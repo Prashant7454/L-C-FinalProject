@@ -16,8 +16,8 @@ public class ExternalNewsSourceServiceImpl implements ExternalNewsSourceService 
     private ExternalNewsSourceRepository externalNewsSourceRepository;
 
     @Override
-    public List<ExternalNewsSourceDTO> getNewsSourceBySourceName(String userName) {
-        return externalNewsSourceRepository.findByServerName(userName).stream()
+    public List<ExternalNewsSourceDTO> getNewsSourceBySourceName(String SourceName) {
+        return externalNewsSourceRepository.findBySourceName(SourceName).stream()
                 .map(c -> {
                     ExternalNewsSourceDTO dto = new ExternalNewsSourceDTO();
                     dto.setId(c.getId());
@@ -26,6 +26,7 @@ public class ExternalNewsSourceServiceImpl implements ExternalNewsSourceService 
                     dto.setBaseUrl(c.getBaseUrl());
                     dto.setStatus(c.getStatus());
                     dto.setLastAccessed(c.getLastAccessed());
+                    System.out.println("API key: " + c.getApiKey());
                     return dto;
                 }).collect(Collectors.toList());
     }
@@ -39,6 +40,7 @@ public class ExternalNewsSourceServiceImpl implements ExternalNewsSourceService 
         externalNewsSource.setStatus(api.getStatus());
         externalNewsSource.setLastAccessed(api.getLastAccessed());
         externalNewsSource.setBaseUrl(api.getBaseUrl());
+        externalNewsSource.setApiKey(api.getApiKey());
         externalNewsSourceRepository.save(externalNewsSource);
     }
 }

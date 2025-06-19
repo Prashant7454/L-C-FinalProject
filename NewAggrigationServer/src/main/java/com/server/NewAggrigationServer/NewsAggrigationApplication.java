@@ -2,8 +2,10 @@ package com.server.NewAggrigationServer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(scanBasePackages = "com.server.NewAggrigationServer")
+@EnableScheduling
 public class NewsAggrigationApplication {
 
 	public static void main(String[] args) {

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ExternalNewsSourceRepository extends JpaRepository<ExternalNewsSource,Integer> {
-    List<ExternalNewsSource> findByServerName(String sourceName);
+    List<ExternalNewsSource> findBySourceName(String sourceName);
 }
