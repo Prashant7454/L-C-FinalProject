@@ -18,9 +18,4 @@ public class NotificationConfigController {
     public NotificationConfigDTO saveConfig(@RequestBody NotificationConfigDTO dto) {
         return configService.saveConfig(dto);
     }
-
-    @GetMapping("/user/{userId}")
-    public List<NotificationConfigDTO> getConfigByUser(@PathVariable Integer userId) {
-        return configService.getConfigsByUserId(userId);
-    }
 }

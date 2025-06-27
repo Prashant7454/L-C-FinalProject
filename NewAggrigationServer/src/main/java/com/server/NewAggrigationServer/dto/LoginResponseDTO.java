@@ -4,6 +4,16 @@ public class LoginResponseDTO {
     private String message;
     private Integer userId;
     private String token;
+    private String role;
+    private int status;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getMessage() {
         return message;
@@ -27,6 +37,14 @@ public class LoginResponseDTO {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
 

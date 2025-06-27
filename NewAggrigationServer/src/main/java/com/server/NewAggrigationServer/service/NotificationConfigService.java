@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface NotificationConfigService {
     NotificationConfigDTO saveConfig(NotificationConfigDTO dto);
-    List<NotificationConfigDTO> getConfigsByUserId(Integer userId);
+    NotificationConfigDTO getNotificationConfigurationByCategoryId(int categoryId);
 }

@@ -20,15 +20,14 @@ public class SignupAction implements MenuAction {
     }
 
     @Override
-    public void execute() {
+    public void execute(int userId) {
         System.out.print("Enter Email: ");
         String email = scanner.next();
         System.out.print("Enter Username: ");
         String username = scanner.next();
         System.out.print("Enter Password: ");
         String password = scanner.next();
-        System.out.print("Enter Role(Admin/User): ");
-        String role = scanner.next();
+        String role = "User";
 
         SignupRequest signupRequest = new SignupRequest();
         signupRequest.setEmail(email);

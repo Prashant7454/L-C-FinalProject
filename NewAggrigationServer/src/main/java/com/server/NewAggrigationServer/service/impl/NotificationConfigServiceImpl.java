@@ -28,15 +28,14 @@ public class NotificationConfigServiceImpl implements NotificationConfigService 
     }
 
     @Override
-    public List<NotificationConfigDTO> getConfigsByUserId(Integer userId) {
-        return configRepository.findByUserId(userId).stream()
-                .map(c -> {
-                    NotificationConfigDTO dto = new NotificationConfigDTO();
-                    dto.setId(c.getId());
-                    dto.setUserId(c.getUserId());
-                    dto.setCategoryId(c.getCategoryId());
-                    dto.setEnabled(c.getEnabled());
-                    return dto;
-                }).collect(Collectors.toList());
+    public NotificationConfigDTO getNotificationConfigurationByCategoryId(int categoryId) {
+        NotificationConfiguration notificationConfiguration = configRepository.getNotificationConfigurationByCategoryId(categoryId);
+        NotificationConfigDTO notificationConfigDTO = new NotificationConfigDTO();
+        notificationConfigDTO.setCategoryId(notificationConfiguration.getCategoryId());
+        notificationConfigDTO.setEnabled(notificationConfiguration.getEnabled());
+        notificationConfigDTO.setId(notificationConfiguration.getId());
+        return notificationConfigDTO;
     }
+
+
 }

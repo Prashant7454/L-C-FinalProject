@@ -4,10 +4,7 @@ import com.server.NewAggrigationServer.dto.ExternalNewsSourceDTO;
 import com.server.NewAggrigationServer.dto.NotificationConfigDTO;
 import com.server.NewAggrigationServer.service.ExternalNewsSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +15,13 @@ public class ExternalNewsSourceController {
     @Autowired
     private ExternalNewsSourceService externalNewsSourceService;
 
-    @GetMapping("/source/{sourceName}")
-    public List<ExternalNewsSourceDTO> getConfigByUser(@PathVariable String sourceName) {
-        return externalNewsSourceService.getNewsSourceBySourceName(sourceName);
+    @GetMapping("/source")
+    public List<ExternalNewsSourceDTO> getAll() {
+        return externalNewsSourceService.getAll();
+    }
+
+    @PostMapping("/updatesource")
+    public ExternalNewsSourceDTO getExternalSourceById(@RequestBody ExternalNewsSourceDTO dto){
+        return externalNewsSourceService.updateExternalNewsSource(dto.getId(),dto);
     }
 }

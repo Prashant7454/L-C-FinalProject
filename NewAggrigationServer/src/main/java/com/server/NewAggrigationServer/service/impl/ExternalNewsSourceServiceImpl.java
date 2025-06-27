@@ -1,7 +1,10 @@
 package com.server.NewAggrigationServer.service.impl;
 
 import com.server.NewAggrigationServer.dto.ExternalNewsSourceDTO;
+import com.server.NewAggrigationServer.dto.NewsDTO;
+import com.server.NewAggrigationServer.exception.ResourceNotFoundException;
 import com.server.NewAggrigationServer.model.ExternalNewsSource;
+import com.server.NewAggrigationServer.model.News;
 import com.server.NewAggrigationServer.repository.ExternalNewsSourceRepository;
 import com.server.NewAggrigationServer.service.ExternalNewsSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +29,11 @@ public class ExternalNewsSourceServiceImpl implements ExternalNewsSourceService 
                     dto.setBaseUrl(c.getBaseUrl());
                     dto.setStatus(c.getStatus());
                     dto.setLastAccessed(c.getLastAccessed());
-                    System.out.println("API key: " + c.getApiKey());
                     return dto;
                 }).collect(Collectors.toList());
     }
+
+
 
     @Override
     public void save(ExternalNewsSourceDTO api) {
@@ -42,5 +46,36 @@ public class ExternalNewsSourceServiceImpl implements ExternalNewsSourceService 
         externalNewsSource.setBaseUrl(api.getBaseUrl());
         externalNewsSource.setApiKey(api.getApiKey());
         externalNewsSourceRepository.save(externalNewsSource);
+    }
+
+    @Override
+    public List<ExternalNewsSourceDTO> getAll() {
+        return externalNewsSourceRepository.findAll().stream()
+                .map(c -> {
+                    ExternalNewsSourceDTO dto = new ExternalNewsSourceDTO();
+                    dto.setId(c.getId());
+                    dto.setSourceName(c.getSourceName());
+                    dto.setApiKey(c.getApiKey());
+                    dto.setBaseUrl(c.getBaseUrl());
+                    dto.setStatus(c.getStatus());
+                    dto.setLastAccessed(c.getLastAccessed());
+                    return dto;
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    public ExternalNewsSourceDTO updateExternalNewsSource(Integer id, ExternalNewsSourceDTO dto) {
+        ExternalNewsSource externalNewsSource = externalNewsSourceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("News not found with ID: " + id));
+        externalNewsSource.setApiKey(dto.getApiKey());
+        ExternalNewsSource updated = externalNewsSourceRepository.save(externalNewsSource);
+        ExternalNewsSourceDTO externalNewsSourceDTO = new ExternalNewsSourceDTO();
+        dto.setLastAccessed(updated.getLastAccessed());
+        dto.setStatus(updated.getStatus());
+        dto.setId(updated.getId());
+        dto.setSourceName(updated.getSourceName());
+        dto.setApiKey(updated.getApiKey());
+        dto.setBaseUrl(updated.getBaseUrl());
+        return dto;
     }
 }

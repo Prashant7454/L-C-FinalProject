@@ -1,4 +1,4 @@
-package Application.command.dasboard;
+package Application.command.userDashboard;
 
 import Application.command.MenuAction;
 
@@ -9,7 +9,7 @@ public class NotificationAction implements MenuAction {
     }
 
     @Override
-    public void execute() {
+    public void execute(int userId) {
         System.out.println("Fetching top notification...");
         return; // breaks the dashboard loop
     }

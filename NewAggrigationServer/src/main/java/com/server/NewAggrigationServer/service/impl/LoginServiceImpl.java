@@ -1,6 +1,8 @@
 package com.server.NewAggrigationServer.service.impl;
 
 import com.server.NewAggrigationServer.dto.LoginResponseDTO;
+import com.server.NewAggrigationServer.exception.ResourceNotFoundException;
+import com.server.NewAggrigationServer.exception.UserLoginException;
 import com.server.NewAggrigationServer.model.User;
 import com.server.NewAggrigationServer.repository.UserRepository;
 import com.server.NewAggrigationServer.service.LoginService;
@@ -22,7 +24,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public LoginResponseDTO login(String username, String rawPassword) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+                .orElseThrow(() -> new UserLoginException("Invalid username or password"));
 
         String encryptedInput = encryptionUtil.encrypt(rawPassword);
 
@@ -31,9 +33,10 @@ public class LoginServiceImpl implements LoginService {
             dto.setMessage("Login successful");
             dto.setUserId(user.getId());
             dto.setToken("token");
+            dto.setRole(user.getRole());
             return dto;
         } else {
-            throw new RuntimeException("Invalid username or password");
+            throw new UserLoginException("Invalid username or password");
         }
     }
 }

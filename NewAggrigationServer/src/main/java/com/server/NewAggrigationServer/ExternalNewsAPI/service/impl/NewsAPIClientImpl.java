@@ -32,7 +32,7 @@ public class NewsAPIClientImpl implements NewsAPIClient {
     }
     @Override
     public List<News> fetchNews() {
-        List<ExternalNewsSourceDTO> api = externalNewsSourceService.getNewsSourceBySourceName("NewsAPI");
+        List<ExternalNewsSourceDTO> api = externalNewsSourceService.getNewsSourceBySourceName("News API");
         URI uri = UriComponentsBuilder
                 .fromUriString(api.get(0).getBaseUrl())
                 .queryParam("apiKey", api.get(0).getApiKey())

@@ -4,7 +4,16 @@ public class LoginResponse {
     private String message;
     private Integer userId;
     private String token;
+    private String role;
     private int status;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getMessage() {
         return message;

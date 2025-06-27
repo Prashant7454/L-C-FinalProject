@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/auth")
 public class LoginController {
 
     private final LoginService loginService;
@@ -22,12 +22,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
-        try {
-            LoginResponseDTO response = loginService.login(loginRequest.getUsername(), loginRequest.getPassword());
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
-        }
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequest) {
+        return loginService.login(loginRequest.getUsername(), loginRequest.getPassword());
     }
 }

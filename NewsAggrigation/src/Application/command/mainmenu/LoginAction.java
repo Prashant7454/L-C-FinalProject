@@ -3,6 +3,7 @@ package Application.command.mainmenu;
 import Application.auth.login.LoginResponse;
 import Application.auth.login.service.LoginService;
 import Application.command.MenuAction;
+import Application.menu.AdminDashboardMenu;
 import Application.menu.UserDashboardMenu;
 
 import java.util.Scanner;
@@ -21,7 +22,7 @@ public class LoginAction implements MenuAction {
     }
 
     @Override
-    public void execute() {
+    public void execute(int userId) {
         System.out.print("Enter Username: ");
         String username = scanner.next();
         System.out.print("Enter password: ");
@@ -36,7 +37,11 @@ public class LoginAction implements MenuAction {
 
         if (response != null) {
             System.out.println("Welcome to the Dashboard!");
-            new UserDashboardMenu(response).showMenu(); // load dashboard with token or userId
+            if (response.getRole().equalsIgnoreCase("admin")) {
+                new AdminDashboardMenu(response).showMenu(response.getUserId());
+            } else {
+                new UserDashboardMenu(response).showMenu(response.getUserId());
+            }
         } else {
             System.out.println("Login failed.");
         }

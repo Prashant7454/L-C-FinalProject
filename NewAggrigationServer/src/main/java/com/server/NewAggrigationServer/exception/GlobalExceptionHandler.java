@@ -45,4 +45,16 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
+    @ExceptionHandler(UserLoginException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserLoginException(UserLoginException userLoginException, HttpServletRequest request){
+        ApiErrorResponse response = new ApiErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "unauthorized",
+                userLoginException.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }

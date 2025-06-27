@@ -1,14 +1,12 @@
 package Application.news;
 
-import java.time.LocalDateTime;
-
 public class News {
     private Integer id;
     private String title;
     private String description;
     private String source;
     private String url;
-    private LocalDateTime publishAt;
+    private String publishAt;
     private String keyword;
 
     public Integer getId() {
@@ -51,11 +49,11 @@ public class News {
         this.url = url;
     }
 
-    public LocalDateTime getPublishAt() {
+    public String getPublishAt() {
         return publishAt;
     }
 
-    public void setPublishAt(LocalDateTime publishAt) {
+    public void setPublishAt(String publishAt) {
         this.publishAt = publishAt;
     }
 

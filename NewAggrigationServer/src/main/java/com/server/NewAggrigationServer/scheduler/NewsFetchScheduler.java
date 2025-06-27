@@ -14,7 +14,7 @@ public class NewsFetchScheduler {
         this.newsSyncService = newsSyncService;
     }
 
-    @Scheduled(fixedRate = 300000) // 3 hrs
+    @Scheduled(fixedRate = 3 * 60 * 6000) // 3 hrs
     public void fetchAllNewsSources() {
         System.out.println("Fetching news at: " + LocalDateTime.now());
         newsSyncService.syncAllFeeds();

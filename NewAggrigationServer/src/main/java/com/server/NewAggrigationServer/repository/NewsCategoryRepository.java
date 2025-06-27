@@ -9,5 +9,6 @@ public interface NewsCategoryRepository extends JpaRepository<NewsCategory, Inte
     List<NewsCategory> findByNewsId(Integer newsId);
     void deleteByNewsIdAndCategoryId(Integer newsId, Integer categoryId);
     void deleteByNewsId(Integer newsId);
+    NewsCategory save(NewsCategory newsCategory);
 }
 

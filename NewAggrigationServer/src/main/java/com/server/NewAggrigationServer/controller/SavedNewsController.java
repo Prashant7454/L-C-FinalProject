@@ -26,9 +26,5 @@ public class SavedNewsController {
         return "Saved news deleted successfully";
     }
 
-    @GetMapping("/save/{userId}")
-    public List<NewsDTO> getSavedNews(@PathVariable Integer userId) {
-        return savedNewsService.getSavedNewsByUserId(userId);
-    }
 }
 

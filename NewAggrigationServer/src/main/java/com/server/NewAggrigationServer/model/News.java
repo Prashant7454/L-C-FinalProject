@@ -18,7 +18,7 @@ public class News {
 
     private String source;
 
-    @Column(length = 1000, unique = true)
+    @Column(length = 255, unique = true)
     private String url;
 
     private LocalDateTime publishAt;

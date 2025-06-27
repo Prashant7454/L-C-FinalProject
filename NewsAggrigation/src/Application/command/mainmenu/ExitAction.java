@@ -10,7 +10,7 @@ public class ExitAction implements MenuAction {
     }
 
     @Override
-    public void execute() {
+    public void execute(int userId) {
         System.out.println("Goodbye!");
         System.exit(0);
     }

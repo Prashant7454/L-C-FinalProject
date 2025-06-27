@@ -34,7 +34,7 @@ public class UserMenu {
                 if (choice < 1 || choice > actions.size()) {
                     System.out.println("Invalid option. Try again.");
                 } else {
-                    actions.get(choice - 1).execute();
+                    actions.get(choice - 1).execute(1);
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a number.");

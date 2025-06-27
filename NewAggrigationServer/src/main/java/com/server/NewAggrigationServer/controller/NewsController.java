@@ -16,6 +16,13 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
+    private SavedNewsService savedNewsService;
+
+    public NewsController(SavedNewsService savedNewsService){
+        this.savedNewsService = savedNewsService;
+    }
+
+
     @PostMapping
     public NewsDTO createNews(@RequestBody NewsDTO dto) {
         return newsService.createNews(dto);
@@ -50,5 +57,10 @@ public class NewsController {
     public ResponseEntity<String> addMultipleNews(@RequestBody List<NewsDTO> newsList) {
         newsService.addMultipleNews(newsList);
         return ResponseEntity.ok("News added successfully");
+    }
+
+    @GetMapping("/save/{userId}")
+    public List<NewsDTO> getSavedNews(@PathVariable Integer userId) {
+        return savedNewsService.getSavedNewsByUserId(userId);
     }
 }
