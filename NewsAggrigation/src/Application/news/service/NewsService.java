@@ -21,4 +21,8 @@ public class NewsService {
     public List<News> savedNews(int userId) throws Exception{
         return newsController.savedNews(userId);
     }
+
+    public List<News> getTodayNewsById(List<Integer> newsIds) throws Exception{
+        return newsController.getTodayNewsById(newsIds);
+    }
 }

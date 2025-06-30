@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.server</groupId>
-	<artifactId>NewAggrigationServer</artifactId>
+	<artifactId>NewsAggrigationServer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>New Aggrigation</name>
 	<description>Project for News Aggrigation Application</description>

@@ -31,6 +31,28 @@ public class NewsController {
         return gson.fromJson(responseJson, listType);
     }
 
+    public List<News> getTodayNewsById(List<Integer> newsIds) throws Exception {
+        String api = NEWS_API_URL + "/today";
+        HttpURLConnection conn = createConnection(api);
+
+        String jsonInputString = gson.toJson(newsIds);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        int status = conn.getResponseCode();
+        InputStream inputStream = (status >= 200 && status < 300)
+                ? conn.getInputStream()
+                : conn.getErrorStream();
+
+        String responseJson = readStream(inputStream);
+
+        Type listType = new TypeToken<List<News>>() {}.getType();
+        return gson.fromJson(responseJson, listType);
+    }
+
     public List<News> searchNews(String keyword) throws Exception{
         String api = NEWS_API_URL + "/search?searchString="+keyword;
         HttpURLConnection conn = createConnection(api);
@@ -66,7 +88,7 @@ public class NewsController {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(false); // GET doesn't need output
+        conn.setDoOutput(true); // GET doesn't need output
         return conn;
     }
 

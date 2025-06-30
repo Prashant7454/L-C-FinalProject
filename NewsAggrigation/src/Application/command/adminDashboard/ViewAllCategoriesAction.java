@@ -16,7 +16,7 @@ public class ViewAllCategoriesAction implements MenuAction {
 
     @Override
     public void execute(LoginResponse response){
-        System.out.println("Add new category action...");
+        System.out.println("Categories");
         CategoryService categoryService = new CategoryService();
         List<Category> categories = new ArrayList<>();
         try{
