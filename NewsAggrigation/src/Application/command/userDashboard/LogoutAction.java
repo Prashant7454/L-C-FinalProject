@@ -1,5 +1,6 @@
 package Application.command.userDashboard;
 
+import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.menu.UserMenu;
 
@@ -10,7 +11,7 @@ public class LogoutAction implements MenuAction {
     }
 
     @Override
-    public void execute(int userId) {
+    public void execute(LoginResponse response) {
         System.out.println("You have been logged out.");
         new UserMenu().showMenu();
     }

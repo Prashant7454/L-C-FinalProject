@@ -19,11 +19,13 @@ public class AdminDashboardMenu {
         actions.add(new ViewServerListAction());
         actions.add(new ViewServerDetailsAction());
         actions.add(new EditServerDetailsAction());
+        actions.add(new ViewAllCategoriesAction());
         actions.add(new AddNewsCategoryAction());
+        actions.add(new HideCategoryAction());
         actions.add(new AdminLogoutAction());
     }
 
-    public void showMenu(int userId) {
+    public void showMenu(LoginResponse response) {
         while (true) {
             System.out.println("\n=== Admin Dashboard ===");
             for (int i = 0; i < actions.size(); i++) {
@@ -36,7 +38,7 @@ public class AdminDashboardMenu {
             try {
                 int choice = Integer.parseInt(input);
                 if (choice >= 1 && choice <= actions.size()) {
-                    actions.get(choice - 1).execute(userId);
+                    actions.get(choice - 1).execute(response);
                 } else {
                     System.out.println("Invalid choice.");
                 }

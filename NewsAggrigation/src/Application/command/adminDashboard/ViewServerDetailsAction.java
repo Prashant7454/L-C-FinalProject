@@ -1,5 +1,6 @@
 package Application.command.adminDashboard;
 
+import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.externalNewsApi.ExternalNewsApi;
 import Application.externalNewsApi.service.ExternalNewsApiService;
@@ -14,7 +15,7 @@ public class ViewServerDetailsAction implements MenuAction {
     }
 
     @Override
-    public void execute(int userId) {
+    public void execute(LoginResponse response) {
         System.out.println("List of external servers: ");
         ExternalNewsApiService externalNewsApiService = new ExternalNewsApiService();
         List<ExternalNewsApi> externalNewsApisList = new ArrayList<>();

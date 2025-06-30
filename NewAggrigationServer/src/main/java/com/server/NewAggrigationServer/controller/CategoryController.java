@@ -37,5 +37,10 @@ public class CategoryController {
     public List<CategoryDTO> getCategoriesByIds(@RequestBody List<Integer> ids) {
         return categoryService.getAllCategoriesByIds(ids);
     }
+
+    @GetMapping("/{id}")
+    public CategoryDTO getCategoryById(@PathVariable int id) {
+        return categoryService.getCategoryById(id);
+    }
 }
 

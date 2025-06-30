@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,17 +61,9 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public List<NewsDTO> getNewsByIds(List<Integer> ids) {
         List<News> newsList = newsRepository.findByIdIn(ids);
-        return newsList.stream().map(news -> {
-            NewsDTO dto = new NewsDTO();
-            dto.setId(news.getId());
-            dto.setTitle(news.getTitle());
-            dto.setDescription(news.getDescription());
-            dto.setSource(news.getSource());
-            dto.setPublishAt(news.getPublishAt());
-            dto.setUrl(news.getUrl());
-            dto.setKeyword(news.getKeyword());
-            return dto;
-        }).collect(Collectors.toList());
+        return newsList.stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -108,6 +101,24 @@ public class NewsServiceImpl implements NewsService {
         news.setUrl(dto.getUrl());
         news.setPublishAt(dto.getPublishAt());
         news.setKeyword(dto.getKeyword());
+    }
+
+    @Override
+    public List<NewsDTO> getTodayNewsByIds(List<Integer> ids) {
+        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
+        List<News> newsList = newsRepository.findByIdInAndPublishAtBetween(ids, startOfDay, endOfDay);
+        return newsList.stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NewsDTO> getNewsByIdsAndDateRange(List<Integer> ids, LocalDateTime startDate, LocalDateTime endDate) {
+        List<News> newsList = newsRepository.findByIdInAndPublishAtBetween(ids, startDate, endDate);
+        return newsList.stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
     }
 }
 

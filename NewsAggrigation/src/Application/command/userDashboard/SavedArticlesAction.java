@@ -1,5 +1,6 @@
 package Application.command.userDashboard;
 
+import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.news.News;
 import Application.news.service.NewsService;
@@ -14,12 +15,12 @@ public class SavedArticlesAction implements MenuAction {
     }
 
     @Override
-    public void execute(int userId) {
+    public void execute(LoginResponse response) {
         System.out.println("Fetching top saved Articles...");
         NewsService newsService = new NewsService();
         List<News> newsList = new ArrayList<>();
         try{
-            newsList = newsService.savedNews(userId);
+            newsList = newsService.savedNews(response.getUserId());
         }
         catch (Exception e){
             System.out.println("Error: " + e.getMessage());

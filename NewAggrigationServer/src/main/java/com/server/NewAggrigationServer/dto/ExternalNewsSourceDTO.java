@@ -1,5 +1,7 @@
 package com.server.NewAggrigationServer.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public class ExternalNewsSourceDTO {
@@ -9,6 +11,8 @@ public class ExternalNewsSourceDTO {
     private String apiKey;
     private String baseUrl;
     private Boolean status;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime lastAccessed;
 
     public ExternalNewsSourceDTO() {}

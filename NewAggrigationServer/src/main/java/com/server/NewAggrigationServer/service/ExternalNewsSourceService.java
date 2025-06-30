@@ -8,5 +8,6 @@ public interface ExternalNewsSourceService {
     List<ExternalNewsSourceDTO> getNewsSourceBySourceName(String userName);
     void save(ExternalNewsSourceDTO api);
     List<ExternalNewsSourceDTO> getAll();
-    public ExternalNewsSourceDTO updateExternalNewsSource(Integer id, ExternalNewsSourceDTO dto);
+    ExternalNewsSourceDTO updateExternalNewsSource(Integer id, ExternalNewsSourceDTO dto);
+    ExternalNewsSourceDTO getExternalSourceById(Integer id);
 }

@@ -78,4 +78,18 @@ public class ExternalNewsSourceServiceImpl implements ExternalNewsSourceService 
         dto.setBaseUrl(updated.getBaseUrl());
         return dto;
     }
+
+    @Override
+    public ExternalNewsSourceDTO getExternalSourceById(Integer id) {
+        ExternalNewsSource externalNewsSource = externalNewsSourceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("News not found with ID: " + id));
+        ExternalNewsSourceDTO dto = new ExternalNewsSourceDTO();
+        dto.setId(externalNewsSource.getId());
+        dto.setSourceName(externalNewsSource.getSourceName());
+        dto.setStatus(externalNewsSource.getStatus());
+        dto.setLastAccessed(externalNewsSource.getLastAccessed());
+        dto.setApiKey(externalNewsSource.getApiKey());
+        dto.setBaseUrl(externalNewsSource.getBaseUrl());
+        return dto;
+    }
 }

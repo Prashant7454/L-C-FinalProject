@@ -1,6 +1,6 @@
-package Application.externalNewsApi.controller;
+package Application.category.controller;
 
-import Application.externalNewsApi.ExternalNewsApi;
+import Application.category.Category;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -12,33 +12,16 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class ExternalNewsApiController {
-    private static final String EXTERNAL_NEWS_API_URL = "http://localhost:8081/api/external";
+public class CategoryController {
+    private static final String CATEGORY_API_URL = "http://localhost:8081/api/categories";
     private final Gson gson = new GsonBuilder().create();
 
-    public List<ExternalNewsApi> getAllExternalNewsApiDetails() throws Exception {
-        String fullAPI = EXTERNAL_NEWS_API_URL + "/source";
-        HttpURLConnection conn = createConnection(fullAPI,"GET");
-
-        int status = conn.getResponseCode();
-        InputStream inputStream = (status >= 200 && status < 300)
-                ? conn.getInputStream()
-                : conn.getErrorStream();
-
-        String responseJson = readStream(inputStream);
-
-        Type listType = new TypeToken<List<ExternalNewsApi>>() {}.getType();
-        return gson.fromJson(responseJson, listType);
-    }
-
-    public ExternalNewsApi updateExternalNewsApiKey(ExternalNewsApi externalNewsApi) throws Exception {
-        String fullAPI = EXTERNAL_NEWS_API_URL + "/updatesource";
-        HttpURLConnection conn = createConnection(fullAPI,"POST");
-
-        String jsonInputString = gson.toJson(externalNewsApi);
+    public Category addCategory(Category category) throws Exception {
+        HttpURLConnection conn = createConnection(CATEGORY_API_URL, "POST");
+        conn.setDoOutput(true);
 
         try (OutputStream os = conn.getOutputStream()) {
-            byte[] input = jsonInputString.getBytes("utf-8");
+            byte[] input = gson.toJson(category).getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
 
@@ -48,14 +31,12 @@ public class ExternalNewsApiController {
                 : conn.getErrorStream();
 
         String responseJson = readStream(inputStream);
-
-        Type listType = new TypeToken<ExternalNewsApi>() {}.getType();
-        return gson.fromJson(responseJson, listType);
+        return gson.fromJson(responseJson, Category.class);
     }
 
-    public ExternalNewsApi getExternalNewsApiById(int id) throws Exception{
-        String fullAPI = EXTERNAL_NEWS_API_URL + "/" + id;
-        HttpURLConnection conn = createConnection(fullAPI,"GET");
+    // Get all categories
+    public List<Category> getAllCategories() throws Exception {
+        HttpURLConnection conn = createConnection(CATEGORY_API_URL, "GET");
 
         int status = conn.getResponseCode();
         InputStream inputStream = (status >= 200 && status < 300)
@@ -64,7 +45,21 @@ public class ExternalNewsApiController {
 
         String responseJson = readStream(inputStream);
 
-        return gson.fromJson(responseJson, ExternalNewsApi.class);
+        Type listType = new TypeToken<List<Category>>() {}.getType();
+        return gson.fromJson(responseJson, listType);
+    }
+
+    // Get category by ID
+    public Category getCategoryById(int id) throws Exception {
+        HttpURLConnection conn = createConnection(CATEGORY_API_URL + "/" + id, "GET");
+
+        int status = conn.getResponseCode();
+        InputStream inputStream = (status >= 200 && status < 300)
+                ? conn.getInputStream()
+                : conn.getErrorStream();
+
+        String responseJson = readStream(inputStream);
+        return gson.fromJson(responseJson, Category.class);
     }
 
     private HttpURLConnection createConnection(String api, String requestMethod) throws IOException {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -62,5 +63,47 @@ public class NewsController {
     @GetMapping("/save/{userId}")
     public List<NewsDTO> getSavedNews(@PathVariable Integer userId) {
         return savedNewsService.getSavedNewsByUserId(userId);
+    }
+
+    @GetMapping("/today")
+    public List<NewsDTO> getTodayNewsByIds(@RequestBody List<Integer> ids) {
+        return newsService.getTodayNewsByIds(ids);
+    }
+
+    @GetMapping("/date-range")
+    public List<NewsDTO> getNewsByIdsAndDateRange( @RequestBody DateRangeNewsRequest dateRangeNewsRequest) {
+        LocalDateTime startDate = LocalDateTime.parse(dateRangeNewsRequest.getStart());
+        LocalDateTime endDate = LocalDateTime.parse(dateRangeNewsRequest.getEnd());
+        return newsService.getNewsByIdsAndDateRange(dateRangeNewsRequest.getIds(), startDate, endDate);
+    }
+
+    private static class DateRangeNewsRequest {
+        private List<Integer> ids;
+        private String start;
+        private String end;
+
+        public List<Integer> getIds() {
+            return ids;
+        }
+
+        public void setIds(List<Integer> ids) {
+            this.ids = ids;
+        }
+
+        public String getStart() {
+            return start;
+        }
+
+        public void setStart(String start) {
+            this.start = start;
+        }
+
+        public String getEnd() {
+            return end;
+        }
+
+        public void setEnd(String end) {
+            this.end = end;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package Application.menu;
 
+import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.command.mainmenu.ExitAction;
 import Application.command.mainmenu.LoginAction;
@@ -34,7 +35,7 @@ public class UserMenu {
                 if (choice < 1 || choice > actions.size()) {
                     System.out.println("Invalid option. Try again.");
                 } else {
-                    actions.get(choice - 1).execute(1);
+                    actions.get(choice - 1).execute(null);
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a number.");

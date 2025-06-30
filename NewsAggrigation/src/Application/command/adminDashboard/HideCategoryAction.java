@@ -1,18 +1,17 @@
-package Application.command.mainmenu;
+package Application.command.adminDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 
-public class ExitAction implements MenuAction {
-
+public class HideCategoryAction implements MenuAction {
     @Override
     public String getName() {
-        return "Exit";
+        return "Hide Category";
     }
 
     @Override
     public void execute(LoginResponse response) {
-        System.out.println("Goodbye!");
-        System.exit(0);
+        System.out.println("Hide Category");
+        return;
     }
 }

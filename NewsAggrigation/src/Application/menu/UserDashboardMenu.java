@@ -23,7 +23,7 @@ public class UserDashboardMenu {
         actions.add(new LogoutAction());
     }
 
-    public void showMenu(int userId) {
+    public void showMenu(LoginResponse response) {
         while (true) {
             System.out.println("\n=== User Dashboard ===");
             for (int i = 0; i < actions.size(); i++) {
@@ -37,7 +37,7 @@ public class UserDashboardMenu {
                 if (choice < 1 || choice > actions.size()) {
                     System.out.println("Invalid option. Try again.");
                 } else {
-                    actions.get(choice - 1).execute(userId);
+                    actions.get(choice - 1).execute(response);
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a valid number.");

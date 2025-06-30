@@ -1,5 +1,6 @@
 package Application.command.mainmenu;
 
+import Application.auth.login.LoginResponse;
 import Application.auth.signup.SignupRequest;
 import Application.auth.signup.SignupResponse;
 import Application.auth.signup.service.SignupService;
@@ -20,7 +21,7 @@ public class SignupAction implements MenuAction {
     }
 
     @Override
-    public void execute(int userId) {
+    public void execute(LoginResponse response) {
         System.out.print("Enter Email: ");
         String email = scanner.next();
         System.out.print("Enter Username: ");

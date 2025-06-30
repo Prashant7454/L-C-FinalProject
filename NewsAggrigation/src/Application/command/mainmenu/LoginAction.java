@@ -22,12 +22,12 @@ public class LoginAction implements MenuAction {
     }
 
     @Override
-    public void execute(int userId) {
+    public void execute(LoginResponse response) {
         System.out.print("Enter Username: ");
         String username = scanner.next();
         System.out.print("Enter password: ");
         String password = scanner.next();
-        LoginResponse response = null;
+        response = null;
         try {
             response = loginService.login(username, password);
         }
@@ -38,9 +38,9 @@ public class LoginAction implements MenuAction {
         if (response != null) {
             System.out.println("Welcome to the Dashboard!");
             if (response.getRole().equalsIgnoreCase("admin")) {
-                new AdminDashboardMenu(response).showMenu(response.getUserId());
+                new AdminDashboardMenu(response).showMenu(response);
             } else {
-                new UserDashboardMenu(response).showMenu(response.getUserId());
+                new UserDashboardMenu(response).showMenu(response);
             }
         } else {
             System.out.println("Login failed.");

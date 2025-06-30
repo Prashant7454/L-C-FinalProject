@@ -5,7 +5,6 @@ import com.server.NewAggrigationServer.model.Category;
 import com.server.NewAggrigationServer.repository.CategoryRepository;
 import com.server.NewAggrigationServer.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +25,17 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = new Category(dto.getName());
         category = categoryRepository.save(category);
         dto.setId(category.getId());
+        return dto;
+    }
+
+    @Override
+    public CategoryDTO getCategoryById(int id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+
+        CategoryDTO dto = new CategoryDTO();
+        dto.setId(category.getId());
+        dto.setName(category.getName());
         return dto;
     }
 

@@ -1,5 +1,6 @@
 package Application.command.userDashboard;
 
+import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.news.News;
 import Application.news.service.NewsService;
@@ -15,7 +16,7 @@ public class SearchAction implements MenuAction {
     }
 
     @Override
-    public void execute(int userId) {
+    public void execute(LoginResponse response) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Search Articles...");
         System.out.print("Enter Keyword: ");
