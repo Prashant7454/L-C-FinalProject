@@ -1,31 +1,32 @@
 package Application.command.adminDashboard;
 
 import Application.auth.login.LoginResponse;
-import Application.category.Category;
 import Application.category.service.CategoryService;
 import Application.command.MenuAction;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 public class AddNewsCategoryAction implements MenuAction {
-    @Override
-    public String getName() {
-        return "Add new News Category";
+
+    private final CategoryService categoryService;
+    private final ViewAllCategoriesAction viewAllCategoriesAction;
+
+    public AddNewsCategoryAction() {
+        this.categoryService = new CategoryService();
+        this.viewAllCategoriesAction = new ViewAllCategoriesAction();
     }
 
     @Override
-    public void execute(LoginResponse response){
-        System.out.println("Add new category action...");
-        CategoryService categoryService = new CategoryService();
-        ViewAllCategoriesAction viewAllCategoriesAction = new ViewAllCategoriesAction();
+    public String getName() {
+        return "Add New News Category";
+    }
+
+    @Override
+    public void execute(LoginResponse response) {
+        System.out.println("== Add New Category ==");
         try {
             viewAllCategoriesAction.execute(response);
             categoryService.addCategory();
-        }
-        catch (Exception e){
-            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Failed to add new category: " + e.getMessage());
         }
     }
 }

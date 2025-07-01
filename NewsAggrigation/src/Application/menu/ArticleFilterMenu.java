@@ -2,20 +2,19 @@ package Application.menu;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
-import Application.command.adminDashboard.*;
-import Application.command.articalDashboard.BackAction;
-import Application.command.articalDashboard.DateRangeNewsAction;
-import Application.command.articalDashboard.TodayNewsAction;
+import Application.command.articalFilterDashboard.BackAction;
+import Application.command.articalFilterDashboard.DateRangeNewsAction;
+import Application.command.articalFilterDashboard.TodayNewsAction;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ArticleMenu {
+public class ArticleFilterMenu {
     private final List<MenuAction> actions = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
 
-    public ArticleMenu() {
+    public ArticleFilterMenu() {
 
         actions.add(new TodayNewsAction());
         actions.add(new DateRangeNewsAction());

@@ -65,12 +65,12 @@ public class NewsController {
         return savedNewsService.getSavedNewsByUserId(userId);
     }
 
-    @GetMapping("/today")
+    @PostMapping("/today")
     public List<NewsDTO> getTodayNewsByIds(@RequestBody List<Integer> ids) {
         return newsService.getTodayNewsByIds(ids);
     }
 
-    @GetMapping("/date-range")
+    @PostMapping("/date-range")
     public List<NewsDTO> getNewsByIdsAndDateRange( @RequestBody DateRangeNewsRequest dateRangeNewsRequest) {
         LocalDateTime startDate = LocalDateTime.parse(dateRangeNewsRequest.getStart());
         LocalDateTime endDate = LocalDateTime.parse(dateRangeNewsRequest.getEnd());

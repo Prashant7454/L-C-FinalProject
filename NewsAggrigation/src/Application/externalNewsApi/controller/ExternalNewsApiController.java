@@ -1,15 +1,12 @@
 package Application.externalNewsApi.controller;
 
 import Application.externalNewsApi.ExternalNewsApi;
+import Application.util.HttpClientUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.*;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class ExternalNewsApiController {
@@ -17,72 +14,22 @@ public class ExternalNewsApiController {
     private final Gson gson = new GsonBuilder().create();
 
     public List<ExternalNewsApi> getAllExternalNewsApiDetails() throws Exception {
-        String fullAPI = EXTERNAL_NEWS_API_URL + "/source";
-        HttpURLConnection conn = createConnection(fullAPI,"GET");
-
-        int status = conn.getResponseCode();
-        InputStream inputStream = (status >= 200 && status < 300)
-                ? conn.getInputStream()
-                : conn.getErrorStream();
-
-        String responseJson = readStream(inputStream);
-
+        String api = EXTERNAL_NEWS_API_URL + "/source";
+        String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
         Type listType = new TypeToken<List<ExternalNewsApi>>() {}.getType();
         return gson.fromJson(responseJson, listType);
     }
 
     public ExternalNewsApi updateExternalNewsApiKey(ExternalNewsApi externalNewsApi) throws Exception {
-        String fullAPI = EXTERNAL_NEWS_API_URL + "/updatesource";
-        HttpURLConnection conn = createConnection(fullAPI,"POST");
-
-        String jsonInputString = gson.toJson(externalNewsApi);
-
-        try (OutputStream os = conn.getOutputStream()) {
-            byte[] input = jsonInputString.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        }
-
-        int status = conn.getResponseCode();
-        InputStream inputStream = (status >= 200 && status < 300)
-                ? conn.getInputStream()
-                : conn.getErrorStream();
-
-        String responseJson = readStream(inputStream);
-
-        Type listType = new TypeToken<ExternalNewsApi>() {}.getType();
-        return gson.fromJson(responseJson, listType);
-    }
-
-    public ExternalNewsApi getExternalNewsApiById(int id) throws Exception{
-        String fullAPI = EXTERNAL_NEWS_API_URL + "/" + id;
-        HttpURLConnection conn = createConnection(fullAPI,"GET");
-
-        int status = conn.getResponseCode();
-        InputStream inputStream = (status >= 200 && status < 300)
-                ? conn.getInputStream()
-                : conn.getErrorStream();
-
-        String responseJson = readStream(inputStream);
-
+        String api = EXTERNAL_NEWS_API_URL + "/updatesource";
+        String jsonBody = gson.toJson(externalNewsApi);
+        String responseJson = HttpClientUtil.sendRequest(api, "POST", jsonBody);
         return gson.fromJson(responseJson, ExternalNewsApi.class);
     }
 
-    private HttpURLConnection createConnection(String api, String requestMethod) throws IOException {
-        URL url = new URL(api);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod(requestMethod);
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true); // GET doesn't need output
-        return conn;
-    }
-
-    private String readStream(InputStream inputStream) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        StringBuilder responseStr = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            responseStr.append(line.trim());
-        }
-        return responseStr.toString();
+    public ExternalNewsApi getExternalNewsApiById(int id) throws Exception {
+        String api = EXTERNAL_NEWS_API_URL + "/" + id;
+        String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
+        return gson.fromJson(responseJson, ExternalNewsApi.class);
     }
 }

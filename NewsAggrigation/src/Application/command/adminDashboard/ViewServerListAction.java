@@ -4,40 +4,44 @@ import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.externalNewsApi.ExternalNewsApi;
 import Application.externalNewsApi.service.ExternalNewsApiService;
-import Application.news.News;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ViewServerListAction implements MenuAction {
+
+    private final ExternalNewsApiService externalNewsApiService;
+
+    public ViewServerListAction() {
+        this.externalNewsApiService = new ExternalNewsApiService();
+    }
+
     @Override
     public String getName() {
-        return "View the list of external servers and status";
+        return "View the List of External Servers and Status";
     }
 
     @Override
     public void execute(LoginResponse response) {
-        System.out.println("List of external servers details: ");
-        ExternalNewsApiService externalNewsApiService = new ExternalNewsApiService();
-        List<ExternalNewsApi> externalNewsApisList = new ArrayList<>();
+        System.out.println("== External Server Details ==");
+
         try {
-            externalNewsApisList = externalNewsApiService.getAllExternalNewsApiDetails();
+            List<ExternalNewsApi> externalNewsApis = externalNewsApiService.getAllExternalNewsApiDetails();
+            printServerList(externalNewsApis);
+        } catch (Exception e) {
+            System.err.println("Error fetching server list: " + e.getMessage());
         }
-        catch (Exception e){
-            System.out.println("Error: " + e.getMessage());
-            return;
-        }
-        showAllExternalAPI(externalNewsApisList);
     }
 
-    private void showAllExternalAPI(List<ExternalNewsApi> externalNewsApisList){
-        int count = 1;
-        for(ExternalNewsApi externalNewsApi: externalNewsApisList){
-            System.out.print(count+".");
-            System.out.print(externalNewsApi.getSourceName()+ "  -  ");
-            System.out.print(externalNewsApi.getStatus()+ "  -  ");
-            System.out.println(externalNewsApi.getLastAccessed());
-            count++;
+    private void printServerList(List<ExternalNewsApi> servers) {
+        if (servers == null || servers.isEmpty()) {
+            System.out.println("(No external servers found)");
+            return;
+        }
+
+        int index = 1;
+        for (ExternalNewsApi server : servers) {
+            System.out.printf("%d. %s  |  Status: %s  |  Last Accessed: %s%n",
+                    index++, server.getSourceName(), server.getStatus(), server.getLastAccessed());
         }
     }
 }

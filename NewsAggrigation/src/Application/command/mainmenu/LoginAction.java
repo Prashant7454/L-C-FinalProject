@@ -9,12 +9,9 @@ import Application.menu.UserDashboardMenu;
 import java.util.Scanner;
 
 public class LoginAction implements MenuAction {
-    private final LoginService loginService = new LoginService();
-    Scanner scanner = null;
 
-    public LoginAction(){
-        scanner = new Scanner(System.in);
-    }
+    private final LoginService loginService = new LoginService();
+    private final Scanner scanner = new Scanner(System.in);
 
     @Override
     public String getName() {
@@ -22,28 +19,35 @@ public class LoginAction implements MenuAction {
     }
 
     @Override
-    public void execute(LoginResponse response) {
-        System.out.print("Enter Username: ");
-        String username = scanner.next();
-        System.out.print("Enter password: ");
-        String password = scanner.next();
-        response = null;
+    public void execute(LoginResponse unused) {
+        String username = promptInput("Enter username: ");
+        String password = promptInput("Enter password: ");
+
         try {
-            response = loginService.login(username, password);
+            LoginResponse response = loginService.login(username, password);
+            handleLoginResponse(response);
+        } catch (Exception e) {
+            System.err.println("Error during login: " + e.getMessage());
         }
-        catch (Exception e){
+    }
+
+    private String promptInput(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine().trim();
+    }
+
+    private void handleLoginResponse(LoginResponse response) {
+        if (response == null) {
+            System.out.println("Login failed. Invalid credentials.");
             return;
         }
 
-        if (response != null) {
-            System.out.println("Welcome to the Dashboard!");
-            if (response.getRole().equalsIgnoreCase("admin")) {
-                new AdminDashboardMenu(response).showMenu(response);
-            } else {
-                new UserDashboardMenu(response).showMenu(response);
-            }
-        } else {
-            System.out.println("Login failed.");
+        System.out.println("Login successful. Welcome to the dashboard!");
+
+        switch (response.getRole().toLowerCase()) {
+            case "admin" -> new AdminDashboardMenu(response).showMenu(response);
+            case "user" -> new UserDashboardMenu(response).showMenu(response);
+            default -> System.out.println("⚠️ Unknown role: " + response.getRole());
         }
     }
 }

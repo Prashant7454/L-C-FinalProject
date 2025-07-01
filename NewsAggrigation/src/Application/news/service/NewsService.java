@@ -1,5 +1,6 @@
 package Application.news.service;
 
+import Application.news.DateRangeNewsRequest;
 import Application.news.News;
 import Application.news.controller.NewsController;
 
@@ -24,5 +25,9 @@ public class NewsService {
 
     public List<News> getTodayNewsById(List<Integer> newsIds) throws Exception{
         return newsController.getTodayNewsById(newsIds);
+    }
+
+    public List<News> getNewsByIdAndDateRange(DateRangeNewsRequest dateRangeNewsRequest) throws Exception{
+        return newsController.getNewsByIdAndDateRange(dateRangeNewsRequest);
     }
 }

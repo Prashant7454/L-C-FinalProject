@@ -4,11 +4,14 @@ import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.news.News;
 import Application.news.service.NewsService;
+import Application.util.NewsPrinterUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SavedArticlesAction implements MenuAction {
+
+    private final NewsService newsService = new NewsService();
+
     @Override
     public String getName() {
         return "SavedArticle";
@@ -16,25 +19,17 @@ public class SavedArticlesAction implements MenuAction {
 
     @Override
     public void execute(LoginResponse response) {
-        System.out.println("Fetching top saved Articles...");
-        NewsService newsService = new NewsService();
-        List<News> newsList = new ArrayList<>();
-        try{
-            newsList = newsService.savedNews(response.getUserId());
-        }
-        catch (Exception e){
-            System.out.println("Error: " + e.getMessage());
-            System.out.println(e);
-        }
-        showAllNews(newsList);
+        System.out.println("Fetching your saved articles...");
+        List<News> newsList = fetchSavedArticles(response.getUserId());
+        NewsPrinterUtil.printNewsList(newsList);
     }
 
-    private void showAllNews(List<News> NewsList){
-        System.out.print("  ID  |  ");
-        System.out.println("Title");
-        for(News news: NewsList){
-            System.out.print(news.getId()+ "  |  ");
-            System.out.println(news.getTitle());
+    private List<News> fetchSavedArticles(int userId) {
+        try {
+            return newsService.savedNews(userId);
+        } catch (Exception e) {
+            System.err.println("Failed to fetch saved articles: " + e.getMessage());
+            return List.of(); // Return empty list on failure
         }
     }
 }

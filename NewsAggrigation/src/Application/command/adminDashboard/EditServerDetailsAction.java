@@ -8,6 +8,17 @@ import Application.externalNewsApi.service.ExternalNewsApiService;
 import java.util.Scanner;
 
 public class EditServerDetailsAction implements MenuAction {
+
+    private final ExternalNewsApiService externalNewsApiService;
+    private final ViewServerDetailsAction viewServerDetailsAction;
+    private final Scanner scanner;
+
+    public EditServerDetailsAction() {
+        this.externalNewsApiService = new ExternalNewsApiService();
+        this.viewServerDetailsAction = new ViewServerDetailsAction();
+        this.scanner = new Scanner(System.in);
+    }
+
     @Override
     public String getName() {
         return "Update/Edit the external server’s details";
@@ -15,24 +26,26 @@ public class EditServerDetailsAction implements MenuAction {
 
     @Override
     public void execute(LoginResponse response) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Update/Edit the external server’s details");
-        ViewServerDetailsAction viewServerDetailsAction = new ViewServerDetailsAction();
-        viewServerDetailsAction.execute(response);
-        System.out.println("Enter the external server ID");
-        int id = scanner.nextInt();
-        System.out.println("Enter the updated API key");
-        String updatedApiKey = scanner.next();
-        ExternalNewsApiService externalNewsApiService = new ExternalNewsApiService();
-        ExternalNewsApi externalNewsApi = null;
-        try{
-            externalNewsApi = externalNewsApiService.getExternalNewsApiDetailById(id);
-            externalNewsApi.setApiKey(updatedApiKey);
-            externalNewsApi = externalNewsApiService.updateExternalNewsApiKey(externalNewsApi);
-        }
-        catch (Exception e){
-            System.out.println("Error: " + e.getMessage());
-        }
+        System.out.println("== Update/Edit External Server Details ==");
 
+        try {
+            // Show existing server details first
+            viewServerDetailsAction.execute(response);
+
+            System.out.print("Enter the external server ID: ");
+            int id = Integer.parseInt(scanner.nextLine().trim());
+
+            System.out.print("Enter the updated API key: ");
+            String updatedApiKey = scanner.nextLine().trim();
+
+            ExternalNewsApi externalNewsApi = externalNewsApiService.getExternalNewsApiDetailById(id);
+            externalNewsApi.setApiKey(updatedApiKey);
+
+            ExternalNewsApi updatedApi = externalNewsApiService.updateExternalNewsApiKey(externalNewsApi);
+            System.out.println("✅ External server updated successfully: " + updatedApi.getSourceName());
+
+        } catch (Exception e) {
+            System.err.println("Error updating external server: " + e.getMessage());
+        }
     }
 }
