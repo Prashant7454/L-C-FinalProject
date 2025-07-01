@@ -29,4 +29,8 @@ public class CategoryService {
     public Category getCategoryById(int id) throws Exception{
         return categoryController.getCategoryById(id);
     }
+
+    public List<Category> getCategoryByNewsId(int NewsId) throws Exception{
+        return categoryController.getCategoryByNewsId(NewsId);
+    }
 }

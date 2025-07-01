@@ -1,4 +1,4 @@
-package Application.command.articalFilterDashboard;
+package Application.command.articleFilterDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;

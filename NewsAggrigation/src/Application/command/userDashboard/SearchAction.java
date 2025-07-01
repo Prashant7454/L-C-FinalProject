@@ -4,7 +4,7 @@ import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.news.News;
 import Application.news.service.NewsService;
-import Application.util.NewsPrinterUtil;
+import Application.util.NewsUtil;
 
 import java.util.List;
 import java.util.Scanner;
@@ -23,7 +23,7 @@ public class SearchAction implements MenuAction {
     public void execute(LoginResponse response) {
         String keyword = promptKeyword();
         List<News> newsList = fetchSearchResults(keyword);
-        NewsPrinterUtil.printNewsList(newsList);
+        NewsUtil.printNewsList(newsList);
     }
 
     private String promptKeyword() {

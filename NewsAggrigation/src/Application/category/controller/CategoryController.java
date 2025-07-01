@@ -12,6 +12,7 @@ import java.util.List;
 public class CategoryController {
     private static final String CATEGORY_API_URL = "http://localhost:8081/api/categories";
     private final Gson gson = new GsonBuilder().create();
+    private final Type listType = new TypeToken<List<Category>>() {}.getType();
 
     public Category addCategory(Category category) throws Exception {
         String jsonBody = gson.toJson(category);
@@ -21,7 +22,6 @@ public class CategoryController {
 
     public List<Category> getAllCategories() throws Exception {
         String responseJson = HttpClientUtil.sendRequest(CATEGORY_API_URL, "GET", null);
-        Type listType = new TypeToken<List<Category>>() {}.getType();
         return gson.fromJson(responseJson, listType);
     }
 
@@ -29,5 +29,11 @@ public class CategoryController {
         String api = CATEGORY_API_URL + "/" + id;
         String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
         return gson.fromJson(responseJson, Category.class);
+    }
+
+    public List<Category> getCategoryByNewsId(int newsId) throws Exception {
+        String api = CATEGORY_API_URL + "/news/" + newsId;
+        String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
+        return gson.fromJson(responseJson, listType);
     }
 }

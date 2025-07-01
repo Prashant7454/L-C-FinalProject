@@ -30,4 +30,8 @@ public class NewsService {
     public List<News> getNewsByIdAndDateRange(DateRangeNewsRequest dateRangeNewsRequest) throws Exception{
         return newsController.getNewsByIdAndDateRange(dateRangeNewsRequest);
     }
+
+    public News getNewsById(Integer newsId) throws Exception{
+        return newsController.getNewsById(newsId);
+    }
 }

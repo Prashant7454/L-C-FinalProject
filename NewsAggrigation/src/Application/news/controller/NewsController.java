@@ -46,4 +46,10 @@ public class NewsController {
         String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
         return gson.fromJson(responseJson, newsListType);
     }
+
+    public News getNewsById(Integer newsId) throws Exception{
+        String api = NEWS_API_URL + "/" + newsId;
+        String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
+        return gson.fromJson(responseJson, News.class);
+    }
 }

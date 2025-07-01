@@ -2,9 +2,10 @@ package Application.command.userDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
+import Application.menu.ArticleMenu;
 import Application.news.News;
 import Application.news.service.NewsService;
-import Application.util.NewsPrinterUtil;
+import Application.util.NewsUtil;
 
 import java.util.List;
 
@@ -21,7 +22,8 @@ public class SavedArticlesAction implements MenuAction {
     public void execute(LoginResponse response) {
         System.out.println("Fetching your saved articles...");
         List<News> newsList = fetchSavedArticles(response.getUserId());
-        NewsPrinterUtil.printNewsList(newsList);
+        NewsUtil.printNewsList(newsList);
+        new ArticleMenu().showMenu(response);
     }
 
     private List<News> fetchSavedArticles(int userId) {

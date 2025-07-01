@@ -13,6 +13,6 @@ public class LogoutAction implements MenuAction {
     @Override
     public void execute(LoginResponse response) {
         System.out.println("You have been logged out.");
-        new UserMenu().showMenu();
+        new UserMenu().showMenu(response);
     }
 }

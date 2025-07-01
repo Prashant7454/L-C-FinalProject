@@ -28,7 +28,7 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
-    @GetMapping("/{newsId}")
+    @GetMapping("/news/{newsId}")
     public List<CategoryDTO> getCategoriesForNews(@PathVariable Integer newsId) {
         return newsCategoryService.getCategoriesByNewsId(newsId);
     }

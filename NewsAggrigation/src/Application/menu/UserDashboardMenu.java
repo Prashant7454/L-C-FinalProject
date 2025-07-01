@@ -3,6 +3,7 @@ package Application.menu;
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.command.userDashboard.*;
+import Application.util.MenuUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,24 +25,6 @@ public class UserDashboardMenu {
     }
 
     public void showMenu(LoginResponse response) {
-        while (true) {
-            System.out.println("\n=== User Dashboard ===");
-            for (int i = 0; i < actions.size(); i++) {
-                System.out.printf("%d. %s%n", i + 1, actions.get(i).getName());
-            }
-            System.out.print("Choose an option: ");
-            String input = scanner.nextLine();
-
-            try {
-                int choice = Integer.parseInt(input);
-                if (choice < 1 || choice > actions.size()) {
-                    System.out.println("Invalid option. Try again.");
-                } else {
-                    actions.get(choice - 1).execute(response);
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
-            }
-        }
+        MenuUtil.showMenu(actions,response);
     }
 }

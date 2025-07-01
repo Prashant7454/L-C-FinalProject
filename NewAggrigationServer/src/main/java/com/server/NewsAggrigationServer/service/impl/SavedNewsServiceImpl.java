@@ -6,6 +6,7 @@ import com.server.NewsAggrigationServer.model.SavedNews;
 import com.server.NewsAggrigationServer.repository.SavedNewsRepository;
 import com.server.NewsAggrigationServer.service.NewsService;
 import com.server.NewsAggrigationServer.service.SavedNewsService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,7 @@ public class SavedNewsServiceImpl implements SavedNewsService {
     }
 
     @Override
+    @Transactional
     public void deleteSavedNews(Integer userId, Integer newsId) {
         boolean exists = savedNewsRepository.existsByUserIdAndNewsId(userId, newsId);
         if (!exists) {

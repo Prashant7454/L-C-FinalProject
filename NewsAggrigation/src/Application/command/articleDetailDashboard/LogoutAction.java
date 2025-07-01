@@ -1,10 +1,12 @@
-package Application.command.adminDashboard;
+package Application.command.articleDetailDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.menu.UserMenu;
 
-public class AdminLogoutAction implements MenuAction {
+import java.awt.*;
+
+public class LogoutAction implements MenuAction {
     @Override
     public String getName() {
         return "Logout";
@@ -12,8 +14,6 @@ public class AdminLogoutAction implements MenuAction {
 
     @Override
     public void execute(LoginResponse response) {
-        System.out.println("Logging out admin...");
         new UserMenu().showMenu(response);
     }
 }
-

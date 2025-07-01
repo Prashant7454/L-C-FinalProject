@@ -5,6 +5,6 @@ import Application.menu.UserMenu;
 
 public class Main {
     public static void main(String[] args) {
-        new UserMenu().showMenu();
+        new UserMenu().showMenu(null);
     }
 }

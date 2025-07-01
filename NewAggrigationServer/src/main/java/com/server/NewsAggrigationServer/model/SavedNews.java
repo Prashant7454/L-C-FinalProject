@@ -3,7 +3,12 @@ package com.server.NewsAggrigationServer.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "saved_news")
+@Table(
+        name = "saved_news",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"newsId", "userId"})
+        }
+)
 public class SavedNews {
 
     @Id
