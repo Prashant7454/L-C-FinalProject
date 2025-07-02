@@ -2,6 +2,8 @@ package Application.command.userDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
+import Application.menu.ArticleMenu;
+import Application.menu.UserDashboardMenu;
 import Application.news.News;
 import Application.news.service.NewsService;
 import Application.util.NewsUtil;
@@ -24,6 +26,7 @@ public class SearchAction implements MenuAction {
         String keyword = promptKeyword();
         List<News> newsList = fetchSearchResults(keyword);
         NewsUtil.printNewsList(newsList);
+        new ArticleMenu(new UserDashboardMenu(response)).showMenu(response);
     }
 
     private String promptKeyword() {

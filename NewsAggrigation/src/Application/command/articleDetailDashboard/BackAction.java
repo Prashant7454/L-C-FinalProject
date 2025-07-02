@@ -3,8 +3,14 @@ package Application.command.articleDetailDashboard;
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.menu.ArticleMenu;
+import Application.menu.Menu;
 
 public class BackAction implements MenuAction {
+    Menu previousMenu;
+    public BackAction(Menu previousMenu){
+        this.previousMenu = previousMenu;
+    }
+
     @Override
     public String getName() {
         return "Back";
@@ -12,6 +18,6 @@ public class BackAction implements MenuAction {
 
     @Override
     public void execute(LoginResponse response) {
-        new ArticleMenu().showMenu(response);
+        new ArticleMenu(previousMenu).showMenu(response);
     }
 }

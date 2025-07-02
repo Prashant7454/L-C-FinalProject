@@ -4,6 +4,7 @@ import Application.auth.login.LoginResponse;
 import Application.category.Category;
 import Application.category.service.CategoryService;
 import Application.command.MenuAction;
+import Application.menu.ArticleFilterMenu;
 import Application.menu.ArticleMenu;
 import Application.news.DateRangeNewsRequest;
 import Application.news.News;
@@ -48,7 +49,7 @@ public class DateRangeNewsAction implements MenuAction {
 
             List<News> newsList = newsService.getNewsByIdAndDateRange(request);
             NewsUtil.printNewsList(newsList);
-            new ArticleMenu().showMenu(response);
+            new ArticleMenu(new ArticleFilterMenu()).showMenu(response);
 
         } catch (Exception e) {
             System.err.println("Error: " + e.getStackTrace());

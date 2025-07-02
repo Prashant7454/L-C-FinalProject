@@ -52,4 +52,11 @@ public class NewsController {
         String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
         return gson.fromJson(responseJson, News.class);
     }
+
+    public News updateNewsLikeAndDisLikeCount(News news) throws Exception{
+        String api = NEWS_API_URL + "/" + news.getId();
+        String jsonBody = gson.toJson(news);
+        String responseJson = HttpClientUtil.sendRequest(api, "PUT", jsonBody);
+        return gson.fromJson(responseJson, News.class);
+    }
 }

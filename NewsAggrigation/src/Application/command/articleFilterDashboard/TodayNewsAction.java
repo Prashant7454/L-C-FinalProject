@@ -4,6 +4,7 @@ import Application.auth.login.LoginResponse;
 import Application.category.Category;
 import Application.category.service.CategoryService;
 import Application.command.MenuAction;
+import Application.menu.ArticleFilterMenu;
 import Application.menu.ArticleMenu;
 import Application.news.News;
 import Application.news.service.NewsService;
@@ -41,7 +42,7 @@ public class TodayNewsAction implements MenuAction {
             List<News> todayNews = newsService.getTodayNewsById(newsIds);
 
             NewsUtil.printNewsList(todayNews);
-            new ArticleMenu().showMenu(response);
+            new ArticleMenu(new ArticleFilterMenu()).showMenu(response);
 
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());

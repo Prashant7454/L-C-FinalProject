@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class AdminDashboardMenu {
+public class AdminDashboardMenu implements Menu{
     private final List<MenuAction> actions = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
     private final LoginResponse adminSession;
@@ -26,6 +26,7 @@ public class AdminDashboardMenu {
         actions.add(new AdminLogoutAction());
     }
 
+    @Override
     public void showMenu(LoginResponse response) {
         MenuUtil.showMenu(actions,response);
     }

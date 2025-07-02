@@ -7,7 +7,7 @@ import Application.news.controller.NewsController;
 import java.util.List;
 
 public class NewsService {
-    private NewsController newsController;
+    private final NewsController newsController;
     public NewsService(){
         newsController = new NewsController();
     }
@@ -33,5 +33,9 @@ public class NewsService {
 
     public News getNewsById(Integer newsId) throws Exception{
         return newsController.getNewsById(newsId);
+    }
+
+    public News updateNewsLikeAndDisLikeCount(News news) throws Exception{
+        return newsController.updateNewsLikeAndDisLikeCount(news);
     }
 }

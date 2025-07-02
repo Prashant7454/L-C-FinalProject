@@ -8,18 +8,19 @@ import Application.util.MenuUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticleDetailMenu {
+public class ArticleDetailMenu implements Menu{
     private final List<MenuAction> actions = new ArrayList<>();
     private Integer newsId;
-    public ArticleDetailMenu(Integer newsId) {
-        actions.add(new BackAction());
+    public ArticleDetailMenu(Integer newsId, Menu previousMenu) {
+        actions.add(new BackAction(previousMenu));
         actions.add(new LogoutAction());
         actions.add(new SaveArticleAction(newsId));
-        actions.add(new LikeArticleAction());
-        actions.add(new DisLikeArticleAction());
+        actions.add(new LikeArticleAction(newsId));
+        actions.add(new DisLikeArticleAction(newsId));
         actions.add(new ReportAction());
     }
 
+    @Override
     public void showMenu(LoginResponse response) {
         MenuUtil.showMenu(actions,response);
     }

@@ -90,6 +90,8 @@ public class NewsServiceImpl implements NewsService {
         dto.setUrl(news.getUrl());
         dto.setPublishAt(news.getPublishAt());
         dto.setKeyword(news.getKeyword());
+        dto.setLikeCount(news.getLikeCount());
+        dto.setDisLikeCount(news.getDisLikeCount());
         return dto;
     }
 
@@ -100,6 +102,8 @@ public class NewsServiceImpl implements NewsService {
         news.setUrl(dto.getUrl());
         news.setPublishAt(dto.getPublishAt());
         news.setKeyword(dto.getKeyword());
+        news.setLikeCount(dto.getLikeCount());
+        news.setDisLikeCount(dto.getDisLikeCount());
     }
 
     @Override

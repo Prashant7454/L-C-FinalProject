@@ -8,6 +8,8 @@ public class News {
     private String url;
     private String publishAt;
     private String keyword;
+    private Integer likeCount;
+    private Integer disLikeCount;
 
     public Integer getId() {
         return id;
@@ -63,5 +65,21 @@ public class News {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public Integer getDisLikeCount() {
+        return disLikeCount;
+    }
+
+    public void setDisLikeCount(Integer disLikeCount) {
+        this.disLikeCount = disLikeCount;
     }
 }

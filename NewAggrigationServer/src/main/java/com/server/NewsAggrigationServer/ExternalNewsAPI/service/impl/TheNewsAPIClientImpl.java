@@ -72,6 +72,8 @@ public class TheNewsAPIClientImpl implements TheNewsAPIClient {
                     LocalDateTime.parse(node.path("published_at").asText(), fmt)
             );
             a.setSource(node.path("source").asText());
+            a.setDisLikeCount(0);
+            a.setLikeCount(0);
             parsedArticles.add(a);
             JsonNode categoryArray = node.path("categories");
             News news = articleRepository.save(a);

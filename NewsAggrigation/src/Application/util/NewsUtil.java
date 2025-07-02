@@ -51,6 +51,8 @@ public class NewsUtil {
         }
 
         System.out.println();
+        System.out.println("Like: " + news.getLikeCount());
+        System.out.println("DisLikeCount: " + news.getDisLikeCount());
         System.out.println();
 
     }

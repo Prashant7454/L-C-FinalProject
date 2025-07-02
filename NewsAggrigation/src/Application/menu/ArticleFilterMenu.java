@@ -10,7 +10,7 @@ import Application.util.MenuUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticleFilterMenu {
+public class ArticleFilterMenu implements Menu{
     private final List<MenuAction> actions = new ArrayList<>();
 
     public ArticleFilterMenu() {
@@ -20,6 +20,7 @@ public class ArticleFilterMenu {
         actions.add(new BackAction());
     }
 
+    @Override
     public void showMenu(LoginResponse response) {
         MenuUtil.showMenu(actions,response);
     }

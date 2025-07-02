@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class UserMenu {
+public class UserMenu implements Menu{
     private final List<MenuAction> actions = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
 
@@ -22,6 +22,7 @@ public class UserMenu {
         actions.add(new ExitAction());
     }
 
+    @Override
     public void showMenu(LoginResponse response) {
         MenuUtil.showMenu(actions,response);
     }

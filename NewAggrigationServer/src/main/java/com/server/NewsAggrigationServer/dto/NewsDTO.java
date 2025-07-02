@@ -10,8 +10,9 @@ public class NewsDTO {
     private String url;
     private LocalDateTime publishAt;
     private String keyword;
+    private Integer likeCount;
+    private Integer disLikeCount;
 
-    // Getters & Setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
@@ -32,5 +33,11 @@ public class NewsDTO {
 
     public String getKeyword() { return keyword; }
     public void setKeyword(String keyword) { this.keyword = keyword; }
+
+    public Integer getLikeCount() { return likeCount; }
+    public void setLikeCount(Integer likeCount) { this.likeCount = likeCount; }
+
+    public Integer getDisLikeCount() { return disLikeCount; }
+    public void setDisLikeCount(Integer disLikeCount) { this.disLikeCount = disLikeCount; }
 }
 

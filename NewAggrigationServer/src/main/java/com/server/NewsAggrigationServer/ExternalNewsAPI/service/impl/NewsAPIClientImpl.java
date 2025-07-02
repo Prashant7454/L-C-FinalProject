@@ -60,6 +60,8 @@ public class NewsAPIClientImpl implements NewsAPIClient {
                     LocalDateTime.parse(node.path("publishedAt").asText(), fmt)
             );
             a.setSource(node.path("name").asText());
+            a.setDisLikeCount(0);
+            a.setLikeCount(0);
             parsedArticles.add(a);
         }
 

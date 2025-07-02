@@ -9,15 +9,16 @@ import Application.util.MenuUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticleMenu {
+public class ArticleMenu implements Menu{
     private final List<MenuAction> actions = new ArrayList<>();
 
-    public ArticleMenu() {
+    public ArticleMenu(Menu previousMenu) {
 
-        actions.add(new BackAction());
-        actions.add(new OpenArticleAction());
+        actions.add(new BackAction(previousMenu));
+        actions.add(new OpenArticleAction(previousMenu));
     }
 
+    @Override
     public void showMenu(LoginResponse response) {
         MenuUtil.showMenu(actions,response);
     }
