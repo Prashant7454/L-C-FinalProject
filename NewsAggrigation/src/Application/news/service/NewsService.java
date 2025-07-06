@@ -73,4 +73,17 @@ public class NewsService {
     public List<News> getNewsByIdsInVisibleCategories(List<Integer> newsIds) throws Exception{
         return newsController.getNewsByIdsInVisibleCategories(newsIds);
     }
+
+    // Admin methods for managing reported news
+    public List<News> getReportedNews() throws Exception{
+        return newsController.getReportedNews();
+    }
+
+    public News hideNews(Integer id) throws Exception{
+        return newsController.hideNews(id);
+    }
+
+    public News unhideNews(Integer id) throws Exception{
+        return newsController.unhideNews(id);
+    }
 }

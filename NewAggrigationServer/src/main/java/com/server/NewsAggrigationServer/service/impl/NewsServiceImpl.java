@@ -151,14 +151,6 @@ public class NewsServiceImpl implements NewsService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<NewsDTO> getReportedNews() {
-        List<News> reportedNewsList = newsRepository.findByReportCountGreaterThan(0);
-        return reportedNewsList.stream()
-                .map(this::mapEntityToDto)
-                .collect(Collectors.toList());
-    }
-
     // New methods for visible news only
     @Override
     public List<NewsDTO> getAllVisibleNews() {
@@ -213,6 +205,35 @@ public class NewsServiceImpl implements NewsService {
         return newsRepository.findNewsByIdsInVisibleCategories(newsIds).stream()
                 .map(this::mapEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NewsDTO> getReportedNews() {
+        return newsRepository.findByReportCountGreaterThan(0).stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public NewsDTO hideNews(Integer id) {
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("News not found with id: " + id));
+        
+        news.setIsHide(1);
+        news = newsRepository.save(news);
+        
+        return mapEntityToDto(news);
+    }
+
+    @Override
+    public NewsDTO unhideNews(Integer id) {
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("News not found with id: " + id));
+        
+        news.setIsHide(0);
+        news = newsRepository.save(news);
+        
+        return mapEntityToDto(news);
     }
 }
 

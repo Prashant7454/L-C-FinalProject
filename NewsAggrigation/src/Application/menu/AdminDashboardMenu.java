@@ -23,6 +23,9 @@ public class AdminDashboardMenu implements Menu{
         actions.add(new ViewAllCategoriesAction());
         actions.add(new AddNewsCategoryAction());
         actions.add(new ManageCategoryVisibilityAction());
+        actions.add(new ManageReportedNewsAction());
+        actions.add(new AssignCategoriesAction());
+        actions.add(new ManageNewsHidingAction());
         actions.add(new AdminLogoutAction());
     }
 

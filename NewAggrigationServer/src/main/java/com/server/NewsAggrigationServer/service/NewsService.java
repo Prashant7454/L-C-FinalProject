@@ -15,7 +15,6 @@ public interface NewsService {
     void addMultipleNews(List<NewsDTO> newsList);
     List<NewsDTO> getTodayNewsByIds(List<Integer> ids);
     List<NewsDTO> getNewsByIdsAndDateRange(List<Integer> ids, LocalDateTime startDate, LocalDateTime endDate);
-    List<NewsDTO> getReportedNews();
     
     // New methods for visible news only
     List<NewsDTO> getAllVisibleNews();
@@ -27,4 +26,9 @@ public interface NewsService {
     // New methods for news in visible categories
     List<NewsDTO> getNewsInVisibleCategories();
     List<NewsDTO> getNewsByIdsInVisibleCategories(List<Integer> newsIds);
+    
+    // Admin methods for managing reported news
+    List<NewsDTO> getReportedNews();
+    NewsDTO hideNews(Integer id);
+    NewsDTO unhideNews(Integer id);
 }

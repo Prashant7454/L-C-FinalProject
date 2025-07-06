@@ -11,5 +11,8 @@ public interface NewsCategoryRepository extends JpaRepository<NewsCategory, Inte
     void deleteByNewsIdAndCategoryId(Integer newsId, Integer categoryId);
     void deleteByNewsId(Integer newsId);
     NewsCategory save(NewsCategory newsCategory);
+    
+    // Method to check if a category is already assigned to a news article
+    boolean existsByNewsIdAndCategoryId(Integer newsId, Integer categoryId);
 }
 

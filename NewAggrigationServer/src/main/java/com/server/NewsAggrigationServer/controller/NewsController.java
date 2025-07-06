@@ -81,11 +81,6 @@ public class NewsController {
         return newsService.getNewsByIdsAndDateRange(dateRangeNewsRequest.getIds(), startDate, endDate);
     }
 
-    @GetMapping("/reported")
-    public List<NewsDTO> getReportedNews() {
-        return newsService.getReportedNews();
-    }
-
     // New endpoints for visible news only
     @GetMapping("/visible")
     public List<NewsDTO> getAllVisibleNews() {
@@ -123,6 +118,22 @@ public class NewsController {
     @PostMapping("/visible-categories/list")
     public List<NewsDTO> getNewsByIdsInVisibleCategories(@RequestBody List<Integer> newsIds) {
         return newsService.getNewsByIdsInVisibleCategories(newsIds);
+    }
+
+    // Admin endpoints for managing reported news
+    @GetMapping("/reported")
+    public List<NewsDTO> getReportedNews() {
+        return newsService.getReportedNews();
+    }
+
+    @PutMapping("/{id}/hide")
+    public NewsDTO hideNews(@PathVariable Integer id) {
+        return newsService.hideNews(id);
+    }
+
+    @PutMapping("/{id}/unhide")
+    public NewsDTO unhideNews(@PathVariable Integer id) {
+        return newsService.unhideNews(id);
     }
 
     private static class DateRangeNewsRequest {

@@ -115,4 +115,23 @@ public class NewsController {
         String responseJson = HttpClientUtil.sendRequest(api, "POST", jsonBody);
         return gson.fromJson(responseJson, newsListType);
     }
+
+    // Admin methods for managing reported news
+    public List<News> getReportedNews() throws Exception {
+        String api = NEWS_API_URL + "/reported";
+        String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
+        return gson.fromJson(responseJson, newsListType);
+    }
+
+    public News hideNews(Integer id) throws Exception {
+        String api = NEWS_API_URL + "/" + id + "/hide";
+        String responseJson = HttpClientUtil.sendRequest(api, "PUT", null);
+        return gson.fromJson(responseJson, News.class);
+    }
+
+    public News unhideNews(Integer id) throws Exception {
+        String api = NEWS_API_URL + "/" + id + "/unhide";
+        String responseJson = HttpClientUtil.sendRequest(api, "PUT", null);
+        return gson.fromJson(responseJson, News.class);
+    }
 }
