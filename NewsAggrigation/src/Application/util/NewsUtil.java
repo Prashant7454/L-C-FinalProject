@@ -64,7 +64,7 @@ public class NewsUtil {
         for(int i = 0;  i< categories.size(); i++){
             System.out.print(categories.get(i).getName());
             if(i<categories.size()-1){
-                System.out.println(", ");
+                System.out.print(", ");
             }
         }
 

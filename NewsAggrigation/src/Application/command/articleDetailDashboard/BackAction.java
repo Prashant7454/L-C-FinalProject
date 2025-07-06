@@ -25,6 +25,6 @@ public class BackAction implements MenuAction {
 
     @Override
     public void execute(LoginResponse response) {
-        new ArticleMenu(previousMenu,newsMap).showMenu(response);
+        previousMenu.showMenu(response);
     }
 }

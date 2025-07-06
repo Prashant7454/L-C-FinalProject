@@ -18,9 +18,11 @@ public class UserDashboardMenu implements Menu{
         this.userSession = userSession;
 
         actions.add(new HeadlinesAction());
+        actions.add(new PersonalizedNewsAction());
         actions.add(new SavedArticlesAction());
         actions.add(new SearchAction());
         actions.add(new NotificationAction());
+        actions.add(new NotificationConfigurationAction());
         actions.add(new LogoutAction());
     }
 

@@ -12,4 +12,7 @@ public interface NotificationConfigurationRepository extends JpaRepository<Notif
     List<NotificationConfiguration> findByUserId(Integer userId);
     NotificationConfiguration findByUserIdAndCategoryId(Integer userId, Integer categoryId);
     void deleteByUserIdAndCategoryId(Integer userId, Integer categoryId);
+    
+    // Method to find enabled notifications by category
+    List<NotificationConfiguration> findByCategoryIdAndEnabledTrue(Integer categoryId);
 }
