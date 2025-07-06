@@ -38,4 +38,26 @@ public class CategoryKeywordServiceImpl implements CategoryKeywordService {
             return dto;
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public List<CategoryKeywordDTO> getCategoryKeywordsByCategoryId(Integer categoryId) {
+        return repository.findByCategoryId(categoryId).stream().map(entity -> {
+            CategoryKeywordDTO dto = new CategoryKeywordDTO();
+            dto.setId(entity.getId());
+            dto.setCategoryId(entity.getCategoryId());
+            dto.setKeywordId(entity.getKeywordId());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryKeywordDTO> getCategoryKeywordsByKeywordId(Integer keywordId) {
+        return repository.findByKeywordId(keywordId).stream().map(entity -> {
+            CategoryKeywordDTO dto = new CategoryKeywordDTO();
+            dto.setId(entity.getId());
+            dto.setCategoryId(entity.getCategoryId());
+            dto.setKeywordId(entity.getKeywordId());
+            return dto;
+        }).collect(Collectors.toList());
+    }
 }

@@ -8,13 +8,17 @@ import Application.news.News;
 import Application.news.service.NewsService;
 import Application.util.NewsUtil;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class OpenArticleAction implements MenuAction {
-    Scanner scanner = new Scanner(System.in);
-    Menu previousMenu;
-    public OpenArticleAction(Menu previousMenu){
+    private Scanner scanner = new Scanner(System.in);
+    private Menu previousMenu;
+    private Map<Integer,News> newsMap;
+    public OpenArticleAction(Menu previousMenu, Map<Integer,News> newsMap){
         this.previousMenu = previousMenu;
+        this.newsMap = newsMap;
     }
 
     @Override
@@ -24,14 +28,20 @@ public class OpenArticleAction implements MenuAction {
 
     @Override
     public void execute(LoginResponse response) {
-        System.out.print("Enter News Id: ");
-        Integer newsId = scanner.nextInt();
+        System.out.print("Select News : ");
+        Integer selectedNewsNumber = scanner.nextInt();
+
+        News selectedNews = newsMap.get(selectedNewsNumber);
+        if(selectedNews == null){
+            System.out.println("Invalid choose!");
+            return;
+        }
         try {
-            NewsUtil.showArticleDetails(newsId);
+            NewsUtil.showArticleDetails(selectedNews);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
-        new ArticleDetailMenu(newsId,previousMenu).showMenu(response);
+        new ArticleDetailMenu(selectedNews.getId(),previousMenu).showMenu(response);
     }
 }

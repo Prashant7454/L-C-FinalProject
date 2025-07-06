@@ -35,7 +35,42 @@ public class NewsService {
         return newsController.getNewsById(newsId);
     }
 
+    public boolean isNewsHidden(Integer newsId) throws Exception{
+        News news = newsController.getNewsById(newsId);
+        return news != null && news.getIsHide() != null && news.getIsHide() == 1;
+    }
+
     public News updateNewsLikeAndDisLikeCount(News news) throws Exception{
         return newsController.updateNewsLikeAndDisLikeCount(news);
+    }
+
+    public News updateNews(News news) throws Exception{
+        return newsController.updateNews(news);
+    }
+
+    // New methods for visible news only
+    public List<News> getAllVisibleNews() throws Exception{
+        return newsController.getAllVisibleNews();
+    }
+
+    public List<News> searchVisibleNews(String keyword) throws Exception{
+        return newsController.searchVisibleNews(keyword);
+    }
+
+    public List<News> getVisibleTodayNewsById(List<Integer> newsIds) throws Exception{
+        return newsController.getVisibleTodayNewsById(newsIds);
+    }
+
+    public List<News> getVisibleNewsByIdAndDateRange(DateRangeNewsRequest dateRangeNewsRequest) throws Exception{
+        return newsController.getVisibleNewsByIdAndDateRange(dateRangeNewsRequest);
+    }
+
+    // New methods for news in visible categories
+    public List<News> getNewsInVisibleCategories() throws Exception{
+        return newsController.getNewsInVisibleCategories();
+    }
+
+    public List<News> getNewsByIdsInVisibleCategories(List<Integer> newsIds) throws Exception{
+        return newsController.getNewsByIdsInVisibleCategories(newsIds);
     }
 }

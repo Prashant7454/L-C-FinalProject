@@ -25,9 +25,17 @@ public class News {
 
     private String keyword;
 
-    private Integer likeCount;
+    @Column(nullable = false)
+    private Integer likeCount = 0;
 
-    private Integer disLikeCount;
+    @Column(nullable = false)
+    private Integer disLikeCount = 0;
+
+    @Column(nullable = false)
+    private Integer reportCount = 0;
+
+    @Column(nullable = false)
+    private Integer isHide = 0;
 
     // Getters & Setters
     public Integer getId() { return id; }
@@ -51,20 +59,27 @@ public class News {
     public String getKeyword() { return keyword; }
     public void setKeyword(String keyword) { this.keyword = keyword; }
 
-    public Integer getLikeCount() {
-        return likeCount;
-    }
+    public Integer getLikeCount() { return likeCount; }
+    public void setLikeCount(Integer likeCount) { this.likeCount = likeCount; }
 
-    public void setLikeCount(Integer likeCount) {
-        this.likeCount = likeCount;
-    }
+    public Integer getDisLikeCount() { return disLikeCount; }
+    public void setDisLikeCount(Integer disLikeCount) { this.disLikeCount = disLikeCount; }
 
-    public Integer getDisLikeCount() {
-        return disLikeCount;
-    }
+    public Integer getReportCount() { return reportCount; }
+    public void setReportCount(Integer reportCount) { this.reportCount = reportCount; }
 
-    public void setDisLikeCount(Integer disLikeCount) {
-        this.disLikeCount = disLikeCount;
+    public Integer getIsHide() { return isHide; }
+    public void setIsHide(Integer isHide) { this.isHide = isHide; }
+
+    @Override
+    public String toString() {
+        return "News{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", likeCount=" + likeCount +
+                ", disLikeCount=" + disLikeCount +
+                ", reportCount=" + reportCount +
+                ", isHide=" + isHide +
+                '}';
     }
 }
-

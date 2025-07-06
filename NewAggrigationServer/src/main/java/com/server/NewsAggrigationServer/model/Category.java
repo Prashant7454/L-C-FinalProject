@@ -12,6 +12,9 @@ public class Category {
 
     private String name;
 
+    @Column(nullable = false)
+    private Integer isHide = 0;
+
     // Constructors
     public Category() {}
 
@@ -25,5 +28,8 @@ public class Category {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    public Integer getIsHide() { return isHide; }
+    public void setIsHide(Integer isHide) { this.isHide = isHide; }
 }
 

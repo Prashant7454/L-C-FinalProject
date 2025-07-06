@@ -10,6 +10,8 @@ public class News {
     private String keyword;
     private Integer likeCount;
     private Integer disLikeCount;
+    private Integer reportCount;
+    private Integer isHide;
 
     public Integer getId() {
         return id;
@@ -81,5 +83,38 @@ public class News {
 
     public void setDisLikeCount(Integer disLikeCount) {
         this.disLikeCount = disLikeCount;
+    }
+
+    public Integer getReportCount() {
+        return reportCount;
+    }
+
+    public void setReportCount(Integer reportCount) {
+        this.reportCount = reportCount;
+    }
+
+    public Integer getIsHide() {
+        return isHide;
+    }
+
+    public void setIsHide(Integer isHide) {
+        this.isHide = isHide;
+    }
+
+    @Override
+    public String toString() {
+        return "News{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", source='" + source + '\'' +
+                ", url='" + url + '\'' +
+                ", publishAt='" + publishAt + '\'' +
+                ", keyword='" + keyword + '\'' +
+                ", likeCount=" + likeCount +
+                ", disLikeCount=" + disLikeCount +
+                ", reportCount=" + reportCount +
+                ", isHide=" + isHide +
+                '}';
     }
 }

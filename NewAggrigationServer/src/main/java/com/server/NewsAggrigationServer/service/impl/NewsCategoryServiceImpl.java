@@ -36,7 +36,7 @@ public class NewsCategoryServiceImpl implements NewsCategoryService {
         for(NewsCategory newsCategory: newsCategories){
             categoryIds.add(newsCategory.getCategoryId());
         }
-        return categoryService.getAllCategoriesByIds(categoryIds);
+        return categoryService.getVisibleCategoriesByIds(categoryIds);
     }
 
     @Override

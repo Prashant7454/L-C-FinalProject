@@ -13,8 +13,7 @@ import Application.newsCategory.service.NewsCategoryService;
 import Application.util.CategoryUtil;
 import Application.util.NewsUtil;
 
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class DateRangeNewsAction implements MenuAction {
 
@@ -34,25 +33,35 @@ public class DateRangeNewsAction implements MenuAction {
             String startDate = getDateInput("Enter start date (yyyy-mm-dd): ", "T00:00:00");
             String endDate = getDateInput("Enter end date (yyyy-mm-dd): ", "T23:59:59");
 
-            List<Category> categories = categoryService.getAllCategories();
-            CategoryUtil.printAllCategories(categories);
+            List<Category> categories = categoryService.getAllVisibleCategories();
+            Map<Integer,Category> categoryMap = CategoryUtil.processCategory(categories);
+            CategoryUtil.printCategory(categoryMap);
 
-            System.out.print("Enter category ID: ");
-            int categoryId = Integer.parseInt(scanner.nextLine().trim());
+            System.out.print("Select Category: ");
+            int selectedCategoryNumber = Integer.parseInt(scanner.nextLine().trim());
+            List<News> allNews = new ArrayList<>();
+            List<Integer> newsIds =  new ArrayList<>();
+            if(selectedCategoryNumber == 1){
+                allNews = newsService.getNewsInVisibleCategories();
+                newsIds = NewsUtil.getAllNewsId(allNews);
+            }
+            else{
+                newsIds = newsCategoryService.getNewsIdByCategoryId(categoryMap.get(selectedCategoryNumber).getId());
+            }
 
-            List<Integer> newsIds = newsCategoryService.getNewsIdByCategoryId(categoryId);
-
+            // Filter news by date range and visible categories
             DateRangeNewsRequest request = new DateRangeNewsRequest();
             request.setStart(startDate);
             request.setEnd(endDate);
             request.setIds(newsIds);
 
-            List<News> newsList = newsService.getNewsByIdAndDateRange(request);
-            NewsUtil.printNewsList(newsList);
-            new ArticleMenu(new ArticleFilterMenu()).showMenu(response);
+            List<News> newsList = newsService.getVisibleNewsByIdAndDateRange(request);
+            Map<Integer,News> newsMap = NewsUtil.processNewsList(newsList);
+            NewsUtil.printNewsList(newsMap);
+            new ArticleMenu(new ArticleFilterMenu(),newsMap).showMenu(response);
 
         } catch (Exception e) {
-            System.err.println("Error: " + e.getStackTrace());
+            System.err.println("Error: " + e.getMessage());
         }
     }
 

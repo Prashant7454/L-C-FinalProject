@@ -29,7 +29,7 @@ public class CategoryController {
     }
 
     @GetMapping("/news/{newsId}")
-    public List<CategoryDTO> getCategoriesForNews(@PathVariable Integer newsId) {
+    public List<CategoryDTO> getCategoriesByNewsId(@PathVariable Integer newsId) {
         return newsCategoryService.getCategoriesByNewsId(newsId);
     }
 
@@ -41,6 +41,28 @@ public class CategoryController {
     @GetMapping("/{id}")
     public CategoryDTO getCategoryById(@PathVariable int id) {
         return categoryService.getCategoryById(id);
+    }
+
+    // New endpoints for visible categories only
+    @GetMapping("/visible")
+    public List<CategoryDTO> getAllVisibleCategories() {
+        return categoryService.getAllVisibleCategories();
+    }
+
+    @PostMapping("/visible/by-ids")
+    public List<CategoryDTO> getVisibleCategoriesByIds(@RequestBody List<Integer> ids) {
+        return categoryService.getVisibleCategoriesByIds(ids);
+    }
+
+    // Admin endpoints for hiding/unhiding categories
+    @PutMapping("/{id}/hide")
+    public CategoryDTO hideCategory(@PathVariable Integer id) {
+        return categoryService.hideCategory(id);
+    }
+
+    @PutMapping("/{id}/unhide")
+    public CategoryDTO unhideCategory(@PathVariable Integer id) {
+        return categoryService.unhideCategory(id);
     }
 }
 

@@ -1,5 +1,4 @@
 package com.server.NewsAggrigationServer.controller;
-
 import com.server.NewsAggrigationServer.dto.CategoryKeywordDTO;
 import com.server.NewsAggrigationServer.service.CategoryKeywordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +21,15 @@ public class CategoryKeywordController {
     @GetMapping
     public List<CategoryKeywordDTO> getAll() {
         return categoryKeywordService.getAllCategoryKeywords();
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public List<CategoryKeywordDTO> getByCategoryId(@PathVariable Integer categoryId) {
+        return categoryKeywordService.getCategoryKeywordsByCategoryId(categoryId);
+    }
+
+    @GetMapping("/keyword/{keywordId}")
+    public List<CategoryKeywordDTO> getByKeywordId(@PathVariable Integer keywordId) {
+        return categoryKeywordService.getCategoryKeywordsByKeywordId(keywordId);
     }
 }

@@ -28,10 +28,26 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public NewsDTO updateNews(Integer id, NewsDTO dto) {
+        System.out.println("Updating news with ID: " + id);
+        System.out.println("DTO like count: " + dto.getLikeCount());
+        System.out.println("DTO dislike count: " + dto.getDisLikeCount());
+        
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("News not found with ID: " + id));
+        
+        System.out.println("Before update - like count: " + news.getLikeCount());
+        System.out.println("Before update - dislike count: " + news.getDisLikeCount());
+        
         mapDtoToEntity(dto, news);
+        
+        System.out.println("After mapping - like count: " + news.getLikeCount());
+        System.out.println("After mapping - dislike count: " + news.getDisLikeCount());
+        
         News updated = newsRepository.save(news);
+        
+        System.out.println("After save - like count: " + updated.getLikeCount());
+        System.out.println("After save - dislike count: " + updated.getDisLikeCount());
+        
         return mapEntityToDto(updated);
     }
 
@@ -92,10 +108,16 @@ public class NewsServiceImpl implements NewsService {
         dto.setKeyword(news.getKeyword());
         dto.setLikeCount(news.getLikeCount());
         dto.setDisLikeCount(news.getDisLikeCount());
+        dto.setReportCount(news.getReportCount());
+        dto.setIsHide(news.getIsHide());
         return dto;
     }
 
     private void mapDtoToEntity(NewsDTO dto, News news) {
+        System.out.println("Mapping DTO to Entity:");
+        System.out.println("DTO like count: " + dto.getLikeCount());
+        System.out.println("DTO dislike count: " + dto.getDisLikeCount());
+        
         news.setTitle(dto.getTitle());
         news.setDescription(dto.getDescription());
         news.setSource(dto.getSource());
@@ -104,6 +126,11 @@ public class NewsServiceImpl implements NewsService {
         news.setKeyword(dto.getKeyword());
         news.setLikeCount(dto.getLikeCount());
         news.setDisLikeCount(dto.getDisLikeCount());
+        news.setReportCount(dto.getReportCount());
+        news.setIsHide(dto.getIsHide());
+        
+        System.out.println("Entity like count after mapping: " + news.getLikeCount());
+        System.out.println("Entity dislike count after mapping: " + news.getDisLikeCount());
     }
 
     @Override
@@ -120,6 +147,70 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsDTO> getNewsByIdsAndDateRange(List<Integer> ids, LocalDateTime startDate, LocalDateTime endDate) {
         List<News> newsList = newsRepository.findByIdInAndPublishAtBetween(ids, startDate, endDate);
         return newsList.stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NewsDTO> getReportedNews() {
+        List<News> reportedNewsList = newsRepository.findByReportCountGreaterThan(0);
+        return reportedNewsList.stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    // New methods for visible news only
+    @Override
+    public List<NewsDTO> getAllVisibleNews() {
+        return newsRepository.findByIsHide(0).stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NewsDTO> getVisibleNews(String searchString) {
+        List<News> matchedNews = newsRepository.searchVisible(searchString);
+        return matchedNews.stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NewsDTO> getVisibleNewsByIds(List<Integer> ids) {
+        List<News> newsList = newsRepository.findByIdInAndIsHide(ids, 0);
+        return newsList.stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NewsDTO> getVisibleTodayNewsByIds(List<Integer> ids) {
+        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
+        List<News> newsList = newsRepository.findByIdInAndPublishAtBetweenAndIsHide(ids, startOfDay, endOfDay, 0);
+        return newsList.stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NewsDTO> getVisibleNewsByIdsAndDateRange(List<Integer> ids, LocalDateTime startDate, LocalDateTime endDate) {
+        List<News> newsList = newsRepository.findByIdInAndPublishAtBetweenAndIsHide(ids, startDate, endDate, 0);
+        return newsList.stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NewsDTO> getNewsInVisibleCategories() {
+        return newsRepository.findNewsInVisibleCategories().stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NewsDTO> getNewsByIdsInVisibleCategories(List<Integer> newsIds) {
+        return newsRepository.findNewsByIdsInVisibleCategories(newsIds).stream()
                 .map(this::mapEntityToDto)
                 .collect(Collectors.toList());
     }

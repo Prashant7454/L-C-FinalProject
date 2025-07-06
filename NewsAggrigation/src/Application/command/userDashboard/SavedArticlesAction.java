@@ -9,6 +9,7 @@ import Application.news.service.NewsService;
 import Application.util.NewsUtil;
 
 import java.util.List;
+import java.util.Map;
 
 public class SavedArticlesAction implements MenuAction {
 
@@ -23,8 +24,9 @@ public class SavedArticlesAction implements MenuAction {
     public void execute(LoginResponse response) {
         System.out.println("Fetching your saved articles...");
         List<News> newsList = fetchSavedArticles(response.getUserId());
-        NewsUtil.printNewsList(newsList);
-        new ArticleMenu(new UserDashboardMenu(response)).showMenu(response);
+        Map<Integer,News> newsMap = NewsUtil.processNewsList(newsList);
+        NewsUtil.printNewsList(newsMap);
+        new ArticleMenu(new UserDashboardMenu(response),newsMap).showMenu(response);
     }
 
     private List<News> fetchSavedArticles(int userId) {

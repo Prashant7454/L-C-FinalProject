@@ -31,7 +31,11 @@ public class NewsController {
 
     @PutMapping("/{id}")
     public NewsDTO updateNews(@PathVariable Integer id, @RequestBody NewsDTO dto) {
-        return newsService.updateNews(id, dto);
+        System.out.println("Received update request for news ID: " + id);
+        System.out.println("Request body: " + dto);
+        NewsDTO result = newsService.updateNews(id, dto);
+        System.out.println("Updated news: " + result);
+        return result;
     }
 
     @GetMapping("/{id}")
@@ -75,6 +79,50 @@ public class NewsController {
         LocalDateTime startDate = LocalDateTime.parse(dateRangeNewsRequest.getStart());
         LocalDateTime endDate = LocalDateTime.parse(dateRangeNewsRequest.getEnd());
         return newsService.getNewsByIdsAndDateRange(dateRangeNewsRequest.getIds(), startDate, endDate);
+    }
+
+    @GetMapping("/reported")
+    public List<NewsDTO> getReportedNews() {
+        return newsService.getReportedNews();
+    }
+
+    // New endpoints for visible news only
+    @GetMapping("/visible")
+    public List<NewsDTO> getAllVisibleNews() {
+        return newsService.getAllVisibleNews();
+    }
+
+    @GetMapping("/visible/search")
+    public List<NewsDTO> getVisibleNews(@RequestParam String searchString) {
+        return newsService.getVisibleNews(searchString);
+    }
+
+    @PostMapping("/visible/list")
+    public List<NewsDTO> getVisibleNewsByIdList(@RequestBody List<Integer> ids) {
+        return newsService.getVisibleNewsByIds(ids);
+    }
+
+    @PostMapping("/visible/today")
+    public List<NewsDTO> getVisibleTodayNewsByIds(@RequestBody List<Integer> ids) {
+        return newsService.getVisibleTodayNewsByIds(ids);
+    }
+
+    @PostMapping("/visible/date-range")
+    public List<NewsDTO> getVisibleNewsByIdsAndDateRange(@RequestBody DateRangeNewsRequest dateRangeNewsRequest) {
+        LocalDateTime startDate = LocalDateTime.parse(dateRangeNewsRequest.getStart());
+        LocalDateTime endDate = LocalDateTime.parse(dateRangeNewsRequest.getEnd());
+        return newsService.getVisibleNewsByIdsAndDateRange(dateRangeNewsRequest.getIds(), startDate, endDate);
+    }
+
+    // New endpoints for news in visible categories
+    @GetMapping("/visible-categories")
+    public List<NewsDTO> getNewsInVisibleCategories() {
+        return newsService.getNewsInVisibleCategories();
+    }
+
+    @PostMapping("/visible-categories/list")
+    public List<NewsDTO> getNewsByIdsInVisibleCategories(@RequestBody List<Integer> newsIds) {
+        return newsService.getNewsByIdsInVisibleCategories(newsIds);
     }
 
     private static class DateRangeNewsRequest {

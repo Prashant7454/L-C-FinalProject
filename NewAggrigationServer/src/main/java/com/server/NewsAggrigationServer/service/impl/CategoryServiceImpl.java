@@ -36,6 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryDTO dto = new CategoryDTO();
         dto.setId(category.getId());
         dto.setName(category.getName());
+        dto.setIsHide(category.getIsHide());
         return dto;
     }
 
@@ -46,6 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
                     CategoryDTO dto = new CategoryDTO();
                     dto.setId(c.getId());
                     dto.setName(c.getName());
+                    dto.setIsHide(c.getIsHide());
                     return dto;
                 }).collect(Collectors.toList());
     }
@@ -57,8 +59,63 @@ public class CategoryServiceImpl implements CategoryService {
                     CategoryDTO dto = new CategoryDTO();
                     dto.setId(c.getId());
                     dto.setName(c.getName());
+                    dto.setIsHide(c.getIsHide());
                     return dto;
                 }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryDTO> getAllVisibleCategories() {
+        return categoryRepository.findByIsHide(0).stream()
+                .map(c -> {
+                    CategoryDTO dto = new CategoryDTO();
+                    dto.setId(c.getId());
+                    dto.setName(c.getName());
+                    dto.setIsHide(c.getIsHide());
+                    return dto;
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryDTO> getVisibleCategoriesByIds(List<Integer> categoryIds) {
+        return categoryRepository.findByIdInAndIsHide(categoryIds, 0).stream()
+                .map(c -> {
+                    CategoryDTO dto = new CategoryDTO();
+                    dto.setId(c.getId());
+                    dto.setName(c.getName());
+                    dto.setIsHide(c.getIsHide());
+                    return dto;
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    public CategoryDTO hideCategory(Integer id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+        
+        category.setIsHide(1);
+        category = categoryRepository.save(category);
+        
+        CategoryDTO dto = new CategoryDTO();
+        dto.setId(category.getId());
+        dto.setName(category.getName());
+        dto.setIsHide(category.getIsHide());
+        return dto;
+    }
+
+    @Override
+    public CategoryDTO unhideCategory(Integer id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+        
+        category.setIsHide(0);
+        category = categoryRepository.save(category);
+        
+        CategoryDTO dto = new CategoryDTO();
+        dto.setId(category.getId());
+        dto.setName(category.getName());
+        dto.setIsHide(category.getIsHide());
+        return dto;
     }
 }
 

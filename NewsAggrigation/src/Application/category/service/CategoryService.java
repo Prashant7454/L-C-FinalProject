@@ -33,4 +33,22 @@ public class CategoryService {
     public List<Category> getCategoryByNewsId(int NewsId) throws Exception{
         return categoryController.getCategoryByNewsId(NewsId);
     }
+
+    // New methods for visible categories only
+    public List<Category> getAllVisibleCategories() throws Exception{
+        return categoryController.getAllVisibleCategories();
+    }
+
+    public List<Category> getVisibleCategoriesByIds(List<Integer> ids) throws Exception{
+        return categoryController.getVisibleCategoriesByIds(ids);
+    }
+
+    // Admin methods for hiding/unhiding categories
+    public Category hideCategory(Integer id) throws Exception{
+        return categoryController.hideCategory(id);
+    }
+
+    public Category unhideCategory(Integer id) throws Exception{
+        return categoryController.unhideCategory(id);
+    }
 }

@@ -3,6 +3,7 @@ package Application.category;
 public class Category {
     private Integer id;
     private String name;
+    private Integer isHide;
 
     // Getters & Setters
     public Integer getId() { return id; }
@@ -10,4 +11,7 @@ public class Category {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    public Integer getIsHide() { return isHide; }
+    public void setIsHide(Integer isHide) { this.isHide = isHide; }
 }

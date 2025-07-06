@@ -2,16 +2,16 @@ package Application.command.userDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
+import Application.menu.NotificationConfigMenu;
 
 public class NotificationAction implements MenuAction {
     @Override
     public String getName() {
-        return "Notification";
+        return "Notification Configuration";
     }
 
     @Override
     public void execute(LoginResponse response) {
-        System.out.println("Fetching top notification...");
-        return; // breaks the dashboard loop
+        new NotificationConfigMenu(response).showMenu(response);
     }
 }

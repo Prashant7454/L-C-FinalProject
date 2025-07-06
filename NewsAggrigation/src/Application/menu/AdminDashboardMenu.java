@@ -22,7 +22,7 @@ public class AdminDashboardMenu implements Menu{
         actions.add(new EditServerDetailsAction());
         actions.add(new ViewAllCategoriesAction());
         actions.add(new AddNewsCategoryAction());
-        actions.add(new HideCategoryAction());
+        actions.add(new ManageCategoryVisibilityAction());
         actions.add(new AdminLogoutAction());
     }
 

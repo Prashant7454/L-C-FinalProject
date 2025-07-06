@@ -56,7 +56,63 @@ public class NewsController {
     public News updateNewsLikeAndDisLikeCount(News news) throws Exception{
         String api = NEWS_API_URL + "/" + news.getId();
         String jsonBody = gson.toJson(news);
+        
+        // Debug: Print what we're sending to server
+        System.out.println("Sending to server: " + jsonBody);
+        
+        String responseJson = HttpClientUtil.sendRequest(api, "PUT", jsonBody);
+        
+        // Debug: Print server response
+        System.out.println("Server response: " + responseJson);
+        
+        return gson.fromJson(responseJson, News.class);
+    }
+
+    public News updateNews(News news) throws Exception{
+        String api = NEWS_API_URL + "/" + news.getId();
+        String jsonBody = gson.toJson(news);
         String responseJson = HttpClientUtil.sendRequest(api, "PUT", jsonBody);
         return gson.fromJson(responseJson, News.class);
+    }
+
+    // New methods for visible news only
+    public List<News> getAllVisibleNews() throws Exception {
+        String api = NEWS_API_URL + "/visible";
+        String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
+        return gson.fromJson(responseJson, newsListType);
+    }
+
+    public List<News> searchVisibleNews(String keyword) throws Exception {
+        String api = NEWS_API_URL + "/visible/search?searchString=" + keyword;
+        String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
+        return gson.fromJson(responseJson, newsListType);
+    }
+
+    public List<News> getVisibleTodayNewsById(List<Integer> newsIds) throws Exception {
+        String api = NEWS_API_URL + "/visible/today";
+        String jsonBody = gson.toJson(newsIds);
+        String responseJson = HttpClientUtil.sendRequest(api, "POST", jsonBody);
+        return gson.fromJson(responseJson, newsListType);
+    }
+
+    public List<News> getVisibleNewsByIdAndDateRange(DateRangeNewsRequest request) throws Exception {
+        String api = NEWS_API_URL + "/visible/date-range";
+        String jsonBody = gson.toJson(request);
+        String responseJson = HttpClientUtil.sendRequest(api, "POST", jsonBody);
+        return gson.fromJson(responseJson, newsListType);
+    }
+
+    // New methods for news in visible categories
+    public List<News> getNewsInVisibleCategories() throws Exception {
+        String api = NEWS_API_URL + "/visible-categories";
+        String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
+        return gson.fromJson(responseJson, newsListType);
+    }
+
+    public List<News> getNewsByIdsInVisibleCategories(List<Integer> newsIds) throws Exception {
+        String api = NEWS_API_URL + "/visible-categories/list";
+        String jsonBody = gson.toJson(newsIds);
+        String responseJson = HttpClientUtil.sendRequest(api, "POST", jsonBody);
+        return gson.fromJson(responseJson, newsListType);
     }
 }

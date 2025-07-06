@@ -36,4 +36,31 @@ public class CategoryController {
         String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
         return gson.fromJson(responseJson, listType);
     }
+
+    // New methods for visible categories only
+    public List<Category> getAllVisibleCategories() throws Exception {
+        String api = CATEGORY_API_URL + "/visible";
+        String responseJson = HttpClientUtil.sendRequest(api, "GET", null);
+        return gson.fromJson(responseJson, listType);
+    }
+
+    public List<Category> getVisibleCategoriesByIds(List<Integer> ids) throws Exception {
+        String api = CATEGORY_API_URL + "/visible/by-ids";
+        String jsonBody = gson.toJson(ids);
+        String responseJson = HttpClientUtil.sendRequest(api, "POST", jsonBody);
+        return gson.fromJson(responseJson, listType);
+    }
+
+    // Admin methods for hiding/unhiding categories
+    public Category hideCategory(Integer id) throws Exception {
+        String api = CATEGORY_API_URL + "/" + id + "/hide";
+        String responseJson = HttpClientUtil.sendRequest(api, "PUT", null);
+        return gson.fromJson(responseJson, Category.class);
+    }
+
+    public Category unhideCategory(Integer id) throws Exception {
+        String api = CATEGORY_API_URL + "/" + id + "/unhide";
+        String responseJson = HttpClientUtil.sendRequest(api, "PUT", null);
+        return gson.fromJson(responseJson, Category.class);
+    }
 }
