@@ -46,7 +46,13 @@ public class NewsAPIClientImpl implements NewsAPIClient {
 
 
         JsonNode arr = resp.getBody().path("articles");
-        if (!arr.isArray()) return Collections.emptyList();
+        if (!arr.isArray()) {
+            // Set status to false when no news is fetched
+            api.get(0).setStatus(false);
+            api.get(0).setLastAccessed(LocalDateTime.now());
+            externalNewsSourceService.save(api.get(0));
+            return Collections.emptyList();
+        }
 
         List<News> parsedArticles = new ArrayList<>();
         DateTimeFormatter fmt = DateTimeFormatter.ISO_DATE_TIME;
@@ -65,6 +71,14 @@ public class NewsAPIClientImpl implements NewsAPIClient {
             parsedArticles.add(a);
         }
 
+        // If no articles were parsed, set status to false
+        if (parsedArticles.isEmpty()) {
+            api.get(0).setStatus(false);
+        } else {
+            // If articles were successfully fetched, ensure status is true
+            api.get(0).setStatus(true);
+        }
+        
         api.get(0).setLastAccessed(LocalDateTime.now());
         externalNewsSourceService.save(api.get(0));
 

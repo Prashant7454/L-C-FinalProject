@@ -1,4 +1,4 @@
-package Application.command.notification;
+package Application.command.userDashboard.articleFilterDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;

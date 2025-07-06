@@ -1,6 +1,7 @@
 package com.server.NewsAggrigationServer.service.impl;
 
 import com.server.NewsAggrigationServer.dto.LoginResponseDTO;
+import com.server.NewsAggrigationServer.exception.ExceptionConstants;
 import com.server.NewsAggrigationServer.exception.UserLoginException;
 import com.server.NewsAggrigationServer.model.User;
 import com.server.NewsAggrigationServer.repository.UserRepository;
@@ -22,7 +23,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public LoginResponseDTO login(String username, String rawPassword) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserLoginException("Invalid username or password"));
+                .orElseThrow(() -> new UserLoginException(ExceptionConstants.INVALID_USERNAME_PASSWORD));
 
         String encryptedInput = encryptionUtil.encrypt(rawPassword);
 
@@ -34,7 +35,7 @@ public class LoginServiceImpl implements LoginService {
             dto.setRole(user.getRole());
             return dto;
         } else {
-            throw new UserLoginException("Invalid username or password");
+            throw new UserLoginException(ExceptionConstants.INVALID_USERNAME_PASSWORD);
         }
     }
 }

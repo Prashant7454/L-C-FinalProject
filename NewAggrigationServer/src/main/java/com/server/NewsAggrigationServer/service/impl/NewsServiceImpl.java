@@ -1,6 +1,8 @@
 package com.server.NewsAggrigationServer.service.impl;
 
 import com.server.NewsAggrigationServer.dto.NewsDTO;
+import com.server.NewsAggrigationServer.exception.ExceptionConstants;
+import com.server.NewsAggrigationServer.exception.NewsServiceException;
 import com.server.NewsAggrigationServer.exception.ResourceNotFoundException;
 import com.server.NewsAggrigationServer.model.News;
 import com.server.NewsAggrigationServer.repository.NewsRepository;
@@ -20,41 +22,44 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public NewsDTO createNews(NewsDTO dto) {
-        News news = new News();
-        mapDtoToEntity(dto, news);
-        News saved = newsRepository.save(news);
-        return mapEntityToDto(saved);
+        try {
+            News news = new News();
+            mapDtoToEntity(dto, news);
+            News saved = newsRepository.save(news);
+            return mapEntityToDto(saved);
+        } catch (Exception e) {
+            throw new NewsServiceException(
+                ExceptionConstants.NEWS_SAVE_ERROR,
+                ExceptionConstants.NEWS_SERVICE_ERROR,
+                "CREATE_NEWS"
+            );
+        }
     }
 
     @Override
     public NewsDTO updateNews(Integer id, NewsDTO dto) {
-        System.out.println("Updating news with ID: " + id);
-        System.out.println("DTO like count: " + dto.getLikeCount());
-        System.out.println("DTO dislike count: " + dto.getDisLikeCount());
-        
-        News news = newsRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("News not found with ID: " + id));
-        
-        System.out.println("Before update - like count: " + news.getLikeCount());
-        System.out.println("Before update - dislike count: " + news.getDisLikeCount());
-        
-        mapDtoToEntity(dto, news);
-        
-        System.out.println("After mapping - like count: " + news.getLikeCount());
-        System.out.println("After mapping - dislike count: " + news.getDisLikeCount());
-        
-        News updated = newsRepository.save(news);
-        
-        System.out.println("After save - like count: " + updated.getLikeCount());
-        System.out.println("After save - dislike count: " + updated.getDisLikeCount());
-        
-        return mapEntityToDto(updated);
+        try {
+            News news = newsRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException(ExceptionConstants.NEWS_NOT_FOUND + " with ID: " + id));
+            
+            mapDtoToEntity(dto, news);
+            News updated = newsRepository.save(news);
+            return mapEntityToDto(updated);
+        } catch (ResourceNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new NewsServiceException(
+                ExceptionConstants.NEWS_UPDATE_ERROR,
+                ExceptionConstants.NEWS_SERVICE_ERROR,
+                "UPDATE_NEWS"
+            );
+        }
     }
 
     @Override
     public NewsDTO getNewsById(Integer id) {
         News news = newsRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("News not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionConstants.NEWS_NOT_FOUND + " with ID: " + id));
         return mapEntityToDto(news);
     }
 

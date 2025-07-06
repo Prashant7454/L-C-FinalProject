@@ -2,8 +2,8 @@ package Application.menu;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
-import Application.command.articleDashboard.OpenArticleAction;
-import Application.command.articleDashboard.BackAction;
+import Application.command.userDashboard.articleFilterDashboard.articleDashboard.OpenArticleAction;
+import Application.command.userDashboard.articleFilterDashboard.articleDashboard.BackAction;
 import Application.news.News;
 import Application.util.MenuUtil;
 
@@ -16,8 +16,8 @@ public class ArticleMenu implements Menu{
     private Map<Integer,News> newsMap;
     public ArticleMenu(Menu previousMenu, Map<Integer,News> newsMap) {
         this.newsMap = newsMap;
-        actions.add(new BackAction(previousMenu));
         actions.add(new OpenArticleAction(previousMenu,newsMap));
+        actions.add(new BackAction(previousMenu));
     }
 
     @Override

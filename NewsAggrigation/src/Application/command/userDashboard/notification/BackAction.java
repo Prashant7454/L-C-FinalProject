@@ -1,7 +1,8 @@
-package Application.command.notificationConfig;
+package Application.command.userDashboard.notification;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
+import Application.menu.UserDashboardMenu;
 
 public class BackAction implements MenuAction {
     @Override
@@ -11,7 +12,6 @@ public class BackAction implements MenuAction {
 
     @Override
     public void execute(LoginResponse response) {
-        // This will break the menu loop and return to the previous menu
-        return;
+        new UserDashboardMenu(response).showMenu(response);
     }
-} 
+}

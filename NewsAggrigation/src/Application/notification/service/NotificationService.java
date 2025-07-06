@@ -15,4 +15,8 @@ public class NotificationService {
     public void clearNotificationsByUserId(Integer userId) throws Exception{
         notificationController.clearNotificationsByUser(userId);
     }
+
+    public void deleteNotification(Integer newsId, Integer userId) throws Exception {
+        notificationController.deleteNotification(newsId, userId);
+    }
 }

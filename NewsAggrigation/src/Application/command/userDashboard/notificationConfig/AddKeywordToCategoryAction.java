@@ -1,4 +1,4 @@
-package Application.command.notificationConfig;
+package Application.command.userDashboard.notificationConfig;
 
 import Application.auth.login.LoginResponse;
 import Application.category.Category;

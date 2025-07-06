@@ -2,7 +2,7 @@ package Application.menu;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
-import Application.command.notificationConfig.*;
+import Application.command.userDashboard.notificationConfig.*;
 import Application.util.MenuUtil;
 
 import java.util.ArrayList;

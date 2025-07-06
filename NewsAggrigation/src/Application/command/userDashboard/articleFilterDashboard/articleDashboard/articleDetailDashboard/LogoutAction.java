@@ -1,10 +1,8 @@
-package Application.command.articleDetailDashboard;
+package Application.command.userDashboard.articleFilterDashboard.articleDashboard.articleDetailDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
 import Application.menu.UserMenu;
-
-import java.awt.*;
 
 public class LogoutAction implements MenuAction {
     @Override

@@ -42,4 +42,10 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
            "JOIN Category c ON nc.categoryId = c.id " +
            "WHERE n.id IN :newsIds AND c.isHide = 0 AND n.isHide = 0")
     List<News> findNewsByIdsInVisibleCategories(List<Integer> newsIds);
+    
+    // Check if news exists by URL
+    boolean existsByUrl(String url);
+    
+    // Find news by URL
+    News findByUrl(String url);
 }

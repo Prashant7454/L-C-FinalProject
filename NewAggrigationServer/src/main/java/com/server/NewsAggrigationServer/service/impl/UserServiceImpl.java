@@ -2,6 +2,8 @@ package com.server.NewsAggrigationServer.service.impl;
 
 
 import com.server.NewsAggrigationServer.dto.UserDTO;
+import com.server.NewsAggrigationServer.exception.DatabaseException;
+import com.server.NewsAggrigationServer.exception.ExceptionConstants;
 import com.server.NewsAggrigationServer.exception.FoundDuplicateUserNameException;
 import com.server.NewsAggrigationServer.exception.ResourceNotFoundException;
 import com.server.NewsAggrigationServer.model.User;
@@ -36,7 +38,14 @@ public class UserServiceImpl implements UserService {
         try {
             user = userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
-            throw new FoundDuplicateUserNameException("Email or Username already exists");
+            throw new FoundDuplicateUserNameException(ExceptionConstants.USER_ALREADY_EXISTS);
+        } catch (Exception ex) {
+            throw new DatabaseException(
+                ExceptionConstants.DB_QUERY_ERROR,
+                "CREATE_USER",
+                "users",
+                "DB_CREATE_ERROR"
+            );
         }
 
         userDTO.setId(user.getId());
@@ -59,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: "+email));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionConstants.USER_NOT_FOUND + " with email: " + email));
 
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());

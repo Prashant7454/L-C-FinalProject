@@ -1,15 +1,10 @@
-package Application.command.articleDashboard;
+package Application.command.userDashboard.notificationConfig;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
-import Application.menu.Menu;
+import Application.menu.UserDashboardMenu;
 
 public class BackAction implements MenuAction {
-    Menu previousMenu;
-    public BackAction(Menu previousMenu){
-        this.previousMenu = previousMenu;
-    }
-
     @Override
     public String getName() {
         return "Back";
@@ -17,6 +12,6 @@ public class BackAction implements MenuAction {
 
     @Override
     public void execute(LoginResponse response) {
-        previousMenu.showMenu(response);
+        new UserDashboardMenu(response).showMenu(response);
     }
-}
+} 

@@ -1,4 +1,4 @@
-package Application.command.articleFilterDashboard;
+package Application.command.userDashboard.articleFilterDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.category.Category;

@@ -2,7 +2,7 @@ package Application.menu;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
-import Application.command.articleDashboard.OpenArticleAction;
+import Application.command.userDashboard.articleFilterDashboard.articleDashboard.OpenArticleAction;
 import Application.command.userDashboard.personalization.*;
 import Application.news.News;
 import Application.util.MenuUtil;

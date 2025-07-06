@@ -23,5 +23,10 @@ public class NotificationController {
     public void clearNotificationsByUser(Integer userId) throws Exception {
         String api = NOTIFICATION_API_URL + "/clear/" + userId;
         HttpClientUtil.sendRequest(api, "DELETE", null);
-    }   
+    }
+
+    public void deleteNotification(Integer newsId, Integer userId) throws Exception {
+        String api = NOTIFICATION_API_URL + "/delete?newsId=" + newsId + "&userId=" + userId;
+        HttpClientUtil.sendRequest(api, "DELETE", null);
+    }
 }

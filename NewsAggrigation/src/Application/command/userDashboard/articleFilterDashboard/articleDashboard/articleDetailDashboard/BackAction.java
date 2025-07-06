@@ -1,11 +1,9 @@
-package Application.command.articleDetailDashboard;
+package Application.command.userDashboard.articleFilterDashboard.articleDashboard.articleDetailDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
-import Application.menu.ArticleMenu;
 import Application.menu.Menu;
 import Application.news.News;
-import Application.util.NewsUtil;
 
 import java.util.HashMap;
 import java.util.Map;

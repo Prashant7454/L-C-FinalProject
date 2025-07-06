@@ -1,4 +1,4 @@
-package Application.command.notificationConfig;
+package Application.command.userDashboard.notificationConfig;
 
 import Application.auth.login.LoginResponse;
 import Application.category.Category;
@@ -8,7 +8,6 @@ import Application.notificationConfig.NotificationConfig;
 import Application.notificationConfig.service.NotificationConfigService;
 import Application.util.CategoryUtil;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;

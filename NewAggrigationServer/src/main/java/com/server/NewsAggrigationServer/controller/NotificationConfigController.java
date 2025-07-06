@@ -34,6 +34,7 @@ public class NotificationConfigController {
 
     @PutMapping
     public NotificationConfigDTO updateNotificationConfiguration(@RequestBody NotificationConfigDTO dto) {
+        System.out.println("Called");
         return configService.updateNotificationConfiguration(dto);
     }
 

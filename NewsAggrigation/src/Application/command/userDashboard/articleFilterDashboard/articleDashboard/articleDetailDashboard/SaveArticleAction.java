@@ -1,4 +1,4 @@
-package Application.command.articleDetailDashboard;
+package Application.command.userDashboard.articleFilterDashboard.articleDashboard.articleDetailDashboard;
 
 import Application.auth.login.LoginResponse;
 import Application.command.MenuAction;
@@ -21,6 +21,7 @@ public class SaveArticleAction implements MenuAction {
     public void execute(LoginResponse response) {
         try {
             savedNewsService.saveNews(response.getUserId(), newsId);
+            System.out.println("Article saved successfully!");
         }
         catch(Exception e){
             System.out.println(e.getMessage());
