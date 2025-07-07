@@ -124,4 +124,4 @@ public class NewsLikeDislikeUserServiceImplTest {
         verify(newsLikeDislikeUserRepository, times(1)).findByUserIdAndDisliked(3, 1);
         verify(newsService, never()).getNewsByIds(anyList());
     }
-} 
+}

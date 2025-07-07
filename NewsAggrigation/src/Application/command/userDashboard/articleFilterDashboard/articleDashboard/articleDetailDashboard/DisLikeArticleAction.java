@@ -47,6 +47,7 @@ public class DisLikeArticleAction implements MenuAction {
 
         try{
             newNewsLikeDislikeReaction = newsLikeDislikeUserService.saveOrUpdateReaction(newNewsLikeDislikeReaction);
+            System.out.println("Article Disliked successfully!");
         }
         catch (Exception e){
             System.out.println("Message: " + e.getMessage());

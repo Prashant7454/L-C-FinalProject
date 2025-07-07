@@ -57,13 +57,7 @@ public class NewsController {
         String api = NEWS_API_URL + "/" + news.getId();
         String jsonBody = gson.toJson(news);
         
-        // Debug: Print what we're sending to server
-        System.out.println("Sending to server: " + jsonBody);
-        
         String responseJson = HttpClientUtil.sendRequest(api, "PUT", jsonBody);
-        
-        // Debug: Print server response
-        System.out.println("Server response: " + responseJson);
         
         return gson.fromJson(responseJson, News.class);
     }

@@ -92,4 +92,4 @@ class SavedNewsServiceImplTest {
         when(savedNewsRepository.existsByUserIdAndNewsId(1, 2)).thenReturn(false);
         assertThrows(RuntimeException.class, () -> savedNewsService.deleteSavedNews(1, 2));
     }
-} 
+}

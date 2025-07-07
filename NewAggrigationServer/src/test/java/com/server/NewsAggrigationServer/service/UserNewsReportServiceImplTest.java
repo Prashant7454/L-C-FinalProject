@@ -121,4 +121,4 @@ public class UserNewsReportServiceImplTest {
         assertNull(result);
         verify(repository, times(1)).findByUserIdAndNewsId(2, 3);
     }
-} 
+}

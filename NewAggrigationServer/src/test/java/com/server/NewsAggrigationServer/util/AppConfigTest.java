@@ -14,4 +14,4 @@ class AppConfigTest {
         assertNotNull(restTemplate);
         context.close();
     }
-} 
+}

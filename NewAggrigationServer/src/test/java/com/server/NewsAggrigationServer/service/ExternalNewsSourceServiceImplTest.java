@@ -40,7 +40,7 @@ class ExternalNewsSourceServiceImplTest {
         testExternalNewsSource.setSourceName("Test News API");
         testExternalNewsSource.setBaseUrl("https://api.testnews.com");
         testExternalNewsSource.setApiKey("test-api-key-123");
-        testExternalNewsSource.setStatus(true);
+        testExternalNewsSource.setStatus(1);
         testExternalNewsSource.setLastAccessed(LocalDateTime.now());
 
         testExternalNewsSourceDTO = new ExternalNewsSourceDTO();
@@ -48,7 +48,7 @@ class ExternalNewsSourceServiceImplTest {
         testExternalNewsSourceDTO.setSourceName("Test News API");
         testExternalNewsSourceDTO.setBaseUrl("https://api.testnews.com");
         testExternalNewsSourceDTO.setApiKey("test-api-key-123");
-        testExternalNewsSourceDTO.setStatus(true);
+        testExternalNewsSourceDTO.setStatus(1);
         testExternalNewsSourceDTO.setLastAccessed(LocalDateTime.now());
     }
 
@@ -99,7 +99,7 @@ class ExternalNewsSourceServiceImplTest {
         source2.setSourceName("Test News API");
         source2.setBaseUrl("https://api2.testnews.com");
         source2.setApiKey("test-api-key-456");
-        source2.setStatus(false);
+        source2.setStatus(0);
         source2.setLastAccessed(LocalDateTime.now().minusHours(1));
 
         List<ExternalNewsSource> mockSources = Arrays.asList(testExternalNewsSource, source2);
@@ -156,7 +156,7 @@ class ExternalNewsSourceServiceImplTest {
         source2.setSourceName("Another News API");
         source2.setBaseUrl("https://api.another.com");
         source2.setApiKey("another-api-key");
-        source2.setStatus(false);
+        source2.setStatus(0);
         source2.setLastAccessed(LocalDateTime.now().minusDays(1));
 
         List<ExternalNewsSource> mockSources = Arrays.asList(testExternalNewsSource, source2);
@@ -283,4 +283,4 @@ class ExternalNewsSourceServiceImplTest {
         assertEquals("News not found with ID: null", exception.getMessage());
         verify(externalNewsSourceRepository).findById(null);
     }
-} 
+}

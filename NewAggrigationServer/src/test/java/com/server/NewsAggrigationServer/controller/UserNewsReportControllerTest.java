@@ -100,4 +100,4 @@ public class UserNewsReportControllerTest {
         dto.setIsReported(isReported);
         return dto;
     }
-} 
+}

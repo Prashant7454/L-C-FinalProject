@@ -155,4 +155,4 @@ public class UserServiceImplTest {
         assertThrows(ResourceNotFoundException.class, () -> userService.getUserByEmail("notfound@example.com"));
         verify(userRepository, times(1)).findByEmail("notfound@example.com");
     }
-} 
+}

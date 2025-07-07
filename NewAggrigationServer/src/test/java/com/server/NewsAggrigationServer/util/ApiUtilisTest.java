@@ -76,4 +76,4 @@ class ApiUtilisTest {
         assertEquals(200, response.statusCode());
         assertEquals("{\"message\":\"ok\"}", response.body());
     }
-} 
+}

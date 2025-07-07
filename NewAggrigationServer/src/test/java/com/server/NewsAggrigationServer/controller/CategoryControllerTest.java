@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-public class CategoryControllerTest {
+class CategoryControllerTest {
 
     @Mock
     private CategoryService categoryService;
@@ -315,4 +315,4 @@ public class CategoryControllerTest {
         dto.setIsHide(isHide);
         return dto;
     }
-} 
+}

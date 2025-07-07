@@ -48,7 +48,7 @@ class ExternalNewsSourceControllerTest {
         testExternalNewsSourceDTO.setSourceName("Test News API");
         testExternalNewsSourceDTO.setBaseUrl("https://api.testnews.com");
         testExternalNewsSourceDTO.setApiKey("test-api-key-123");
-        testExternalNewsSourceDTO.setStatus(true);
+        testExternalNewsSourceDTO.setStatus(1);
         testExternalNewsSourceDTO.setLastAccessed(LocalDateTime.now());
     }
 
@@ -110,7 +110,7 @@ class ExternalNewsSourceControllerTest {
         source2.setSourceName("Another News API");
         source2.setBaseUrl("https://api.another.com");
         source2.setApiKey("another-api-key");
-        source2.setStatus(false);
+        source2.setStatus(0);
         source2.setLastAccessed(LocalDateTime.now().minusDays(1));
 
         List<ExternalNewsSourceDTO> mockSources = Arrays.asList(testExternalNewsSourceDTO, source2);
@@ -224,6 +224,25 @@ class ExternalNewsSourceControllerTest {
     }
 
     @Test
+    void updateExternalNewsSource_ShouldHandleNullIdInRequestBody() throws Exception {
+        // Arrange
+        ExternalNewsSourceDTO updateDTO = new ExternalNewsSourceDTO();
+        updateDTO.setId(0);
+        updateDTO.setApiKey("updated-api-key");
+
+        when(externalNewsSourceService.updateExternalNewsSource(eq(null), any(ExternalNewsSourceDTO.class)))
+                .thenThrow(new ResourceNotFoundException("News not found with ID: null"));
+
+        // Act & Assert
+        mockMvc.perform(put("/api/external/updatesource")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isNotFound());
+
+        verify(externalNewsSourceService).updateExternalNewsSource(eq(null), any(ExternalNewsSourceDTO.class));
+    }
+
+    @Test
     void updateExternalNewsSource_ShouldHandlePartialUpdate() throws Exception {
         // Arrange
         ExternalNewsSourceDTO updateDTO = new ExternalNewsSourceDTO();
@@ -274,4 +293,4 @@ class ExternalNewsSourceControllerTest {
 
         verify(externalNewsSourceService, never()).updateExternalNewsSource(any(), any());
     }
-} 
+}

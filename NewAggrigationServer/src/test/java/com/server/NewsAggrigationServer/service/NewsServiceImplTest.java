@@ -626,4 +626,4 @@ public class NewsServiceImplTest {
         dto.setIsHide(isHide);
         return dto;
     }
-} 
+}

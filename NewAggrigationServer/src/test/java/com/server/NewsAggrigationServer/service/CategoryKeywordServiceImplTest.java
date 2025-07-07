@@ -298,4 +298,4 @@ public class CategoryKeywordServiceImplTest {
 
         verify(repository, times(1)).findAll();
     }
-} 
+}

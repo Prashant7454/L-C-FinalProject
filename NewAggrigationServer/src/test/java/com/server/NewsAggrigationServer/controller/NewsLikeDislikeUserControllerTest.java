@@ -117,4 +117,4 @@ public class NewsLikeDislikeUserControllerTest {
         model.setDisliked(disliked);
         return model;
     }
-} 
+}

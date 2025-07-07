@@ -295,4 +295,4 @@ logging.level.org.springframework.test=DEBUG
 2. **Security Testing**: Add authentication/authorization tests
 3. **API Documentation**: Generate OpenAPI documentation from tests
 4. **Contract Testing**: Add consumer-driven contract tests
-5. **Mutation Testing**: Add mutation testing for better coverage validation 
+5. **Mutation Testing**: Add mutation testing for better coverage validation

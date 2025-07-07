@@ -143,4 +143,4 @@ public class NotificationConfigControllerTest {
 
         verify(configService, times(1)).deleteNotificationConfiguration(userId, categoryId);
     }
-} 
+}

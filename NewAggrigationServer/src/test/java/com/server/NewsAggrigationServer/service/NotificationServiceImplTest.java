@@ -120,4 +120,4 @@ public class NotificationServiceImplTest {
         notificationService.deleteNotification(newsId, userId);
         verify(notificationRepository, times(1)).deleteByNewsIdAndUserId(newsId, userId);
     }
-} 
+}

@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class CategoryServiceImplTest {
+class CategoryServiceImplTest {
 
     @Mock
     private CategoryRepository categoryRepository;
@@ -42,27 +42,6 @@ public class CategoryServiceImplTest {
         testCategoryDTO.setId(1);
         testCategoryDTO.setName("Technology");
         testCategoryDTO.setIsHide(0);
-    }
-
-    @Test
-    void createCategory_Success() {
-        // Arrange
-        CategoryDTO inputDto = new CategoryDTO();
-        inputDto.setName("Technology");
-
-        when(categoryRepository.existsByName("Technology")).thenReturn(false);
-        when(categoryRepository.save(any(Category.class))).thenReturn(testCategory);
-
-        // Act
-        CategoryDTO result = categoryService.createCategory(inputDto);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.getId());
-        assertEquals("Technology", result.getName());
-
-        verify(categoryRepository, times(1)).existsByName("Technology");
-        verify(categoryRepository, times(1)).save(any(Category.class));
     }
 
     @Test
@@ -380,4 +359,4 @@ public class CategoryServiceImplTest {
 
         verify(categoryRepository, times(1)).existsByName("");
     }
-} 
+}

@@ -41,7 +41,7 @@ class NewsAPIClientImplTest {
         sourceDTO = new ExternalNewsSourceDTO();
         sourceDTO.setBaseUrl("http://test.com");
         sourceDTO.setApiKey("key");
-        sourceDTO.setStatus(true);
+        sourceDTO.setStatus(1);
         sourceDTO.setLastAccessed(LocalDateTime.now());
     }
 
@@ -79,4 +79,4 @@ class NewsAPIClientImplTest {
                 .thenThrow(new RuntimeException("fail"));
         assertThrows(RuntimeException.class, () -> newsAPIClientImpl.fetchNews());
     }
-} 
+}

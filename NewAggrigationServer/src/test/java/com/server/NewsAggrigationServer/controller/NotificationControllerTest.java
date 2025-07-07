@@ -122,4 +122,4 @@ public class NotificationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Notification test endpoint called for newsId: 1"));
     }
-} 
+}

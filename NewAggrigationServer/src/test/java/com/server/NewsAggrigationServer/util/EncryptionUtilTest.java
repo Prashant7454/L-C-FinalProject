@@ -20,4 +20,4 @@ class EncryptionUtilTest {
         EncryptionUtil util = new EncryptionUtil();
         assertThrows(IllegalArgumentException.class, () -> util.decrypt("not_base64"));
     }
-} 
+}

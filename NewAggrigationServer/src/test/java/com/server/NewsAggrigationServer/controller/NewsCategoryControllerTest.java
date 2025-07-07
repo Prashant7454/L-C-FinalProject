@@ -121,4 +121,4 @@ public class NewsCategoryControllerTest {
 
         verify(newsCategoryService, times(1)).getNewsIdByCategoryId(5);
     }
-} 
+}

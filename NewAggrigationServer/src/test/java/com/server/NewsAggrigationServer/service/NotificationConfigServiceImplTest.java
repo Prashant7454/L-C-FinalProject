@@ -123,4 +123,4 @@ public class NotificationConfigServiceImplTest {
         configService.deleteNotificationConfiguration(2, 1);
         verify(configRepository, times(1)).deleteByUserIdAndCategoryId(2, 1);
     }
-} 
+}

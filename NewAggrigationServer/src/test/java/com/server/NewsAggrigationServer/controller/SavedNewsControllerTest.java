@@ -61,4 +61,4 @@ public class SavedNewsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Saved news deleted successfully"));
     }
-} 
+}

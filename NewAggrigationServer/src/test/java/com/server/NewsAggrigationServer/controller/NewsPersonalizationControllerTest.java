@@ -86,4 +86,4 @@ public class NewsPersonalizationControllerTest {
                 .andExpect(content().string("Article read recorded successfully"));
         verify(personalizationService, times(1)).recordArticleRead(1, 2);
     }
-} 
+}

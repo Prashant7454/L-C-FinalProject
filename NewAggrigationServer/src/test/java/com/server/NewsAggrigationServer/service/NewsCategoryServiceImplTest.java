@@ -135,4 +135,4 @@ public class NewsCategoryServiceImplTest {
         assertEquals(3, result.get(1));
         verify(newsCategoryRepository, times(1)).findByCategoryId(2);
     }
-} 
+}

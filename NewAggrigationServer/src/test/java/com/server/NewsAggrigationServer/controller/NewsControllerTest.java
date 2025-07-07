@@ -47,8 +47,8 @@ public class NewsControllerTest {
     @Test
     void createNews_Success() throws Exception {
         // Arrange
-        NewsDTO inputDto = createNewsDTO(null, "Test News", "Test Description", "Test Source", "http://test.com", null, "test", 0, 0, 0, 0);
-        NewsDTO expectedDto = createNewsDTO(1, "Test News", "Test Description", "Test Source", "http://test.com", null, "test", 0, 0, 0, 0);
+        NewsDTO inputDto = createNewsDTO(null, "Test News", "Test Description", "Test Source", "http://test.com", LocalDateTime.now(), "test", 0, 0, 0, 0);
+        NewsDTO expectedDto = createNewsDTO(1, "Test News", "Test Description", "Test Source", "http://test.com", LocalDateTime.now(), "test", 0, 0, 0, 0);
 
         when(newsService.createNews(any(NewsDTO.class))).thenReturn(expectedDto);
 
@@ -69,8 +69,8 @@ public class NewsControllerTest {
     void updateNews_Success() throws Exception {
         // Arrange
         Integer newsId = 1;
-        NewsDTO inputDto = createNewsDTO(1, "Updated News", "Updated Description", "Updated Source", "http://updated.com", null, "updated", 5, 2, 1, 0);
-        NewsDTO expectedDto = createNewsDTO(1, "Updated News", "Updated Description", "Updated Source", "http://updated.com", null, "updated", 5, 2, 1, 0);
+        NewsDTO inputDto = createNewsDTO(1, "Updated News", "Updated Description", "Updated Source", "http://updated.com", LocalDateTime.now(), "updated", 5, 2, 1, 0);
+        NewsDTO expectedDto = createNewsDTO(1, "Updated News", "Updated Description", "Updated Source", "http://updated.com", LocalDateTime.now(), "updated", 5, 2, 1, 0);
 
         when(newsService.updateNews(eq(newsId), any(NewsDTO.class))).thenReturn(expectedDto);
 
@@ -148,6 +148,26 @@ public class NewsControllerTest {
                 .andExpect(jsonPath("$[0].title").value("Tech News"));
 
         verify(newsService, times(1)).getNews(searchString);
+    }
+
+    @Test
+    void addMultipleNews_Success() throws Exception {
+        // Arrange
+        List<NewsDTO> newsList = Arrays.asList(
+                createNewsDTO(null, "News 1", "Description 1", "Source 1", "http://news1.com", LocalDateTime.now(), "news1", 0, 0, 0, 0),
+                createNewsDTO(null, "News 2", "Description 2", "Source 2", "http://news2.com", LocalDateTime.now(), "news2", 0, 0, 0, 0)
+        );
+
+        doNothing().when(newsService).addMultipleNews(anyList());
+
+        // Act & Assert
+        mockMvc.perform(post("/api/news/add-multiple")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(newsList)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("News added successfully"));
+
+        verify(newsService, times(1)).addMultipleNews(anyList());
     }
 
     @Test
@@ -422,4 +442,4 @@ public class NewsControllerTest {
         dto.setIsHide(isHide);
         return dto;
     }
-} 
+}

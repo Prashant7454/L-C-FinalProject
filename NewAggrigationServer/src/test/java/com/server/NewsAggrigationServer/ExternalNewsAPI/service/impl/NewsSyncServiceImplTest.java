@@ -67,4 +67,4 @@ class NewsSyncServiceImplTest {
         newsSyncServiceImpl.syncAllFeeds();
         verify(newsRepository, never()).saveAll(anyList());
     }
-} 
+}

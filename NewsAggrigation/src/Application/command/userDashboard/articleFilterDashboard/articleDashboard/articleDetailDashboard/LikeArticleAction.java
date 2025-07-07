@@ -32,17 +32,15 @@ public class LikeArticleAction implements MenuAction {
     @Override
     public void execute(LoginResponse response) {
         try {
-        Integer userId = response.getUserId();
+            Integer userId = response.getUserId();
             
             if (isAlreadyLiked(userId)) {
                 displayMessage(ALREADY_LIKED_MESSAGE);
             return;
         }
-            
             NewsLikeDislikeUser reaction = createLikeReaction(userId);
             saveReaction(reaction);
             updateNewsLikeCount(userId);
-            
             displayMessage(LIKE_SUCCESS_MESSAGE);
         } catch (Exception e) {
             handleError(e);
@@ -66,7 +64,6 @@ public class LikeArticleAction implements MenuAction {
         if (existingReaction != null && existingReaction.getNewsId().equals(newsId)) {
             reaction.setId(existingReaction.getId());
         }
-        
         return reaction;
     }
 
@@ -81,29 +78,16 @@ public class LikeArticleAction implements MenuAction {
         }
         
         NewsLikeDislikeUser existingReaction = reactionService.getReaction(newsId, userId);
-        
-        // Debug: Print current values
-        System.out.println("Current news like count: " + news.getLikeCount());
-        System.out.println("Current news dislike count: " + news.getDisLikeCount());
-        
-        // Increment like count
+
         Integer currentLikeCount = news.getLikeCount() != null ? news.getLikeCount() : 0;
         news.setLikeCount(currentLikeCount + 1);
-        
-        // Decrement dislike count if user previously disliked
+
         if (existingReaction != null && existingReaction.isDisliked() == LIKED_STATUS) {
             Integer currentDislikeCount = news.getDisLikeCount() != null ? news.getDisLikeCount() : 0;
             news.setDisLikeCount(currentDislikeCount - 1);
-            System.out.println("Decrementing dislike count from " + currentDislikeCount + " to " + (currentDislikeCount - 1));
         }
-        
-        // Debug: Print updated values
-        System.out.println("Updated news like count: " + news.getLikeCount());
-        System.out.println("Updated news dislike count: " + news.getDisLikeCount());
-        
+
         News updatedNews = newsService.updateNewsLikeAndDisLikeCount(news);
-        System.out.println("Server response - like count: " + updatedNews.getLikeCount());
-        System.out.println("Server response - dislike count: " + updatedNews.getDisLikeCount());
     }
 
     private void displayMessage(String message) {

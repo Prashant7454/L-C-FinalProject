@@ -73,4 +73,4 @@ public class NewsPersonalizationServiceImplTest {
         List<Integer> result = service.getUserTopInterestCategories(1, 5);
         assertNotNull(result);
     }
-} 
+}
