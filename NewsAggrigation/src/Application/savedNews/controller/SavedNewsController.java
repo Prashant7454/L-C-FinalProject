@@ -19,4 +19,11 @@ public class SavedNewsController {
         String responseJson = HttpClientUtil.sendRequest(api, "POST", jsonBody);
         return gson.fromJson(responseJson, SavedNews.class);
     }
+
+    public boolean unsaveNews(Integer userId, Integer newsId) throws Exception {
+        String api = NEWS_CATEGORY_API_URL + "?userId=" + userId + "&newsId=" + newsId;
+        String responseJson = HttpClientUtil.sendRequest(api, "DELETE", null);
+        // Optionally, check responseJson for success message
+        return responseJson != null && responseJson.contains("deleted successfully");
+    }
 }

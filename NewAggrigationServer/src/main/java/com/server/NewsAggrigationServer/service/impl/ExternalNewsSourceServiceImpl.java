@@ -74,6 +74,7 @@ public class ExternalNewsSourceServiceImpl implements ExternalNewsSourceService 
         dto.setSourceName(updated.getSourceName());
         dto.setApiKey(updated.getApiKey());
         dto.setBaseUrl(updated.getBaseUrl());
+        System.out.println(dto);
         return dto;
     }
 

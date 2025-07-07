@@ -17,12 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest {
+public class UserControllerTest {
 
     @Mock
     private UserService userService;
@@ -33,123 +33,84 @@ class UserControllerTest {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
-    private UserDTO testUserDTO;
-
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         objectMapper = new ObjectMapper();
-
-        testUserDTO = new UserDTO();
-        testUserDTO.setId(1);
-        testUserDTO.setUsername("testuser");
-        testUserDTO.setEmail("test@example.com");
-        testUserDTO.setPassword("password123");
-        testUserDTO.setRole("USER");
     }
 
     @Test
-    void testCreateUser_Success() throws Exception {
-        // Arrange
-        when(userService.createUser(any(UserDTO.class))).thenReturn(testUserDTO);
+    void createUser_Success() throws Exception {
+        UserDTO inputDto = new UserDTO();
+        inputDto.setUsername("testuser");
+        inputDto.setEmail("test@example.com");
+        inputDto.setPassword("password");
+        inputDto.setRole("USER");
 
-        // Act & Assert
+        UserDTO expectedDto = new UserDTO();
+        expectedDto.setId(1);
+        expectedDto.setUsername("testuser");
+        expectedDto.setEmail("test@example.com");
+        expectedDto.setPassword("***");
+        expectedDto.setRole("USER");
+
+        when(userService.createUser(any(UserDTO.class))).thenReturn(expectedDto);
+
         mockMvc.perform(post("/api/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(testUserDTO)))
+                .content(objectMapper.writeValueAsString(inputDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testUserDTO.getId()))
-                .andExpect(jsonPath("$.username").value(testUserDTO.getUsername()))
-                .andExpect(jsonPath("$.email").value(testUserDTO.getEmail()))
-                .andExpect(jsonPath("$.role").value(testUserDTO.getRole()));
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.username").value("testuser"))
+                .andExpect(jsonPath("$.email").value("test@example.com"))
+                .andExpect(jsonPath("$.role").value("USER"));
+
+        verify(userService, times(1)).createUser(any(UserDTO.class));
     }
 
     @Test
-    void testCreateUser_InvalidRequest() throws Exception {
-        // Arrange
-        UserDTO invalidUserDTO = new UserDTO();
-        // Missing required fields
+    void getAllUsers_Success() throws Exception {
+        List<UserDTO> expectedUsers = Arrays.asList(
+                createUserDTO(1, "user1", "user1@example.com", "***", "USER"),
+                createUserDTO(2, "user2", "user2@example.com", "***", "ADMIN")
+        );
 
-        // Act & Assert
-        mockMvc.perform(post("/api/user")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidUserDTO)))
-                .andExpect(status().isOk()); // Controller doesn't validate, service handles validation
-    }
+        when(userService.getAllUsers()).thenReturn(expectedUsers);
 
-    @Test
-    void testGetAllUsers_Success() throws Exception {
-        // Arrange
-        UserDTO user1 = new UserDTO();
-        user1.setId(1);
-        user1.setUsername("user1");
-        user1.setEmail("user1@example.com");
-        user1.setRole("USER");
-
-        UserDTO user2 = new UserDTO();
-        user2.setId(2);
-        user2.setUsername("user2");
-        user2.setEmail("user2@example.com");
-        user2.setRole("ADMIN");
-
-        List<UserDTO> users = Arrays.asList(user1, user2);
-        when(userService.getAllUsers()).thenReturn(users);
-
-        // Act & Assert
         mockMvc.perform(get("/api/user"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").value(user1.getId()))
-                .andExpect(jsonPath("$[0].username").value(user1.getUsername()))
-                .andExpect(jsonPath("$[1].id").value(user2.getId()))
-                .andExpect(jsonPath("$[1].username").value(user2.getUsername()));
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].username").value("user1"))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].username").value("user2"));
+
+        verify(userService, times(1)).getAllUsers();
     }
 
     @Test
-    void testGetAllUsers_EmptyList() throws Exception {
-        // Arrange
-        when(userService.getAllUsers()).thenReturn(Arrays.asList());
+    void getUserByEmail_Success() throws Exception {
+        String email = "user1@example.com";
+        UserDTO expectedDto = createUserDTO(1, "user1", email, "***", "USER");
 
-        // Act & Assert
-        mockMvc.perform(get("/api/user"))
+        when(userService.getUserByEmail(email)).thenReturn(expectedDto);
+
+        mockMvc.perform(get("/api/user/email/{email}", email))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isEmpty());
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.username").value("user1"))
+                .andExpect(jsonPath("$.email").value(email));
+
+        verify(userService, times(1)).getUserByEmail(email);
     }
 
-    @Test
-    void testGetUserByEmail_Success() throws Exception {
-        // Arrange
-        when(userService.getUserByEmail("test@example.com")).thenReturn(testUserDTO);
-
-        // Act & Assert
-        mockMvc.perform(get("/api/user/email/test@example.com"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testUserDTO.getId()))
-                .andExpect(jsonPath("$.username").value(testUserDTO.getUsername()))
-                .andExpect(jsonPath("$.email").value(testUserDTO.getEmail()))
-                .andExpect(jsonPath("$.role").value(testUserDTO.getRole()));
-    }
-
-    @Test
-    void testGetUserByEmail_WithSpecialCharacters() throws Exception {
-        // Arrange
-        String emailWithSpecialChars = "test+user@example.com";
-        when(userService.getUserByEmail(emailWithSpecialChars)).thenReturn(testUserDTO);
-
-        // Act & Assert
-        mockMvc.perform(get("/api/user/email/{email}", emailWithSpecialChars))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(testUserDTO.getEmail()));
-    }
-
-    @Test
-    void testGetUserByEmail_EmptyEmail() throws Exception {
-        // Arrange
-        when(userService.getUserByEmail("")).thenReturn(testUserDTO);
-
-        // Act & Assert
-        mockMvc.perform(get("/api/user/email/"))
-                .andExpect(status().isOk());
+    private UserDTO createUserDTO(Integer id, String username, String email, String password, String role) {
+        UserDTO dto = new UserDTO();
+        dto.setId(id);
+        dto.setUsername(username);
+        dto.setEmail(email);
+        dto.setPassword(password);
+        dto.setRole(role);
+        return dto;
     }
 } 

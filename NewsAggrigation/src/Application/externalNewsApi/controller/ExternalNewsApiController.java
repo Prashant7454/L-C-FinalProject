@@ -23,7 +23,7 @@ public class ExternalNewsApiController {
     public ExternalNewsApi updateExternalNewsApiKey(ExternalNewsApi externalNewsApi) throws Exception {
         String api = EXTERNAL_NEWS_API_URL + "/updatesource";
         String jsonBody = gson.toJson(externalNewsApi);
-        String responseJson = HttpClientUtil.sendRequest(api, "POST", jsonBody);
+        String responseJson = HttpClientUtil.sendRequest(api, "PUT", jsonBody);
         return gson.fromJson(responseJson, ExternalNewsApi.class);
     }
 

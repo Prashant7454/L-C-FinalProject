@@ -21,15 +21,15 @@ public class ExternalNewsSource {
     @Column(name = "apiKey", nullable = false)
     private String apiKey;
 
-    @Column(name = "status", nullable = false)
-    private Boolean status = true;
+    @Column(name = "status")
+    private Integer status = 1;
 
     @Column(name = "lastAccessed")
     private LocalDateTime lastAccessed;
 
     public ExternalNewsSource() {}
 
-    public ExternalNewsSource(String sourceName, String apiKey, Boolean status) {
+    public ExternalNewsSource(String sourceName, String apiKey, Integer status) {
         this.sourceName = sourceName;
         this.apiKey = apiKey;
         this.status = status;
@@ -67,11 +67,11 @@ public class ExternalNewsSource {
         this.apiKey = apiKey;
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

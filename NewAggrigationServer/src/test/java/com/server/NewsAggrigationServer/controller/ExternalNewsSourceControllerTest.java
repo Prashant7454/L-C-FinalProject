@@ -1,6 +1,8 @@
 package com.server.NewsAggrigationServer.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.NewsAggrigationServer.dto.ExternalNewsSourceDTO;
+import com.server.NewsAggrigationServer.exception.ResourceNotFoundException;
 import com.server.NewsAggrigationServer.service.ExternalNewsSourceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,14 +10,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 class ExternalNewsSourceControllerTest {
@@ -26,420 +33,245 @@ class ExternalNewsSourceControllerTest {
     @InjectMocks
     private ExternalNewsSourceController externalNewsSourceController;
 
-    private ExternalNewsSourceDTO sourceDTO1;
-    private ExternalNewsSourceDTO sourceDTO2;
-    private List<ExternalNewsSourceDTO> sourceList;
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
+
+    private ExternalNewsSourceDTO testExternalNewsSourceDTO;
 
     @BeforeEach
     void setUp() {
-        sourceDTO1 = new ExternalNewsSourceDTO();
-        sourceDTO1.setId(1);
-        sourceDTO1.setName("CNN");
-        sourceDTO1.setUrl("https://cnn.com");
-        sourceDTO1.setIsActive(1);
+        mockMvc = MockMvcBuilders.standaloneSetup(externalNewsSourceController).build();
+        objectMapper = new ObjectMapper();
 
-        sourceDTO2 = new ExternalNewsSourceDTO();
-        sourceDTO2.setId(2);
-        sourceDTO2.setName("BBC");
-        sourceDTO2.setUrl("https://bbc.com");
-        sourceDTO2.setIsActive(0);
-
-        sourceList = Arrays.asList(sourceDTO1, sourceDTO2);
+        testExternalNewsSourceDTO = new ExternalNewsSourceDTO();
+        testExternalNewsSourceDTO.setId(1);
+        testExternalNewsSourceDTO.setSourceName("Test News API");
+        testExternalNewsSourceDTO.setBaseUrl("https://api.testnews.com");
+        testExternalNewsSourceDTO.setApiKey("test-api-key-123");
+        testExternalNewsSourceDTO.setStatus(true);
+        testExternalNewsSourceDTO.setLastAccessed(LocalDateTime.now());
     }
 
     @Test
-    void testGetExternalSourceById() {
+    void getExternalSourceById_ShouldReturnSource_WhenFound() throws Exception {
         // Arrange
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.getId());
-        assertEquals("CNN", result.getName());
-        assertEquals("https://cnn.com", result.getUrl());
-        assertEquals(1, result.getIsActive());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithZeroId() {
-        // Arrange
-        when(externalNewsSourceService.getExternalSourceById(0)).thenThrow(new IllegalArgumentException("Invalid source ID"));
+        Integer id = 1;
+        when(externalNewsSourceService.getExternalSourceById(id)).thenReturn(testExternalNewsSourceDTO);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            externalNewsSourceController.getExternalSourceById(0);
-        });
-        verify(externalNewsSourceService).getExternalSourceById(0);
+        mockMvc.perform(get("/api/external/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(testExternalNewsSourceDTO.getId()))
+                .andExpect(jsonPath("$.sourceName").value(testExternalNewsSourceDTO.getSourceName()))
+                .andExpect(jsonPath("$.baseUrl").value(testExternalNewsSourceDTO.getBaseUrl()))
+                .andExpect(jsonPath("$.apiKey").value(testExternalNewsSourceDTO.getApiKey()))
+                .andExpect(jsonPath("$.status").value(testExternalNewsSourceDTO.getStatus()));
+
+        verify(externalNewsSourceService).getExternalSourceById(id);
     }
 
     @Test
-    void testGetExternalSourceByIdWithNegativeId() {
+    void getExternalSourceById_ShouldReturn404_WhenSourceNotFound() throws Exception {
         // Arrange
-        when(externalNewsSourceService.getExternalSourceById(-1)).thenThrow(new IllegalArgumentException("Invalid source ID"));
+        Integer id = 999;
+        when(externalNewsSourceService.getExternalSourceById(id))
+                .thenThrow(new ResourceNotFoundException("News not found with ID: " + id));
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            externalNewsSourceController.getExternalSourceById(-1);
-        });
-        verify(externalNewsSourceService).getExternalSourceById(-1);
+        mockMvc.perform(get("/api/external/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        verify(externalNewsSourceService).getExternalSourceById(id);
     }
 
     @Test
-    void testGetExternalSourceByIdWithServiceException() {
+    void getExternalSourceById_ShouldHandleInvalidId() throws Exception {
         // Arrange
-        when(externalNewsSourceService.getExternalSourceById(1)).thenThrow(new RuntimeException("Service error"));
+        String invalidId = "invalid";
+        when(externalNewsSourceService.getExternalSourceById(null))
+                .thenThrow(new ResourceNotFoundException("News not found with ID: null"));
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            externalNewsSourceController.getExternalSourceById(1);
-        });
-        verify(externalNewsSourceService).getExternalSourceById(1);
+        mockMvc.perform(get("/api/external/{id}", invalidId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        // Note: This test might need adjustment based on how Spring handles path variable conversion
     }
 
     @Test
-    void testGetAll() {
+    void getAll_ShouldReturnAllSources() throws Exception {
         // Arrange
-        when(externalNewsSourceService.getAll()).thenReturn(sourceList);
+        ExternalNewsSourceDTO source2 = new ExternalNewsSourceDTO();
+        source2.setId(2);
+        source2.setSourceName("Another News API");
+        source2.setBaseUrl("https://api.another.com");
+        source2.setApiKey("another-api-key");
+        source2.setStatus(false);
+        source2.setLastAccessed(LocalDateTime.now().minusDays(1));
 
-        // Act
-        List<ExternalNewsSourceDTO> result = externalNewsSourceController.getAll();
+        List<ExternalNewsSourceDTO> mockSources = Arrays.asList(testExternalNewsSourceDTO, source2);
+        when(externalNewsSourceService.getAll()).thenReturn(mockSources);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals(1, result.get(0).getId());
-        assertEquals(2, result.get(1).getId());
-        assertEquals("CNN", result.get(0).getName());
-        assertEquals("BBC", result.get(1).getName());
+        // Act & Assert
+        mockMvc.perform(get("/api/external/source")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(testExternalNewsSourceDTO.getId()))
+                .andExpect(jsonPath("$[0].sourceName").value(testExternalNewsSourceDTO.getSourceName()))
+                .andExpect(jsonPath("$[1].id").value(source2.getId()))
+                .andExpect(jsonPath("$[1].sourceName").value(source2.getSourceName()));
+
         verify(externalNewsSourceService).getAll();
     }
 
     @Test
-    void testGetAllWithEmptyList() {
+    void getAll_ShouldReturnEmptyArray_WhenNoSourcesExist() throws Exception {
         // Arrange
-        when(externalNewsSourceService.getAll()).thenReturn(Collections.emptyList());
+        when(externalNewsSourceService.getAll()).thenReturn(Arrays.asList());
 
-        // Act
-        List<ExternalNewsSourceDTO> result = externalNewsSourceController.getAll();
+        // Act & Assert
+        mockMvc.perform(get("/api/external/source")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
 
-        // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
         verify(externalNewsSourceService).getAll();
     }
 
     @Test
-    void testGetAllWithServiceException() {
+    void updateExternalNewsSource_ShouldUpdateSource_WhenValidRequest() throws Exception {
         // Arrange
-        when(externalNewsSourceService.getAll()).thenThrow(new RuntimeException("Service error"));
+        ExternalNewsSourceDTO updateDTO = new ExternalNewsSourceDTO();
+        updateDTO.setId(1);
+        updateDTO.setApiKey("updated-api-key");
+
+        when(externalNewsSourceService.updateExternalNewsSource(eq(updateDTO.getId()), any(ExternalNewsSourceDTO.class)))
+                .thenReturn(testExternalNewsSourceDTO);
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            externalNewsSourceController.getAll();
-        });
-        verify(externalNewsSourceService).getAll();
+        mockMvc.perform(put("/api/external/updatesource")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(testExternalNewsSourceDTO.getId()))
+                .andExpect(jsonPath("$.sourceName").value(testExternalNewsSourceDTO.getSourceName()))
+                .andExpect(jsonPath("$.apiKey").value(testExternalNewsSourceDTO.getApiKey()));
+
+        verify(externalNewsSourceService).updateExternalNewsSource(eq(updateDTO.getId()), any(ExternalNewsSourceDTO.class));
     }
 
     @Test
-    void testUpdateExternalSource() {
+    void updateExternalNewsSource_ShouldReturn404_WhenSourceNotFound() throws Exception {
         // Arrange
-        when(externalNewsSourceService.updateExternalNewsSource(1, sourceDTO1)).thenReturn(sourceDTO1);
+        ExternalNewsSourceDTO updateDTO = new ExternalNewsSourceDTO();
+        updateDTO.setId(999);
+        updateDTO.setApiKey("updated-api-key");
 
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(sourceDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.getId());
-        assertEquals("CNN", result.getName());
-        assertEquals("https://cnn.com", result.getUrl());
-        assertEquals(1, result.getIsActive());
-        verify(externalNewsSourceService).updateExternalNewsSource(1, sourceDTO1);
-    }
-
-    @Test
-    void testUpdateExternalSourceWithNullInput() {
-        // Arrange
-        when(externalNewsSourceService.updateExternalNewsSource(1, null)).thenThrow(new IllegalArgumentException("Source cannot be null"));
+        when(externalNewsSourceService.updateExternalNewsSource(eq(updateDTO.getId()), any(ExternalNewsSourceDTO.class)))
+                .thenThrow(new ResourceNotFoundException("News not found with ID: " + updateDTO.getId()));
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            externalNewsSourceController.getExternalSourceById(null);
-        });
-        verify(externalNewsSourceService).updateExternalNewsSource(1, null);
+        mockMvc.perform(put("/api/external/updatesource")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isNotFound());
+
+        verify(externalNewsSourceService).updateExternalNewsSource(eq(updateDTO.getId()), any(ExternalNewsSourceDTO.class));
     }
 
     @Test
-    void testUpdateExternalSourceWithNullId() {
+    void updateExternalNewsSource_ShouldHandleInvalidJson() throws Exception {
         // Arrange
-        sourceDTO1.setId(null);
-        when(externalNewsSourceService.updateExternalNewsSource(null, sourceDTO1)).thenThrow(new IllegalArgumentException("Source ID cannot be null"));
+        String invalidJson = "{ invalid json }";
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            externalNewsSourceController.getExternalSourceById(sourceDTO1);
-        });
-        verify(externalNewsSourceService).updateExternalNewsSource(null, sourceDTO1);
+        mockMvc.perform(put("/api/external/updatesource")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalidJson))
+                .andExpect(status().isBadRequest());
+
+        verify(externalNewsSourceService, never()).updateExternalNewsSource(any(), any());
     }
 
     @Test
-    void testUpdateExternalSourceWithServiceException() {
+    void updateExternalNewsSource_ShouldHandleNullRequestBody() throws Exception {
+        // Act & Assert
+        mockMvc.perform(put("/api/external/updatesource")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verify(externalNewsSourceService, never()).updateExternalNewsSource(any(), any());
+    }
+
+    @Test
+    void updateExternalNewsSource_ShouldHandleEmptyRequestBody() throws Exception {
+        // Act & Assert
+        mockMvc.perform(put("/api/external/updatesource")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(""))
+                .andExpect(status().isBadRequest());
+
+        verify(externalNewsSourceService, never()).updateExternalNewsSource(any(), any());
+    }
+
+    @Test
+    void updateExternalNewsSource_ShouldHandlePartialUpdate() throws Exception {
         // Arrange
-        when(externalNewsSourceService.updateExternalNewsSource(1, sourceDTO1)).thenThrow(new RuntimeException("Service error"));
+        ExternalNewsSourceDTO updateDTO = new ExternalNewsSourceDTO();
+        updateDTO.setId(1);
+        // Only setting id, leaving other fields null
+
+        when(externalNewsSourceService.updateExternalNewsSource(eq(updateDTO.getId()), any(ExternalNewsSourceDTO.class)))
+                .thenReturn(testExternalNewsSourceDTO);
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            externalNewsSourceController.getExternalSourceById(sourceDTO1);
-        });
-        verify(externalNewsSourceService).updateExternalNewsSource(1, sourceDTO1);
+        mockMvc.perform(put("/api/external/updatesource")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(testExternalNewsSourceDTO.getId()));
+
+        verify(externalNewsSourceService).updateExternalNewsSource(eq(updateDTO.getId()), any(ExternalNewsSourceDTO.class));
     }
 
     @Test
-    void testGetExternalSourceByIdWithLargeId() {
+    void controller_ShouldHandleServiceException() throws Exception {
         // Arrange
-        when(externalNewsSourceService.getExternalSourceById(Integer.MAX_VALUE)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(Integer.MAX_VALUE);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.getId());
-        verify(externalNewsSourceService).getExternalSourceById(Integer.MAX_VALUE);
-    }
-
-    @Test
-    void testUpdateExternalSourceWithZeroId() {
-        // Arrange
-        sourceDTO1.setId(0);
-        when(externalNewsSourceService.updateExternalNewsSource(0, sourceDTO1)).thenThrow(new IllegalArgumentException("Invalid source ID"));
+        Integer id = 1;
+        when(externalNewsSourceService.getExternalSourceById(id))
+                .thenThrow(new RuntimeException("Database connection failed"));
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            externalNewsSourceController.getExternalSourceById(sourceDTO1);
-        });
-        verify(externalNewsSourceService).updateExternalNewsSource(0, sourceDTO1);
+        mockMvc.perform(get("/api/external/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError());
+
+        verify(externalNewsSourceService).getExternalSourceById(id);
     }
 
     @Test
-    void testUpdateExternalSourceWithNegativeId() {
+    void controller_ShouldHandleUnsupportedMediaType() throws Exception {
         // Arrange
-        sourceDTO1.setId(-1);
-        when(externalNewsSourceService.updateExternalNewsSource(-1, sourceDTO1)).thenThrow(new IllegalArgumentException("Invalid source ID"));
+        ExternalNewsSourceDTO updateDTO = new ExternalNewsSourceDTO();
+        updateDTO.setId(1);
+        updateDTO.setApiKey("updated-api-key");
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            externalNewsSourceController.getExternalSourceById(sourceDTO1);
-        });
-        verify(externalNewsSourceService).updateExternalNewsSource(-1, sourceDTO1);
-    }
+        mockMvc.perform(put("/api/external/updatesource")
+                .contentType(MediaType.TEXT_PLAIN)
+                .content("plain text content"))
+                .andExpect(status().isUnsupportedMediaType());
 
-    @Test
-    void testUpdateExternalSourceWithLargeId() {
-        // Arrange
-        sourceDTO1.setId(Integer.MAX_VALUE);
-        when(externalNewsSourceService.updateExternalNewsSource(Integer.MAX_VALUE, sourceDTO1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(sourceDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(Integer.MAX_VALUE, result.getId());
-        verify(externalNewsSourceService).updateExternalNewsSource(Integer.MAX_VALUE, sourceDTO1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithNullName() {
-        // Arrange
-        sourceDTO1.setName(null);
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertNull(result.getName());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithEmptyName() {
-        // Arrange
-        sourceDTO1.setName("");
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("", result.getName());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithNullUrl() {
-        // Arrange
-        sourceDTO1.setUrl(null);
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertNull(result.getUrl());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithEmptyUrl() {
-        // Arrange
-        sourceDTO1.setUrl("");
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("", result.getUrl());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithNullIsActive() {
-        // Arrange
-        sourceDTO1.setIsActive(null);
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertNull(result.getIsActive());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithZeroIsActive() {
-        // Arrange
-        sourceDTO1.setIsActive(0);
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(0, result.getIsActive());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithNegativeIsActive() {
-        // Arrange
-        sourceDTO1.setIsActive(-1);
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(-1, result.getIsActive());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithLargeIsActive() {
-        // Arrange
-        sourceDTO1.setIsActive(Integer.MAX_VALUE);
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(Integer.MAX_VALUE, result.getIsActive());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetAllWithLargeList() {
-        // Arrange
-        List<ExternalNewsSourceDTO> largeList = Arrays.asList(
-            sourceDTO1, sourceDTO2, sourceDTO1, sourceDTO2, sourceDTO1,
-            sourceDTO2, sourceDTO1, sourceDTO2, sourceDTO1, sourceDTO2
-        );
-        when(externalNewsSourceService.getAll()).thenReturn(largeList);
-
-        // Act
-        List<ExternalNewsSourceDTO> result = externalNewsSourceController.getAll();
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(10, result.size());
-        verify(externalNewsSourceService).getAll();
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithSpecialCharacters() {
-        // Arrange
-        sourceDTO1.setName("CNN@#$%^&*()");
-        sourceDTO1.setUrl("https://cnn@#$%^&*().com");
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("CNN@#$%^&*()", result.getName());
-        assertEquals("https://cnn@#$%^&*().com", result.getUrl());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithUnicode() {
-        // Arrange
-        sourceDTO1.setName("CNN\u00E9\u00F1\u00FC");
-        sourceDTO1.setUrl("https://cnn\u00E9\u00F1\u00FC.com");
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("CNN\u00E9\u00F1\u00FC", result.getName());
-        assertEquals("https://cnn\u00E9\u00F1\u00FC.com", result.getUrl());
-        verify(externalNewsSourceService).getExternalSourceById(1);
-    }
-
-    @Test
-    void testGetExternalSourceByIdWithLongValues() {
-        // Arrange
-        String longString = "a".repeat(1000);
-        sourceDTO1.setName(longString);
-        sourceDTO1.setUrl("https://" + longString + ".com");
-        when(externalNewsSourceService.getExternalSourceById(1)).thenReturn(sourceDTO1);
-
-        // Act
-        ExternalNewsSourceDTO result = externalNewsSourceController.getExternalSourceById(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(longString, result.getName());
-        assertEquals("https://" + longString + ".com", result.getUrl());
-        verify(externalNewsSourceService).getExternalSourceById(1);
+        verify(externalNewsSourceService, never()).updateExternalNewsSource(any(), any());
     }
 } 

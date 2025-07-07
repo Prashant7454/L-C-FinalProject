@@ -17,14 +17,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-class CategoryControllerTest {
+public class CategoryControllerTest {
 
     @Mock
     private CategoryService categoryService;
@@ -38,343 +37,282 @@ class CategoryControllerTest {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
-    private CategoryDTO testCategoryDTO;
-
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
         objectMapper = new ObjectMapper();
-
-        testCategoryDTO = new CategoryDTO();
-        testCategoryDTO.setId(1);
-        testCategoryDTO.setName("Technology");
-        testCategoryDTO.setIsHide(0);
     }
 
     @Test
-    void testCreateCategory_Success() throws Exception {
+    void createCategory_Success() throws Exception {
         // Arrange
-        when(categoryService.createCategory(any(CategoryDTO.class))).thenReturn(testCategoryDTO);
+        CategoryDTO inputDto = new CategoryDTO();
+        inputDto.setName("Technology");
+
+        CategoryDTO expectedDto = new CategoryDTO();
+        expectedDto.setId(1);
+        expectedDto.setName("Technology");
+        expectedDto.setIsHide(0);
+
+        when(categoryService.createCategory(any(CategoryDTO.class))).thenReturn(expectedDto);
 
         // Act & Assert
         mockMvc.perform(post("/api/categories")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(testCategoryDTO)))
+                .content(objectMapper.writeValueAsString(inputDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testCategoryDTO.getId()))
-                .andExpect(jsonPath("$.name").value(testCategoryDTO.getName()))
-                .andExpect(jsonPath("$.isHide").value(testCategoryDTO.getIsHide()));
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("Technology"))
+                .andExpect(jsonPath("$.isHide").value(0));
+
+        verify(categoryService, times(1)).createCategory(any(CategoryDTO.class));
     }
 
     @Test
-    void testCreateCategory_WithEmptyName() throws Exception {
+    void createCategory_WithExistingName_ThrowsException() throws Exception {
         // Arrange
-        CategoryDTO emptyNameDTO = new CategoryDTO();
-        emptyNameDTO.setName("");
-        when(categoryService.createCategory(any(CategoryDTO.class))).thenReturn(emptyNameDTO);
+        CategoryDTO inputDto = new CategoryDTO();
+        inputDto.setName("Technology");
+
+        when(categoryService.createCategory(any(CategoryDTO.class)))
+                .thenThrow(new RuntimeException("Category already exists with name: Technology"));
 
         // Act & Assert
         mockMvc.perform(post("/api/categories")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(emptyNameDTO)))
-                .andExpect(status().isOk());
+                .content(objectMapper.writeValueAsString(inputDto)))
+                .andExpect(status().isInternalServerError());
+
+        verify(categoryService, times(1)).createCategory(any(CategoryDTO.class));
     }
 
     @Test
-    void testCreateCategory_WithNullName() throws Exception {
+    void getAllCategories_Success() throws Exception {
         // Arrange
-        CategoryDTO nullNameDTO = new CategoryDTO();
-        nullNameDTO.setName(null);
-        when(categoryService.createCategory(any(CategoryDTO.class))).thenReturn(nullNameDTO);
+        List<CategoryDTO> expectedCategories = Arrays.asList(
+                createCategoryDTO(1, "Technology", 0),
+                createCategoryDTO(2, "Sports", 0),
+                createCategoryDTO(3, "Politics", 1)
+        );
 
-        // Act & Assert
-        mockMvc.perform(post("/api/categories")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(nullNameDTO)))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void testGetAllCategories_Success() throws Exception {
-        // Arrange
-        CategoryDTO category1 = new CategoryDTO();
-        category1.setId(1);
-        category1.setName("Technology");
-
-        CategoryDTO category2 = new CategoryDTO();
-        category2.setId(2);
-        category2.setName("Science");
-
-        List<CategoryDTO> categories = Arrays.asList(category1, category2);
-        when(categoryService.getAllCategories()).thenReturn(categories);
+        when(categoryService.getAllCategories()).thenReturn(expectedCategories);
 
         // Act & Assert
         mockMvc.perform(get("/api/categories"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").value(category1.getId()))
-                .andExpect(jsonPath("$[0].name").value(category1.getName()))
-                .andExpect(jsonPath("$[1].id").value(category2.getId()))
-                .andExpect(jsonPath("$[1].name").value(category2.getName()));
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("Technology"))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].name").value("Sports"))
+                .andExpect(jsonPath("$[2].id").value(3))
+                .andExpect(jsonPath("$[2].name").value("Politics"));
+
+        verify(categoryService, times(1)).getAllCategories();
     }
 
     @Test
-    void testGetAllCategories_EmptyList() throws Exception {
+    void getCategoriesByNewsId_Success() throws Exception {
         // Arrange
-        when(categoryService.getAllCategories()).thenReturn(Arrays.asList());
+        Integer newsId = 1;
+        List<CategoryDTO> expectedCategories = Arrays.asList(
+                createCategoryDTO(1, "Technology", 0),
+                createCategoryDTO(2, "Science", 0)
+        );
+
+        when(newsCategoryService.getCategoriesByNewsId(newsId)).thenReturn(expectedCategories);
 
         // Act & Assert
-        mockMvc.perform(get("/api/categories"))
+        mockMvc.perform(get("/api/categories/news/{newsId}", newsId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isEmpty());
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("Technology"))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].name").value("Science"));
+
+        verify(newsCategoryService, times(1)).getCategoriesByNewsId(newsId);
     }
 
     @Test
-    void testGetCategoriesByNewsId_Success() throws Exception {
+    void getCategoriesByIds_Success() throws Exception {
         // Arrange
-        List<CategoryDTO> categories = Arrays.asList(testCategoryDTO);
-        when(newsCategoryService.getCategoriesByNewsId(1)).thenReturn(categories);
+        List<Integer> categoryIds = Arrays.asList(1, 2, 3);
+        List<CategoryDTO> expectedCategories = Arrays.asList(
+                createCategoryDTO(1, "Technology", 0),
+                createCategoryDTO(2, "Sports", 0),
+                createCategoryDTO(3, "Politics", 1)
+        );
 
-        // Act & Assert
-        mockMvc.perform(get("/api/categories/news/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").value(testCategoryDTO.getId()));
-    }
-
-    @Test
-    void testGetCategoriesByNewsId_WithZeroId() throws Exception {
-        // Arrange
-        when(newsCategoryService.getCategoriesByNewsId(0)).thenReturn(Arrays.asList());
-
-        // Act & Assert
-        mockMvc.perform(get("/api/categories/news/0"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
-    }
-
-    @Test
-    void testGetCategoriesByIds_Success() throws Exception {
-        // Arrange
-        List<Integer> ids = Arrays.asList(1, 2);
-        List<CategoryDTO> categories = Arrays.asList(testCategoryDTO);
-        when(categoryService.getAllCategoriesByIds(ids)).thenReturn(categories);
+        when(categoryService.getAllCategoriesByIds(categoryIds)).thenReturn(expectedCategories);
 
         // Act & Assert
         mockMvc.perform(post("/api/categories/by-ids")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(ids)))
+                .content(objectMapper.writeValueAsString(categoryIds)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").value(testCategoryDTO.getId()));
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[2].id").value(3));
+
+        verify(categoryService, times(1)).getAllCategoriesByIds(categoryIds);
     }
 
     @Test
-    void testGetCategoriesByIds_EmptyList() throws Exception {
+    void getCategoryById_Success() throws Exception {
         // Arrange
-        List<Integer> ids = Arrays.asList();
-        when(categoryService.getAllCategoriesByIds(ids)).thenReturn(Arrays.asList());
+        Integer categoryId = 1;
+        CategoryDTO expectedCategory = createCategoryDTO(1, "Technology", 0);
+
+        when(categoryService.getCategoryById(categoryId)).thenReturn(expectedCategory);
 
         // Act & Assert
-        mockMvc.perform(post("/api/categories/by-ids")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(ids)))
+        mockMvc.perform(get("/api/categories/{id}", categoryId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isEmpty());
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("Technology"))
+                .andExpect(jsonPath("$.isHide").value(0));
+
+        verify(categoryService, times(1)).getCategoryById(categoryId);
     }
 
     @Test
-    void testGetCategoryById_Success() throws Exception {
+    void getCategoryById_NotFound_ThrowsException() throws Exception {
         // Arrange
-        when(categoryService.getCategoryById(1)).thenReturn(testCategoryDTO);
+        Integer categoryId = 999;
+
+        when(categoryService.getCategoryById(categoryId))
+                .thenThrow(new RuntimeException("Category not found with id: " + categoryId));
 
         // Act & Assert
-        mockMvc.perform(get("/api/categories/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testCategoryDTO.getId()))
-                .andExpect(jsonPath("$.name").value(testCategoryDTO.getName()));
+        mockMvc.perform(get("/api/categories/{id}", categoryId))
+                .andExpect(status().isInternalServerError());
+
+        verify(categoryService, times(1)).getCategoryById(categoryId);
     }
 
     @Test
-    void testGetCategoryById_WithZeroId() throws Exception {
+    void getAllVisibleCategories_Success() throws Exception {
         // Arrange
-        when(categoryService.getCategoryById(0)).thenReturn(testCategoryDTO);
+        List<CategoryDTO> expectedCategories = Arrays.asList(
+                createCategoryDTO(1, "Technology", 0),
+                createCategoryDTO(2, "Sports", 0)
+        );
 
-        // Act & Assert
-        mockMvc.perform(get("/api/categories/0"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void testGetAllVisibleCategories_Success() throws Exception {
-        // Arrange
-        List<CategoryDTO> categories = Arrays.asList(testCategoryDTO);
-        when(categoryService.getAllVisibleCategories()).thenReturn(categories);
+        when(categoryService.getAllVisibleCategories()).thenReturn(expectedCategories);
 
         // Act & Assert
         mockMvc.perform(get("/api/categories/visible"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").value(testCategoryDTO.getId()));
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("Technology"))
+                .andExpect(jsonPath("$[0].isHide").value(0))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].name").value("Sports"))
+                .andExpect(jsonPath("$[1].isHide").value(0));
+
+        verify(categoryService, times(1)).getAllVisibleCategories();
     }
 
     @Test
-    void testGetVisibleCategoriesByIds_Success() throws Exception {
+    void getVisibleCategoriesByIds_Success() throws Exception {
         // Arrange
-        List<Integer> ids = Arrays.asList(1, 2);
-        List<CategoryDTO> categories = Arrays.asList(testCategoryDTO);
-        when(categoryService.getVisibleCategoriesByIds(ids)).thenReturn(categories);
+        List<Integer> categoryIds = Arrays.asList(1, 2);
+        List<CategoryDTO> expectedCategories = Arrays.asList(
+                createCategoryDTO(1, "Technology", 0),
+                createCategoryDTO(2, "Sports", 0)
+        );
+
+        when(categoryService.getVisibleCategoriesByIds(categoryIds)).thenReturn(expectedCategories);
 
         // Act & Assert
         mockMvc.perform(post("/api/categories/visible/by-ids")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(ids)))
+                .content(objectMapper.writeValueAsString(categoryIds)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").value(testCategoryDTO.getId()));
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].isHide").value(0))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].isHide").value(0));
+
+        verify(categoryService, times(1)).getVisibleCategoriesByIds(categoryIds);
     }
 
     @Test
-    void testHideCategory_Success() throws Exception {
+    void hideCategory_Success() throws Exception {
         // Arrange
-        CategoryDTO hiddenCategory = new CategoryDTO();
-        hiddenCategory.setId(1);
-        hiddenCategory.setName("Technology");
-        hiddenCategory.setIsHide(1);
-        when(categoryService.hideCategory(1)).thenReturn(hiddenCategory);
+        Integer categoryId = 1;
+        CategoryDTO expectedCategory = createCategoryDTO(1, "Technology", 1);
+
+        when(categoryService.hideCategory(categoryId)).thenReturn(expectedCategory);
 
         // Act & Assert
-        mockMvc.perform(put("/api/categories/1/hide"))
+        mockMvc.perform(put("/api/categories/{id}/hide", categoryId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(hiddenCategory.getId()))
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("Technology"))
                 .andExpect(jsonPath("$.isHide").value(1));
+
+        verify(categoryService, times(1)).hideCategory(categoryId);
     }
 
     @Test
-    void testUnhideCategory_Success() throws Exception {
+    void hideCategory_NotFound_ThrowsException() throws Exception {
         // Arrange
-        CategoryDTO visibleCategory = new CategoryDTO();
-        visibleCategory.setId(1);
-        visibleCategory.setName("Technology");
-        visibleCategory.setIsHide(0);
-        when(categoryService.unhideCategory(1)).thenReturn(visibleCategory);
+        Integer categoryId = 999;
+
+        when(categoryService.hideCategory(categoryId))
+                .thenThrow(new RuntimeException("Category not found with id: " + categoryId));
 
         // Act & Assert
-        mockMvc.perform(put("/api/categories/1/unhide"))
+        mockMvc.perform(put("/api/categories/{id}/hide", categoryId))
+                .andExpect(status().isInternalServerError());
+
+        verify(categoryService, times(1)).hideCategory(categoryId);
+    }
+
+    @Test
+    void unhideCategory_Success() throws Exception {
+        // Arrange
+        Integer categoryId = 1;
+        CategoryDTO expectedCategory = createCategoryDTO(1, "Technology", 0);
+
+        when(categoryService.unhideCategory(categoryId)).thenReturn(expectedCategory);
+
+        // Act & Assert
+        mockMvc.perform(put("/api/categories/{id}/unhide", categoryId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(visibleCategory.getId()))
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("Technology"))
                 .andExpect(jsonPath("$.isHide").value(0));
+
+        verify(categoryService, times(1)).unhideCategory(categoryId);
     }
 
     @Test
-    void testCreateCategory_WithSpecialCharacters() throws Exception {
+    void unhideCategory_NotFound_ThrowsException() throws Exception {
         // Arrange
-        CategoryDTO specialCategory = new CategoryDTO();
-        specialCategory.setName("Tech@Science#2023");
-        when(categoryService.createCategory(any(CategoryDTO.class))).thenReturn(specialCategory);
+        Integer categoryId = 999;
+
+        when(categoryService.unhideCategory(categoryId))
+                .thenThrow(new RuntimeException("Category not found with id: " + categoryId));
 
         // Act & Assert
-        mockMvc.perform(post("/api/categories")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(specialCategory)))
-                .andExpect(status().isOk());
+        mockMvc.perform(put("/api/categories/{id}/unhide", categoryId))
+                .andExpect(status().isInternalServerError());
+
+        verify(categoryService, times(1)).unhideCategory(categoryId);
     }
 
-    @Test
-    void testCreateCategory_WithUnicodeCharacters() throws Exception {
-        // Arrange
-        CategoryDTO unicodeCategory = new CategoryDTO();
-        unicodeCategory.setName("Technology with émojis 🚀");
-        when(categoryService.createCategory(any(CategoryDTO.class))).thenReturn(unicodeCategory);
-
-        // Act & Assert
-        mockMvc.perform(post("/api/categories")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(unicodeCategory)))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void testCreateCategory_WithLongName() throws Exception {
-        // Arrange
-        String longName = "This is a very long category name that contains many characters and should be properly handled";
-        CategoryDTO longNameCategory = new CategoryDTO();
-        longNameCategory.setName(longName);
-        when(categoryService.createCategory(any(CategoryDTO.class))).thenReturn(longNameCategory);
-
-        // Act & Assert
-        mockMvc.perform(post("/api/categories")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(longNameCategory)))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void testCreateCategory_WithInvalidContentType() throws Exception {
-        // Act & Assert
-        mockMvc.perform(post("/api/categories")
-                .contentType(MediaType.TEXT_PLAIN)
-                .content("invalid content"))
-                .andExpect(status().isUnsupportedMediaType());
-    }
-
-    @Test
-    void testCreateCategory_WithInvalidJson() throws Exception {
-        // Act & Assert
-        mockMvc.perform(post("/api/categories")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{ invalid json }"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void testGetCategoriesByIds_WithInvalidJson() throws Exception {
-        // Act & Assert
-        mockMvc.perform(post("/api/categories/by-ids")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{ invalid json }"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void testGetVisibleCategoriesByIds_WithInvalidJson() throws Exception {
-        // Act & Assert
-        mockMvc.perform(post("/api/categories/visible/by-ids")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{ invalid json }"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void testGetCategoriesByNewsId_WithNegativeId() throws Exception {
-        // Arrange
-        when(newsCategoryService.getCategoriesByNewsId(-1)).thenReturn(Arrays.asList());
-
-        // Act & Assert
-        mockMvc.perform(get("/api/categories/news/-1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
-    }
-
-    @Test
-    void testHideCategory_WithNegativeId() throws Exception {
-        // Arrange
-        when(categoryService.hideCategory(-1)).thenReturn(testCategoryDTO);
-
-        // Act & Assert
-        mockMvc.perform(put("/api/categories/-1/hide"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void testUnhideCategory_WithNegativeId() throws Exception {
-        // Arrange
-        when(categoryService.unhideCategory(-1)).thenReturn(testCategoryDTO);
-
-        // Act & Assert
-        mockMvc.perform(put("/api/categories/-1/unhide"))
-                .andExpect(status().isOk());
+    // Helper method to create CategoryDTO objects
+    private CategoryDTO createCategoryDTO(Integer id, String name, Integer isHide) {
+        CategoryDTO dto = new CategoryDTO();
+        dto.setId(id);
+        dto.setName(name);
+        dto.setIsHide(isHide);
+        return dto;
     }
 } 

@@ -10,14 +10,14 @@ public class ExternalNewsSourceDTO {
     private String sourceName;
     private String apiKey;
     private String baseUrl;
-    private Boolean status;
+    private Integer status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime lastAccessed;
 
     public ExternalNewsSourceDTO() {}
 
-    public ExternalNewsSourceDTO(int id, String sourceName, String apiKey, String baseUrl, Boolean status, LocalDateTime lastAccessed) {
+    public ExternalNewsSourceDTO(int id, String sourceName, String apiKey, String baseUrl, Integer status, LocalDateTime lastAccessed) {
         this.id = id;
         this.sourceName = sourceName;
         this.apiKey = apiKey;
@@ -58,11 +58,11 @@ public class ExternalNewsSourceDTO {
         this.baseUrl = baseUrl;
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -72,5 +72,17 @@ public class ExternalNewsSourceDTO {
 
     public void setLastAccessed(LocalDateTime lastAccessed) {
         this.lastAccessed = lastAccessed;
+    }
+
+    @Override
+    public String toString() {
+        return "ExternalNewsSourceDTO{" +
+                "id=" + id +
+                ", sourceName='" + sourceName + '\'' +
+                ", apiKey='" + apiKey + '\'' +
+                ", baseUrl='" + baseUrl + '\'' +
+                ", status=" + status +
+                ", lastAccessed=" + lastAccessed +
+                '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.server.NewsAggrigationServer.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.NewsAggrigationServer.dto.KeywordDTO;
 import com.server.NewsAggrigationServer.service.KeywordService;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,14 +9,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 class KeywordControllerTest {
@@ -26,326 +30,287 @@ class KeywordControllerTest {
     @InjectMocks
     private KeywordController keywordController;
 
-    private KeywordDTO keywordDTO1;
-    private KeywordDTO keywordDTO2;
-    private List<KeywordDTO> keywordList;
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
+
+    private KeywordDTO testKeywordDTO;
 
     @BeforeEach
     void setUp() {
-        keywordDTO1 = new KeywordDTO();
-        keywordDTO1.setId(1);
-        keywordDTO1.setName("technology");
-        keywordDTO1.setDescription("Technology related keywords");
+        mockMvc = MockMvcBuilders.standaloneSetup(keywordController).build();
+        objectMapper = new ObjectMapper();
 
-        keywordDTO2 = new KeywordDTO();
-        keywordDTO2.setId(2);
-        keywordDTO2.setName("sports");
-        keywordDTO2.setDescription("Sports related keywords");
-
-        keywordList = Arrays.asList(keywordDTO1, keywordDTO2);
+        testKeywordDTO = new KeywordDTO();
+        testKeywordDTO.setId(1);
+        testKeywordDTO.setName("Technology");
     }
 
     @Test
-    void testAddKeyword() {
+    void addKeyword_ShouldReturnCreatedKeyword() throws Exception {
         // Arrange
-        when(keywordService.addKeyword(any(KeywordDTO.class))).thenReturn(keywordDTO1);
+        KeywordDTO inputDTO = new KeywordDTO();
+        inputDTO.setName("Science");
 
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
+        KeywordDTO responseDTO = new KeywordDTO();
+        responseDTO.setId(2);
+        responseDTO.setName("Science");
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.getId());
-        assertEquals("technology", result.getName());
-        assertEquals("Technology related keywords", result.getDescription());
-        verify(keywordService).addKeyword(keywordDTO1);
-    }
-
-    @Test
-    void testAddKeywordWithNullInput() {
-        // Arrange
-        when(keywordService.addKeyword(null)).thenThrow(new IllegalArgumentException("Keyword cannot be null"));
+        when(keywordService.addKeyword(any(KeywordDTO.class))).thenReturn(responseDTO);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            keywordController.addKeyword(null);
-        });
-        verify(keywordService).addKeyword(null);
+        mockMvc.perform(post("/api/keywords")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inputDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(2))
+                .andExpect(jsonPath("$.name").value("Science"));
+
+        verify(keywordService).addKeyword(any(KeywordDTO.class));
     }
 
     @Test
-    void testAddKeywordWithEmptyName() {
+    void addKeyword_ShouldHandleNullName() throws Exception {
         // Arrange
-        keywordDTO1.setName("");
-        when(keywordService.addKeyword(keywordDTO1)).thenThrow(new IllegalArgumentException("Keyword name cannot be empty"));
+        KeywordDTO inputDTO = new KeywordDTO();
+        inputDTO.setName(null);
+
+        KeywordDTO responseDTO = new KeywordDTO();
+        responseDTO.setId(3);
+        responseDTO.setName(null);
+
+        when(keywordService.addKeyword(any(KeywordDTO.class))).thenReturn(responseDTO);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            keywordController.addKeyword(keywordDTO1);
-        });
-        verify(keywordService).addKeyword(keywordDTO1);
+        mockMvc.perform(post("/api/keywords")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inputDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(3))
+                .andExpect(jsonPath("$.name").isEmpty());
+
+        verify(keywordService).addKeyword(any(KeywordDTO.class));
     }
 
     @Test
-    void testAddKeywordWithNullName() {
+    void addKeyword_ShouldHandleEmptyName() throws Exception {
         // Arrange
-        keywordDTO1.setName(null);
-        when(keywordService.addKeyword(keywordDTO1)).thenThrow(new IllegalArgumentException("Keyword name cannot be null"));
+        KeywordDTO inputDTO = new KeywordDTO();
+        inputDTO.setName("");
+
+        KeywordDTO responseDTO = new KeywordDTO();
+        responseDTO.setId(4);
+        responseDTO.setName("");
+
+        when(keywordService.addKeyword(any(KeywordDTO.class))).thenReturn(responseDTO);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            keywordController.addKeyword(keywordDTO1);
-        });
-        verify(keywordService).addKeyword(keywordDTO1);
+        mockMvc.perform(post("/api/keywords")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inputDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(4))
+                .andExpect(jsonPath("$.name").value(""));
+
+        verify(keywordService).addKeyword(any(KeywordDTO.class));
     }
 
     @Test
-    void testAddKeywordWithServiceException() {
+    void addKeyword_ShouldHandleSpecialCharacters() throws Exception {
         // Arrange
-        when(keywordService.addKeyword(any(KeywordDTO.class))).thenThrow(new RuntimeException("Service error"));
+        KeywordDTO inputDTO = new KeywordDTO();
+        inputDTO.setName("AI & Machine Learning");
+
+        KeywordDTO responseDTO = new KeywordDTO();
+        responseDTO.setId(5);
+        responseDTO.setName("AI & Machine Learning");
+
+        when(keywordService.addKeyword(any(KeywordDTO.class))).thenReturn(responseDTO);
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            keywordController.addKeyword(keywordDTO1);
-        });
-        verify(keywordService).addKeyword(keywordDTO1);
+        mockMvc.perform(post("/api/keywords")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inputDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(5))
+                .andExpect(jsonPath("$.name").value("AI & Machine Learning"));
+
+        verify(keywordService).addKeyword(any(KeywordDTO.class));
     }
 
     @Test
-    void testGetAllKeywords() {
+    void addKeyword_ShouldHandleLongName() throws Exception {
         // Arrange
-        when(keywordService.getAllKeywords()).thenReturn(keywordList);
+        String longName = "This is a very long keyword name that might be used for testing purposes";
+        KeywordDTO inputDTO = new KeywordDTO();
+        inputDTO.setName(longName);
 
-        // Act
-        List<KeywordDTO> result = keywordController.getAllKeywords();
+        KeywordDTO responseDTO = new KeywordDTO();
+        responseDTO.setId(6);
+        responseDTO.setName(longName);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals(1, result.get(0).getId());
-        assertEquals(2, result.get(1).getId());
-        assertEquals("technology", result.get(0).getName());
-        assertEquals("sports", result.get(1).getName());
+        when(keywordService.addKeyword(any(KeywordDTO.class))).thenReturn(responseDTO);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/keywords")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inputDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(6))
+                .andExpect(jsonPath("$.name").value(longName));
+
+        verify(keywordService).addKeyword(any(KeywordDTO.class));
+    }
+
+    @Test
+    void addKeyword_ShouldHandleInvalidJson() throws Exception {
+        // Act & Assert
+        mockMvc.perform(post("/api/keywords")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("invalid json"))
+                .andExpect(status().isBadRequest());
+
+        verify(keywordService, never()).addKeyword(any(KeywordDTO.class));
+    }
+
+    @Test
+    void addKeyword_ShouldHandleMissingContentType() throws Exception {
+        // Arrange
+        KeywordDTO inputDTO = new KeywordDTO();
+        inputDTO.setName("Test");
+
+        // Act & Assert
+        mockMvc.perform(post("/api/keywords")
+                .content(objectMapper.writeValueAsString(inputDTO)))
+                .andExpect(status().isUnsupportedMediaType());
+
+        verify(keywordService, never()).addKeyword(any(KeywordDTO.class));
+    }
+
+    @Test
+    void getAllKeywords_ShouldReturnAllKeywords() throws Exception {
+        // Arrange
+        KeywordDTO keyword1 = new KeywordDTO();
+        keyword1.setId(1);
+        keyword1.setName("Technology");
+
+        KeywordDTO keyword2 = new KeywordDTO();
+        keyword2.setId(2);
+        keyword2.setName("Science");
+
+        KeywordDTO keyword3 = new KeywordDTO();
+        keyword3.setId(3);
+        keyword3.setName("Sports");
+
+        List<KeywordDTO> mockKeywords = Arrays.asList(keyword1, keyword2, keyword3);
+        when(keywordService.getAllKeywords()).thenReturn(mockKeywords);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/keywords"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("Technology"))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].name").value("Science"))
+                .andExpect(jsonPath("$[2].id").value(3))
+                .andExpect(jsonPath("$[2].name").value("Sports"));
+
         verify(keywordService).getAllKeywords();
     }
 
     @Test
-    void testGetAllKeywordsWithEmptyList() {
+    void getAllKeywords_ShouldReturnEmptyList_WhenNoKeywordsExist() throws Exception {
         // Arrange
-        when(keywordService.getAllKeywords()).thenReturn(Collections.emptyList());
-
-        // Act
-        List<KeywordDTO> result = keywordController.getAllKeywords();
-
-        // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(keywordService).getAllKeywords();
-    }
-
-    @Test
-    void testGetAllKeywordsWithServiceException() {
-        // Arrange
-        when(keywordService.getAllKeywords()).thenThrow(new RuntimeException("Service error"));
+        when(keywordService.getAllKeywords()).thenReturn(Arrays.asList());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            keywordController.getAllKeywords();
-        });
+        mockMvc.perform(get("/api/keywords"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+
         verify(keywordService).getAllKeywords();
     }
 
     @Test
-    void testAddKeywordWithSpecialCharacters() {
+    void getAllKeywords_ShouldHandleKeywordsWithNullNames() throws Exception {
         // Arrange
-        keywordDTO1.setName("test@#$%^&*()");
-        keywordDTO1.setDescription("Test with special characters");
-        when(keywordService.addKeyword(keywordDTO1)).thenReturn(keywordDTO1);
+        KeywordDTO keyword1 = new KeywordDTO();
+        keyword1.setId(1);
+        keyword1.setName(null);
 
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
+        KeywordDTO keyword2 = new KeywordDTO();
+        keyword2.setId(2);
+        keyword2.setName("Valid Name");
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("test@#$%^&*()", result.getName());
-        assertEquals("Test with special characters", result.getDescription());
-        verify(keywordService).addKeyword(keywordDTO1);
-    }
-
-    @Test
-    void testAddKeywordWithUnicode() {
-        // Arrange
-        keywordDTO1.setName("test\u00E9\u00F1\u00FC");
-        keywordDTO1.setDescription("Test with unicode characters");
-        when(keywordService.addKeyword(keywordDTO1)).thenReturn(keywordDTO1);
-
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("test\u00E9\u00F1\u00FC", result.getName());
-        assertEquals("Test with unicode characters", result.getDescription());
-        verify(keywordService).addKeyword(keywordDTO1);
-    }
-
-    @Test
-    void testAddKeywordWithLongName() {
-        // Arrange
-        String longName = "a".repeat(1000);
-        keywordDTO1.setName(longName);
-        keywordDTO1.setDescription("Test with long name");
-        when(keywordService.addKeyword(keywordDTO1)).thenReturn(keywordDTO1);
-
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(longName, result.getName());
-        assertEquals("Test with long name", result.getDescription());
-        verify(keywordService).addKeyword(keywordDTO1);
-    }
-
-    @Test
-    void testAddKeywordWithLongDescription() {
-        // Arrange
-        String longDescription = "a".repeat(10000);
-        keywordDTO1.setName("test");
-        keywordDTO1.setDescription(longDescription);
-        when(keywordService.addKeyword(keywordDTO1)).thenReturn(keywordDTO1);
-
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("test", result.getName());
-        assertEquals(longDescription, result.getDescription());
-        verify(keywordService).addKeyword(keywordDTO1);
-    }
-
-    @Test
-    void testAddKeywordWithZeroId() {
-        // Arrange
-        keywordDTO1.setId(0);
-        when(keywordService.addKeyword(keywordDTO1)).thenReturn(keywordDTO1);
-
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(0, result.getId());
-        verify(keywordService).addKeyword(keywordDTO1);
-    }
-
-    @Test
-    void testAddKeywordWithNegativeId() {
-        // Arrange
-        keywordDTO1.setId(-1);
-        when(keywordService.addKeyword(keywordDTO1)).thenReturn(keywordDTO1);
-
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(-1, result.getId());
-        verify(keywordService).addKeyword(keywordDTO1);
-    }
-
-    @Test
-    void testAddKeywordWithLargeId() {
-        // Arrange
-        keywordDTO1.setId(Integer.MAX_VALUE);
-        when(keywordService.addKeyword(keywordDTO1)).thenReturn(keywordDTO1);
-
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(Integer.MAX_VALUE, result.getId());
-        verify(keywordService).addKeyword(keywordDTO1);
-    }
-
-    @Test
-    void testGetAllKeywordsWithLargeList() {
-        // Arrange
-        List<KeywordDTO> largeList = Arrays.asList(
-            keywordDTO1, keywordDTO2, keywordDTO1, keywordDTO2, keywordDTO1,
-            keywordDTO2, keywordDTO1, keywordDTO2, keywordDTO1, keywordDTO2
-        );
-        when(keywordService.getAllKeywords()).thenReturn(largeList);
-
-        // Act
-        List<KeywordDTO> result = keywordController.getAllKeywords();
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(10, result.size());
-        verify(keywordService).getAllKeywords();
-    }
-
-    @Test
-    void testAddKeywordWithWhitespaceOnly() {
-        // Arrange
-        keywordDTO1.setName("   ");
-        keywordDTO1.setDescription("Test with whitespace only");
-        when(keywordService.addKeyword(keywordDTO1)).thenThrow(new IllegalArgumentException("Keyword name cannot be whitespace only"));
+        List<KeywordDTO> mockKeywords = Arrays.asList(keyword1, keyword2);
+        when(keywordService.getAllKeywords()).thenReturn(mockKeywords);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            keywordController.addKeyword(keywordDTO1);
-        });
-        verify(keywordService).addKeyword(keywordDTO1);
+        mockMvc.perform(get("/api/keywords"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").isEmpty())
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].name").value("Valid Name"));
+
+        verify(keywordService).getAllKeywords();
     }
 
     @Test
-    void testAddKeywordWithLeadingTrailingWhitespace() {
+    void getAllKeywords_ShouldHandleSingleKeyword() throws Exception {
         // Arrange
-        keywordDTO1.setName("  technology  ");
-        keywordDTO1.setDescription("Test with leading/trailing whitespace");
-        when(keywordService.addKeyword(keywordDTO1)).thenReturn(keywordDTO1);
+        List<KeywordDTO> mockKeywords = Arrays.asList(testKeywordDTO);
+        when(keywordService.getAllKeywords()).thenReturn(mockKeywords);
 
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
+        // Act & Assert
+        mockMvc.perform(get("/api/keywords"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("Technology"));
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("  technology  ", result.getName());
-        assertEquals("Test with leading/trailing whitespace", result.getDescription());
-        verify(keywordService).addKeyword(keywordDTO1);
+        verify(keywordService).getAllKeywords();
     }
 
     @Test
-    void testAddKeywordWithNullDescription() {
-        // Arrange
-        keywordDTO1.setDescription(null);
-        when(keywordService.addKeyword(keywordDTO1)).thenReturn(keywordDTO1);
+    void getAllKeywords_ShouldHandleUnsupportedHttpMethod() throws Exception {
+        // Act & Assert
+        mockMvc.perform(put("/api/keywords"))
+                .andExpect(status().isMethodNotAllowed());
 
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertNull(result.getDescription());
-        verify(keywordService).addKeyword(keywordDTO1);
+        verify(keywordService, never()).getAllKeywords();
     }
 
     @Test
-    void testAddKeywordWithEmptyDescription() {
-        // Arrange
-        keywordDTO1.setDescription("");
-        when(keywordService.addKeyword(keywordDTO1)).thenReturn(keywordDTO1);
+    void addKeyword_ShouldHandleEmptyBody() throws Exception {
+        // Act & Assert
+        mockMvc.perform(post("/api/keywords")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(""))
+                .andExpect(status().isBadRequest());
 
-        // Act
-        KeywordDTO result = keywordController.addKeyword(keywordDTO1);
+        verify(keywordService, never()).addKeyword(any(KeywordDTO.class));
+    }
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("", result.getDescription());
-        verify(keywordService).addKeyword(keywordDTO1);
+    @Test
+    void addKeyword_ShouldHandleMalformedJson() throws Exception {
+        // Act & Assert
+        mockMvc.perform(post("/api/keywords")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\": \"test\",}"))
+                .andExpect(status().isBadRequest());
+
+        verify(keywordService, never()).addKeyword(any(KeywordDTO.class));
     }
 } 

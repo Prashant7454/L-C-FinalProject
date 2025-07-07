@@ -7,12 +7,12 @@ public class ExternalNewsApi {
     private String sourceName;
     private String apiKey;
     private String baseUrl;
-    private Boolean status;
+    private Integer status;
     private String lastAccessed;
 
     public ExternalNewsApi() {}
 
-    public ExternalNewsApi(int id, String sourceName, String apiKey, String baseUrl, Boolean status, String lastAccessed) {
+    public ExternalNewsApi(int id, String sourceName, String apiKey, String baseUrl, Integer status, String lastAccessed) {
         this.id = id;
         this.sourceName = sourceName;
         this.apiKey = apiKey;
@@ -53,11 +53,11 @@ public class ExternalNewsApi {
         this.baseUrl = baseUrl;
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

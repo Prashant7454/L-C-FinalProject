@@ -25,7 +25,8 @@ public class ExternalNewsSourceController {
     }
 
     @PutMapping("/updatesource")
-    public ExternalNewsSourceDTO getExternalSourceById(@RequestBody ExternalNewsSourceDTO dto){
+    public ExternalNewsSourceDTO updateSourceById(@RequestBody ExternalNewsSourceDTO dto){
+        System.out.println(dto);
         return externalNewsSourceService.updateExternalNewsSource(dto.getId(),dto);
     }
 }

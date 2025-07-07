@@ -17,4 +17,8 @@ public class SavedNewsService {
         savedNews.setUserId(userId);
         return savedNewsController.saveNews(savedNews);
     }
+
+    public boolean unsaveNews(Integer userId, Integer newsId) throws Exception {
+        return savedNewsController.unsaveNews(userId, newsId);
+    }
 }

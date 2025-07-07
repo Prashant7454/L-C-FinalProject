@@ -13,6 +13,7 @@ public class ArticleDetailMenu implements Menu{
     private Integer newsId;
     public ArticleDetailMenu(Integer newsId, Menu previousMenu) {
         actions.add(new SaveArticleAction(newsId));
+        actions.add(new UnsaveArticleAction(newsId));
         actions.add(new LikeArticleAction(newsId));
         actions.add(new DisLikeArticleAction(newsId));
         actions.add(new ReportAction(newsId));

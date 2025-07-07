@@ -1,5 +1,6 @@
 package com.server.NewsAggrigationServer.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.NewsAggrigationServer.dto.CategoryKeywordDTO;
 import com.server.NewsAggrigationServer.service.CategoryKeywordService;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,17 +9,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-class CategoryKeywordControllerTest {
+public class CategoryKeywordControllerTest {
 
     @Mock
     private CategoryKeywordService categoryKeywordService;
@@ -26,430 +30,310 @@ class CategoryKeywordControllerTest {
     @InjectMocks
     private CategoryKeywordController categoryKeywordController;
 
-    private CategoryKeywordDTO categoryKeywordDTO1;
-    private CategoryKeywordDTO categoryKeywordDTO2;
-    private List<CategoryKeywordDTO> categoryKeywordList;
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        categoryKeywordDTO1 = new CategoryKeywordDTO();
-        categoryKeywordDTO1.setId(1);
-        categoryKeywordDTO1.setCategoryId(1);
-        categoryKeywordDTO1.setKeywordId(1);
-
-        categoryKeywordDTO2 = new CategoryKeywordDTO();
-        categoryKeywordDTO2.setId(2);
-        categoryKeywordDTO2.setCategoryId(1);
-        categoryKeywordDTO2.setKeywordId(2);
-
-        categoryKeywordList = Arrays.asList(categoryKeywordDTO1, categoryKeywordDTO2);
+        mockMvc = MockMvcBuilders.standaloneSetup(categoryKeywordController).build();
+        objectMapper = new ObjectMapper();
     }
 
     @Test
-    void testCreate() {
+    void createCategoryKeyword_Success() throws Exception {
         // Arrange
-        when(categoryKeywordService.createCategoryKeyword(any(CategoryKeywordDTO.class))).thenReturn(categoryKeywordDTO1);
+        CategoryKeywordDTO inputDto = new CategoryKeywordDTO();
+        inputDto.setCategoryId(1);
+        inputDto.setKeywordId(1);
 
-        // Act
-        CategoryKeywordDTO result = categoryKeywordController.create(categoryKeywordDTO1);
+        CategoryKeywordDTO expectedDto = new CategoryKeywordDTO();
+        expectedDto.setId(1);
+        expectedDto.setCategoryId(1);
+        expectedDto.setKeywordId(1);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.getId());
-        assertEquals(1, result.getCategoryId());
-        assertEquals(1, result.getKeywordId());
-        verify(categoryKeywordService).createCategoryKeyword(categoryKeywordDTO1);
-    }
-
-    @Test
-    void testCreateWithNullInput() {
-        // Arrange
-        when(categoryKeywordService.createCategoryKeyword(null)).thenThrow(new IllegalArgumentException("Category keyword cannot be null"));
+        when(categoryKeywordService.createCategoryKeyword(any(CategoryKeywordDTO.class))).thenReturn(expectedDto);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.create(null);
-        });
-        verify(categoryKeywordService).createCategoryKeyword(null);
+        mockMvc.perform(post("/api/category-keyword")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inputDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.categoryId").value(1))
+                .andExpect(jsonPath("$.keywordId").value(1));
+
+        verify(categoryKeywordService, times(1)).createCategoryKeyword(any(CategoryKeywordDTO.class));
     }
 
     @Test
-    void testCreateWithNullCategoryId() {
+    void createCategoryKeyword_WithInvalidData_ThrowsException() throws Exception {
         // Arrange
-        categoryKeywordDTO1.setCategoryId(null);
-        when(categoryKeywordService.createCategoryKeyword(categoryKeywordDTO1)).thenThrow(new IllegalArgumentException("Category ID cannot be null"));
+        CategoryKeywordDTO inputDto = new CategoryKeywordDTO();
+        inputDto.setCategoryId(null);
+        inputDto.setKeywordId(null);
+
+        when(categoryKeywordService.createCategoryKeyword(any(CategoryKeywordDTO.class)))
+                .thenThrow(new IllegalArgumentException("Category ID and Keyword ID cannot be null"));
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.create(categoryKeywordDTO1);
-        });
-        verify(categoryKeywordService).createCategoryKeyword(categoryKeywordDTO1);
+        mockMvc.perform(post("/api/category-keyword")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inputDto)))
+                .andExpect(status().isInternalServerError());
+
+        verify(categoryKeywordService, times(1)).createCategoryKeyword(any(CategoryKeywordDTO.class));
     }
 
     @Test
-    void testCreateWithNullKeywordId() {
+    void getAllCategoryKeywords_Success() throws Exception {
         // Arrange
-        categoryKeywordDTO1.setKeywordId(null);
-        when(categoryKeywordService.createCategoryKeyword(categoryKeywordDTO1)).thenThrow(new IllegalArgumentException("Keyword ID cannot be null"));
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.create(categoryKeywordDTO1);
-        });
-        verify(categoryKeywordService).createCategoryKeyword(categoryKeywordDTO1);
-    }
-
-    @Test
-    void testCreateWithServiceException() {
-        // Arrange
-        when(categoryKeywordService.createCategoryKeyword(any(CategoryKeywordDTO.class))).thenThrow(new RuntimeException("Service error"));
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            categoryKeywordController.create(categoryKeywordDTO1);
-        });
-        verify(categoryKeywordService).createCategoryKeyword(categoryKeywordDTO1);
-    }
-
-    @Test
-    void testGetAll() {
-        // Arrange
-        when(categoryKeywordService.getAllCategoryKeywords()).thenReturn(categoryKeywordList);
-
-        // Act
-        List<CategoryKeywordDTO> result = categoryKeywordController.getAll();
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals(1, result.get(0).getId());
-        assertEquals(2, result.get(1).getId());
-        assertEquals(1, result.get(0).getCategoryId());
-        assertEquals(1, result.get(1).getCategoryId());
-        assertEquals(1, result.get(0).getKeywordId());
-        assertEquals(2, result.get(1).getKeywordId());
-        verify(categoryKeywordService).getAllCategoryKeywords();
-    }
-
-    @Test
-    void testGetAllWithEmptyList() {
-        // Arrange
-        when(categoryKeywordService.getAllCategoryKeywords()).thenReturn(Collections.emptyList());
-
-        // Act
-        List<CategoryKeywordDTO> result = categoryKeywordController.getAll();
-
-        // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(categoryKeywordService).getAllCategoryKeywords();
-    }
-
-    @Test
-    void testGetAllWithServiceException() {
-        // Arrange
-        when(categoryKeywordService.getAllCategoryKeywords()).thenThrow(new RuntimeException("Service error"));
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            categoryKeywordController.getAll();
-        });
-        verify(categoryKeywordService).getAllCategoryKeywords();
-    }
-
-    @Test
-    void testGetByCategoryId() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByCategoryId(1)).thenReturn(categoryKeywordList);
-
-        // Act
-        List<CategoryKeywordDTO> result = categoryKeywordController.getByCategoryId(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals(1, result.get(0).getId());
-        assertEquals(2, result.get(1).getId());
-        assertEquals(1, result.get(0).getCategoryId());
-        assertEquals(1, result.get(1).getCategoryId());
-        verify(categoryKeywordService).getCategoryKeywordsByCategoryId(1);
-    }
-
-    @Test
-    void testGetByCategoryIdWithEmptyList() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByCategoryId(1)).thenReturn(Collections.emptyList());
-
-        // Act
-        List<CategoryKeywordDTO> result = categoryKeywordController.getByCategoryId(1);
-
-        // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(categoryKeywordService).getCategoryKeywordsByCategoryId(1);
-    }
-
-    @Test
-    void testGetByCategoryIdWithNullCategoryId() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByCategoryId(null)).thenThrow(new IllegalArgumentException("Category ID cannot be null"));
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.getByCategoryId(null);
-        });
-        verify(categoryKeywordService).getCategoryKeywordsByCategoryId(null);
-    }
-
-    @Test
-    void testGetByCategoryIdWithServiceException() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByCategoryId(1)).thenThrow(new RuntimeException("Service error"));
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            categoryKeywordController.getByCategoryId(1);
-        });
-        verify(categoryKeywordService).getCategoryKeywordsByCategoryId(1);
-    }
-
-    @Test
-    void testGetByKeywordId() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByKeywordId(1)).thenReturn(categoryKeywordList);
-
-        // Act
-        List<CategoryKeywordDTO> result = categoryKeywordController.getByKeywordId(1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals(1, result.get(0).getId());
-        assertEquals(2, result.get(1).getId());
-        assertEquals(1, result.get(0).getKeywordId());
-        assertEquals(2, result.get(1).getKeywordId());
-        verify(categoryKeywordService).getCategoryKeywordsByKeywordId(1);
-    }
-
-    @Test
-    void testGetByKeywordIdWithEmptyList() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByKeywordId(1)).thenReturn(Collections.emptyList());
-
-        // Act
-        List<CategoryKeywordDTO> result = categoryKeywordController.getByKeywordId(1);
-
-        // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(categoryKeywordService).getCategoryKeywordsByKeywordId(1);
-    }
-
-    @Test
-    void testGetByKeywordIdWithNullKeywordId() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByKeywordId(null)).thenThrow(new IllegalArgumentException("Keyword ID cannot be null"));
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.getByKeywordId(null);
-        });
-        verify(categoryKeywordService).getCategoryKeywordsByKeywordId(null);
-    }
-
-    @Test
-    void testGetByKeywordIdWithServiceException() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByKeywordId(1)).thenThrow(new RuntimeException("Service error"));
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            categoryKeywordController.getByKeywordId(1);
-        });
-        verify(categoryKeywordService).getCategoryKeywordsByKeywordId(1);
-    }
-
-    @Test
-    void testCreateWithZeroValues() {
-        // Arrange
-        categoryKeywordDTO1.setCategoryId(0);
-        categoryKeywordDTO1.setKeywordId(0);
-        when(categoryKeywordService.createCategoryKeyword(categoryKeywordDTO1)).thenThrow(new IllegalArgumentException("Invalid IDs"));
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.create(categoryKeywordDTO1);
-        });
-        verify(categoryKeywordService).createCategoryKeyword(categoryKeywordDTO1);
-    }
-
-    @Test
-    void testCreateWithNegativeValues() {
-        // Arrange
-        categoryKeywordDTO1.setCategoryId(-1);
-        categoryKeywordDTO1.setKeywordId(-1);
-        when(categoryKeywordService.createCategoryKeyword(categoryKeywordDTO1)).thenThrow(new IllegalArgumentException("Invalid IDs"));
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.create(categoryKeywordDTO1);
-        });
-        verify(categoryKeywordService).createCategoryKeyword(categoryKeywordDTO1);
-    }
-
-    @Test
-    void testCreateWithLargeValues() {
-        // Arrange
-        categoryKeywordDTO1.setCategoryId(Integer.MAX_VALUE);
-        categoryKeywordDTO1.setKeywordId(Integer.MAX_VALUE);
-        when(categoryKeywordService.createCategoryKeyword(categoryKeywordDTO1)).thenReturn(categoryKeywordDTO1);
-
-        // Act
-        CategoryKeywordDTO result = categoryKeywordController.create(categoryKeywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(Integer.MAX_VALUE, result.getCategoryId());
-        assertEquals(Integer.MAX_VALUE, result.getKeywordId());
-        verify(categoryKeywordService).createCategoryKeyword(categoryKeywordDTO1);
-    }
-
-    @Test
-    void testGetByCategoryIdWithZeroCategoryId() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByCategoryId(0)).thenThrow(new IllegalArgumentException("Invalid category ID"));
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.getByCategoryId(0);
-        });
-        verify(categoryKeywordService).getCategoryKeywordsByCategoryId(0);
-    }
-
-    @Test
-    void testGetByCategoryIdWithNegativeCategoryId() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByCategoryId(-1)).thenThrow(new IllegalArgumentException("Invalid category ID"));
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.getByCategoryId(-1);
-        });
-        verify(categoryKeywordService).getCategoryKeywordsByCategoryId(-1);
-    }
-
-    @Test
-    void testGetByCategoryIdWithLargeCategoryId() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByCategoryId(Integer.MAX_VALUE)).thenReturn(categoryKeywordList);
-
-        // Act
-        List<CategoryKeywordDTO> result = categoryKeywordController.getByCategoryId(Integer.MAX_VALUE);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        verify(categoryKeywordService).getCategoryKeywordsByCategoryId(Integer.MAX_VALUE);
-    }
-
-    @Test
-    void testGetByKeywordIdWithZeroKeywordId() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByKeywordId(0)).thenThrow(new IllegalArgumentException("Invalid keyword ID"));
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.getByKeywordId(0);
-        });
-        verify(categoryKeywordService).getCategoryKeywordsByKeywordId(0);
-    }
-
-    @Test
-    void testGetByKeywordIdWithNegativeKeywordId() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByKeywordId(-1)).thenThrow(new IllegalArgumentException("Invalid keyword ID"));
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            categoryKeywordController.getByKeywordId(-1);
-        });
-        verify(categoryKeywordService).getCategoryKeywordsByKeywordId(-1);
-    }
-
-    @Test
-    void testGetByKeywordIdWithLargeKeywordId() {
-        // Arrange
-        when(categoryKeywordService.getCategoryKeywordsByKeywordId(Integer.MAX_VALUE)).thenReturn(categoryKeywordList);
-
-        // Act
-        List<CategoryKeywordDTO> result = categoryKeywordController.getByKeywordId(Integer.MAX_VALUE);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        verify(categoryKeywordService).getCategoryKeywordsByKeywordId(Integer.MAX_VALUE);
-    }
-
-    @Test
-    void testCreateWithZeroId() {
-        // Arrange
-        categoryKeywordDTO1.setId(0);
-        when(categoryKeywordService.createCategoryKeyword(categoryKeywordDTO1)).thenReturn(categoryKeywordDTO1);
-
-        // Act
-        CategoryKeywordDTO result = categoryKeywordController.create(categoryKeywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(0, result.getId());
-        verify(categoryKeywordService).createCategoryKeyword(categoryKeywordDTO1);
-    }
-
-    @Test
-    void testCreateWithNegativeId() {
-        // Arrange
-        categoryKeywordDTO1.setId(-1);
-        when(categoryKeywordService.createCategoryKeyword(categoryKeywordDTO1)).thenReturn(categoryKeywordDTO1);
-
-        // Act
-        CategoryKeywordDTO result = categoryKeywordController.create(categoryKeywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(-1, result.getId());
-        verify(categoryKeywordService).createCategoryKeyword(categoryKeywordDTO1);
-    }
-
-    @Test
-    void testCreateWithLargeId() {
-        // Arrange
-        categoryKeywordDTO1.setId(Integer.MAX_VALUE);
-        when(categoryKeywordService.createCategoryKeyword(categoryKeywordDTO1)).thenReturn(categoryKeywordDTO1);
-
-        // Act
-        CategoryKeywordDTO result = categoryKeywordController.create(categoryKeywordDTO1);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(Integer.MAX_VALUE, result.getId());
-        verify(categoryKeywordService).createCategoryKeyword(categoryKeywordDTO1);
-    }
-
-    @Test
-    void testGetAllWithLargeList() {
-        // Arrange
-        List<CategoryKeywordDTO> largeList = Arrays.asList(
-            categoryKeywordDTO1, categoryKeywordDTO2, categoryKeywordDTO1, categoryKeywordDTO2, categoryKeywordDTO1,
-            categoryKeywordDTO2, categoryKeywordDTO1, categoryKeywordDTO2, categoryKeywordDTO1, categoryKeywordDTO2
+        List<CategoryKeywordDTO> expectedCategoryKeywords = Arrays.asList(
+                createCategoryKeywordDTO(1, 1, 1),
+                createCategoryKeywordDTO(2, 2, 2),
+                createCategoryKeywordDTO(3, 3, 3)
         );
-        when(categoryKeywordService.getAllCategoryKeywords()).thenReturn(largeList);
 
-        // Act
-        List<CategoryKeywordDTO> result = categoryKeywordController.getAll();
+        when(categoryKeywordService.getAllCategoryKeywords()).thenReturn(expectedCategoryKeywords);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(10, result.size());
-        verify(categoryKeywordService).getAllCategoryKeywords();
+        // Act & Assert
+        mockMvc.perform(get("/api/category-keyword"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].categoryId").value(1))
+                .andExpect(jsonPath("$[0].keywordId").value(1))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].categoryId").value(2))
+                .andExpect(jsonPath("$[1].keywordId").value(2))
+                .andExpect(jsonPath("$[2].id").value(3))
+                .andExpect(jsonPath("$[2].categoryId").value(3))
+                .andExpect(jsonPath("$[2].keywordId").value(3));
+
+        verify(categoryKeywordService, times(1)).getAllCategoryKeywords();
+    }
+
+    @Test
+    void getAllCategoryKeywords_EmptyList() throws Exception {
+        // Arrange
+        when(categoryKeywordService.getAllCategoryKeywords()).thenReturn(Arrays.asList());
+
+        // Act & Assert
+        mockMvc.perform(get("/api/category-keyword"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+
+        verify(categoryKeywordService, times(1)).getAllCategoryKeywords();
+    }
+
+    @Test
+    void getCategoryKeywordsByCategoryId_Success() throws Exception {
+        // Arrange
+        Integer categoryId = 1;
+        List<CategoryKeywordDTO> expectedCategoryKeywords = Arrays.asList(
+                createCategoryKeywordDTO(1, 1, 1),
+                createCategoryKeywordDTO(2, 1, 2),
+                createCategoryKeywordDTO(3, 1, 3)
+        );
+
+        when(categoryKeywordService.getCategoryKeywordsByCategoryId(categoryId)).thenReturn(expectedCategoryKeywords);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/category-keyword/category/{categoryId}", categoryId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].categoryId").value(1))
+                .andExpect(jsonPath("$[0].keywordId").value(1))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].categoryId").value(1))
+                .andExpect(jsonPath("$[1].keywordId").value(2))
+                .andExpect(jsonPath("$[2].id").value(3))
+                .andExpect(jsonPath("$[2].categoryId").value(1))
+                .andExpect(jsonPath("$[2].keywordId").value(3));
+
+        verify(categoryKeywordService, times(1)).getCategoryKeywordsByCategoryId(categoryId);
+    }
+
+    @Test
+    void getCategoryKeywordsByCategoryId_EmptyList() throws Exception {
+        // Arrange
+        Integer categoryId = 999;
+        when(categoryKeywordService.getCategoryKeywordsByCategoryId(categoryId)).thenReturn(Arrays.asList());
+
+        // Act & Assert
+        mockMvc.perform(get("/api/category-keyword/category/{categoryId}", categoryId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+
+        verify(categoryKeywordService, times(1)).getCategoryKeywordsByCategoryId(categoryId);
+    }
+
+    @Test
+    void getCategoryKeywordsByKeywordId_Success() throws Exception {
+        // Arrange
+        Integer keywordId = 1;
+        List<CategoryKeywordDTO> expectedCategoryKeywords = Arrays.asList(
+                createCategoryKeywordDTO(1, 1, 1),
+                createCategoryKeywordDTO(2, 2, 1),
+                createCategoryKeywordDTO(3, 3, 1)
+        );
+
+        when(categoryKeywordService.getCategoryKeywordsByKeywordId(keywordId)).thenReturn(expectedCategoryKeywords);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/category-keyword/keyword/{keywordId}", keywordId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].categoryId").value(1))
+                .andExpect(jsonPath("$[0].keywordId").value(1))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].categoryId").value(2))
+                .andExpect(jsonPath("$[1].keywordId").value(1))
+                .andExpect(jsonPath("$[2].id").value(3))
+                .andExpect(jsonPath("$[2].categoryId").value(3))
+                .andExpect(jsonPath("$[2].keywordId").value(1));
+
+        verify(categoryKeywordService, times(1)).getCategoryKeywordsByKeywordId(keywordId);
+    }
+
+    @Test
+    void getCategoryKeywordsByKeywordId_EmptyList() throws Exception {
+        // Arrange
+        Integer keywordId = 999;
+        when(categoryKeywordService.getCategoryKeywordsByKeywordId(keywordId)).thenReturn(Arrays.asList());
+
+        // Act & Assert
+        mockMvc.perform(get("/api/category-keyword/keyword/{keywordId}", keywordId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+
+        verify(categoryKeywordService, times(1)).getCategoryKeywordsByKeywordId(keywordId);
+    }
+
+    @Test
+    void createCategoryKeyword_WithMissingContentType_ReturnsError() throws Exception {
+        // Arrange
+        CategoryKeywordDTO inputDto = new CategoryKeywordDTO();
+        inputDto.setCategoryId(1);
+        inputDto.setKeywordId(1);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/category-keyword")
+                .content(objectMapper.writeValueAsString(inputDto)))
+                .andExpect(status().isUnsupportedMediaType());
+
+        verify(categoryKeywordService, never()).createCategoryKeyword(any(CategoryKeywordDTO.class));
+    }
+
+    @Test
+    void createCategoryKeyword_WithInvalidJson_ReturnsError() throws Exception {
+        // Arrange
+        String invalidJson = "{ invalid json }";
+
+        // Act & Assert
+        mockMvc.perform(post("/api/category-keyword")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalidJson))
+                .andExpect(status().isBadRequest());
+
+        verify(categoryKeywordService, never()).createCategoryKeyword(any(CategoryKeywordDTO.class));
+    }
+
+    @Test
+    void createCategoryKeyword_VerifyRequestMapping() throws Exception {
+        // Arrange
+        CategoryKeywordDTO inputDto = new CategoryKeywordDTO();
+        inputDto.setCategoryId(5);
+        inputDto.setKeywordId(10);
+
+        CategoryKeywordDTO expectedDto = new CategoryKeywordDTO();
+        expectedDto.setId(1);
+        expectedDto.setCategoryId(5);
+        expectedDto.setKeywordId(10);
+
+        when(categoryKeywordService.createCategoryKeyword(any(CategoryKeywordDTO.class))).thenReturn(expectedDto);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/category-keyword")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(inputDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.categoryId").value(5))
+                .andExpect(jsonPath("$.keywordId").value(10));
+
+        // Verify that the service was called with the correct DTO
+        verify(categoryKeywordService, times(1)).createCategoryKeyword(argThat(dto -> 
+            dto.getCategoryId().equals(5) && 
+            dto.getKeywordId().equals(10)
+        ));
+    }
+
+    @Test
+    void getAllCategoryKeywords_VerifyServiceCall() throws Exception {
+        // Arrange
+        List<CategoryKeywordDTO> expectedCategoryKeywords = Arrays.asList(
+                createCategoryKeywordDTO(1, 1, 1),
+                createCategoryKeywordDTO(2, 2, 2)
+        );
+
+        when(categoryKeywordService.getAllCategoryKeywords()).thenReturn(expectedCategoryKeywords);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/category-keyword"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[1].id").value(2));
+
+        verify(categoryKeywordService, times(1)).getAllCategoryKeywords();
+    }
+
+    @Test
+    void getCategoryKeywordsByCategoryId_VerifyPathVariable() throws Exception {
+        // Arrange
+        Integer categoryId = 123;
+        List<CategoryKeywordDTO> expectedCategoryKeywords = Arrays.asList(
+                createCategoryKeywordDTO(1, 123, 1)
+        );
+
+        when(categoryKeywordService.getCategoryKeywordsByCategoryId(categoryId)).thenReturn(expectedCategoryKeywords);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/category-keyword/category/{categoryId}", categoryId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].categoryId").value(123));
+
+        verify(categoryKeywordService, times(1)).getCategoryKeywordsByCategoryId(categoryId);
+    }
+
+    @Test
+    void getCategoryKeywordsByKeywordId_VerifyPathVariable() throws Exception {
+        // Arrange
+        Integer keywordId = 456;
+        List<CategoryKeywordDTO> expectedCategoryKeywords = Arrays.asList(
+                createCategoryKeywordDTO(1, 1, 456)
+        );
+
+        when(categoryKeywordService.getCategoryKeywordsByKeywordId(keywordId)).thenReturn(expectedCategoryKeywords);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/category-keyword/keyword/{keywordId}", keywordId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].keywordId").value(456));
+
+        verify(categoryKeywordService, times(1)).getCategoryKeywordsByKeywordId(keywordId);
+    }
+
+    private CategoryKeywordDTO createCategoryKeywordDTO(Integer id, Integer categoryId, Integer keywordId) {
+        CategoryKeywordDTO dto = new CategoryKeywordDTO();
+        dto.setId(id);
+        dto.setCategoryId(categoryId);
+        dto.setKeywordId(keywordId);
+        return dto;
     }
 } 

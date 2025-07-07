@@ -14,12 +14,11 @@ import java.util.List;
 @RequestMapping("/api/news")
 public class NewsController {
 
-    @Autowired
-    private NewsService newsService;
+    private final NewsService newsService;
+    private final SavedNewsService savedNewsService;
 
-    private SavedNewsService savedNewsService;
-
-    public NewsController(SavedNewsService savedNewsService){
+    public NewsController(NewsService newsService, SavedNewsService savedNewsService){
+        this.newsService = newsService;
         this.savedNewsService = savedNewsService;
     }
 
@@ -41,11 +40,6 @@ public class NewsController {
     @GetMapping("/{id}")
     public NewsDTO getNewsById(@PathVariable Integer id) {
         return newsService.getNewsById(id);
-    }
-
-    @GetMapping("/list")
-    public List<NewsDTO> getNewsByIdList(@RequestBody List<Integer> ids) {
-        return newsService.getNewsByIds(ids);
     }
 
     @GetMapping
@@ -90,11 +84,6 @@ public class NewsController {
     @GetMapping("/visible/search")
     public List<NewsDTO> getVisibleNews(@RequestParam String searchString) {
         return newsService.getVisibleNews(searchString);
-    }
-
-    @PostMapping("/visible/list")
-    public List<NewsDTO> getVisibleNewsByIdList(@RequestBody List<Integer> ids) {
-        return newsService.getVisibleNewsByIds(ids);
     }
 
     @PostMapping("/visible/today")

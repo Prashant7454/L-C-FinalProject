@@ -7,6 +7,7 @@ import com.server.NewsAggrigationServer.service.CategoryKeywordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,9 @@ public class CategoryKeywordServiceImpl implements CategoryKeywordService {
 
     @Override
     public List<CategoryKeywordDTO> getCategoryKeywordsByCategoryId(Integer categoryId) {
+        if(categoryId == null){
+            return new ArrayList<>();
+        }
         return repository.findByCategoryId(categoryId).stream().map(entity -> {
             CategoryKeywordDTO dto = new CategoryKeywordDTO();
             dto.setId(entity.getId());
@@ -52,6 +56,9 @@ public class CategoryKeywordServiceImpl implements CategoryKeywordService {
 
     @Override
     public List<CategoryKeywordDTO> getCategoryKeywordsByKeywordId(Integer keywordId) {
+        if(keywordId == null){
+            return new ArrayList<>();
+        }
         return repository.findByKeywordId(keywordId).stream().map(entity -> {
             CategoryKeywordDTO dto = new CategoryKeywordDTO();
             dto.setId(entity.getId());
