@@ -3,6 +3,8 @@ package com.server.NewsAggrigationServer.service.impl;
 import com.server.NewsAggrigationServer.model.News;
 import com.server.NewsAggrigationServer.repository.NewsRepository;
 import com.server.NewsAggrigationServer.service.NewsHidingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class NewsHidingServiceImpl implements NewsHidingService {
+
+    private static final Logger log = LoggerFactory.getLogger(NewsHidingServiceImpl.class);
 
     @Autowired
     private NewsRepository newsRepository;
@@ -37,6 +41,7 @@ public class NewsHidingServiceImpl implements NewsHidingService {
 
     @Override
     public boolean hideNewsById(Integer newsId) {
+        log.info("Hiding news with ID: {}", newsId);
         try {
             News news = newsRepository.findById(newsId).orElse(null);
             if (news == null) {
@@ -53,9 +58,11 @@ public class NewsHidingServiceImpl implements NewsHidingService {
             newsRepository.save(news);
             
             System.out.println("Hidden news ID " + newsId + ": " + news.getTitle());
+            log.info("News with ID: {} hidden successfully", newsId);
             return true;
             
         } catch (Exception e) {
+            log.error("Failed to hide news with ID: {}. Error: {}", newsId, e.getMessage(), e);
             System.err.println("Error hiding news ID " + newsId + ": " + e.getMessage());
             return false;
         }

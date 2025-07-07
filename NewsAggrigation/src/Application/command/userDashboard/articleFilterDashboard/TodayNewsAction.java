@@ -10,6 +10,7 @@ import Application.news.News;
 import Application.news.service.NewsService;
 import Application.newsCategory.service.NewsCategoryService;
 import Application.util.CategoryUtil;
+import Application.util.MenuUtil;
 import Application.util.NewsUtil;
 
 import java.util.ArrayList;
@@ -38,7 +39,10 @@ public class TodayNewsAction implements MenuAction {
             Map<Integer,Category> categoryMap = CategoryUtil.processCategory(categories);
             CategoryUtil.printCategory(categoryMap);
             System.out.print("Select Category: ");
-            int selectedCategoryNumber = Integer.parseInt(scanner.nextLine().trim());
+            int selectedCategoryNumber = MenuUtil.getUserChoice(categoryMap.size());
+            if(selectedCategoryNumber == -1){
+                this.execute(response);
+            }
 
             List<News> todayNews = new ArrayList<>();
             if(selectedCategoryNumber == 1){

@@ -8,6 +8,8 @@ import com.server.NewsAggrigationServer.repository.CategoryKeywordRepository;
 import com.server.NewsAggrigationServer.repository.KeywordRepository;
 import com.server.NewsAggrigationServer.repository.NewsCategoryRepository;
 import com.server.NewsAggrigationServer.service.CategoryAssignmentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class CategoryAssignmentServiceImpl implements CategoryAssignmentService {
+
+    private static final Logger log = LoggerFactory.getLogger(CategoryAssignmentServiceImpl.class);
 
     @Autowired
     private CategoryKeywordRepository categoryKeywordRepository;
@@ -28,42 +32,38 @@ public class CategoryAssignmentServiceImpl implements CategoryAssignmentService 
 
     @Override
     public void assignCategoriesToNews(News news) {
+        log.info("Assigning categories to news: {}", news != null ? news.getTitle() : null);
         if (news == null || news.getTitle() == null) {
+            log.warn("News or news title is null. Skipping category assignment.");
             return;
         }
-
-        // Create search text from title and content
         String searchText = createSearchText(news);
-        
-        // Find matching categories
+        log.debug("Search text for category assignment: {}", searchText);
         List<Integer> matchingCategoryIds = findMatchingCategories(searchText);
-        
-        // Assign categories to news
+        log.info("Found {} matching categories for news '{}': {}", matchingCategoryIds.size(), news.getTitle(), matchingCategoryIds);
         for (Integer categoryId : matchingCategoryIds) {
             assignCategoryToNews(news.getId(), categoryId);
         }
-        
-        System.out.println("Assigned " + matchingCategoryIds.size() + " categories to news: " + news.getTitle());
+        log.info("Assigned {} categories to news: {}", matchingCategoryIds.size(), news.getTitle());
     }
 
     @Override
     public void assignCategoriesToNewsList(List<News> newsList) {
+        log.info("Starting category assignment for {} news articles...", newsList != null ? newsList.size() : 0);
         if (newsList == null || newsList.isEmpty()) {
+            log.warn("News list is null or empty. Skipping batch category assignment.");
             return;
         }
-
-        System.out.println("Starting category assignment for " + newsList.size() + " news articles...");
-        
         for (News news : newsList) {
             assignCategoriesToNews(news);
         }
-        
-        System.out.println("Completed category assignment for all news articles.");
+        log.info("Completed category assignment for all news articles.");
     }
 
     @Override
     public List<Integer> findMatchingCategories(String text) {
         if (text == null || text.trim().isEmpty()) {
+            log.warn("Input text is null or empty. No categories will be matched.");
             return new ArrayList<>();
         }
 
@@ -98,6 +98,8 @@ public class CategoryAssignmentServiceImpl implements CategoryAssignmentService 
             }
         }
         
+        log.debug("Keyword to categories map: {}", keywordToCategories);
+        log.info("Matched category IDs: {}", matchingCategoryIds);
         return new ArrayList<>(matchingCategoryIds);
     }
 
@@ -116,13 +118,13 @@ public class CategoryAssignmentServiceImpl implements CategoryAssignmentService 
     }
 
     private void assignCategoryToNews(Integer newsId, Integer categoryId) {
-        // Check if the category is already assigned to this news
         boolean alreadyAssigned = newsCategoryRepository.existsByNewsIdAndCategoryId(newsId, categoryId);
-        
         if (!alreadyAssigned) {
             NewsCategory newsCategory = new NewsCategory(newsId, categoryId);
             newsCategoryRepository.save(newsCategory);
-            System.out.println("Assigned category ID " + categoryId + " to news ID " + newsId);
+            log.info("Assigned category ID {} to news ID {}", categoryId, newsId);
+        } else {
+            log.debug("Category ID {} already assigned to news ID {}", categoryId, newsId);
         }
     }
 } 

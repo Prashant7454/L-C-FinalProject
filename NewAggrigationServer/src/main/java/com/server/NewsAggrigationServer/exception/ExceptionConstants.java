@@ -22,7 +22,8 @@ public class ExceptionConstants {
     public static final String INVALID_USERNAME_PASSWORD = "Invalid username or password";
     public static final String USER_ACCOUNT_DISABLED = "User account is disabled";
     public static final String INSUFFICIENT_PERMISSIONS = "Insufficient permissions to perform this action";
-    
+    public static final String LOGIN_FAILURE = "Failed To Login";
+
     // News Related Messages
     public static final String NEWS_NOT_FOUND = "News article not found";
     public static final String NEWS_ALREADY_EXISTS = "News article already exists";

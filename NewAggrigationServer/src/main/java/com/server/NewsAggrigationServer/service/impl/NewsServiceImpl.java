@@ -7,6 +7,8 @@ import com.server.NewsAggrigationServer.exception.ResourceNotFoundException;
 import com.server.NewsAggrigationServer.model.News;
 import com.server.NewsAggrigationServer.repository.NewsRepository;
 import com.server.NewsAggrigationServer.service.NewsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +19,22 @@ import java.util.stream.Collectors;
 @Service
 public class NewsServiceImpl implements NewsService {
 
+    private static final Logger log = LoggerFactory.getLogger(NewsServiceImpl.class);
+
     @Autowired
     private NewsRepository newsRepository;
 
     @Override
     public NewsDTO createNews(NewsDTO dto) {
+        log.info("Creating news: {}", dto);
         try {
             News news = new News();
             mapDtoToEntity(dto, news);
             News saved = newsRepository.save(news);
+            log.info("News created with ID: {}", saved.getId());
             return mapEntityToDto(saved);
         } catch (Exception e) {
+            log.error("Error creating news: {}", e.getMessage(), e);
             throw new NewsServiceException(
                 ExceptionConstants.NEWS_SAVE_ERROR,
                 ExceptionConstants.NEWS_SERVICE_ERROR,
@@ -38,16 +45,22 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public NewsDTO updateNews(Integer id, NewsDTO dto) {
+        log.info("Updating news with id: {} and dto: {}", id, dto);
         try {
             News news = newsRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException(ExceptionConstants.NEWS_NOT_FOUND + " with ID: " + id));
-            
+                    .orElseThrow(() -> {
+                        log.warn("News not found with ID: {}", id);
+                        return new ResourceNotFoundException(ExceptionConstants.NEWS_NOT_FOUND + " with ID: " + id);
+                    });
             mapDtoToEntity(dto, news);
             News updated = newsRepository.save(news);
+            log.info("News updated with ID: {}", updated.getId());
             return mapEntityToDto(updated);
         } catch (ResourceNotFoundException e) {
+            log.warn("Update failed: {}", e.getMessage());
             throw e;
         } catch (Exception e) {
+            log.error("Error updating news: {}", e.getMessage(), e);
             throw new NewsServiceException(
                 ExceptionConstants.NEWS_UPDATE_ERROR,
                 ExceptionConstants.NEWS_SERVICE_ERROR,
@@ -58,21 +71,31 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public NewsDTO getNewsById(Integer id) {
+        log.info("Fetching news by id: {}", id);
         News news = newsRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(ExceptionConstants.NEWS_NOT_FOUND + " with ID: " + id));
+                .orElseThrow(() -> {
+                    log.warn("News not found with ID: {}", id);
+                    return new ResourceNotFoundException(ExceptionConstants.NEWS_NOT_FOUND + " with ID: " + id);
+                });
+        log.info("News found: {}", news.getId());
         return mapEntityToDto(news);
     }
 
     @Override
     public List<NewsDTO> getAllNews() {
-        return newsRepository.findAll().stream()
+        log.info("Fetching all news");
+        List<News> newsList = newsRepository.findAll();
+        log.info("Fetched {} news articles", newsList.size());
+        return newsList.stream()
                 .map(this::mapEntityToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<NewsDTO> getNews(String searchString) {
+        log.info("Fetching news by search string: {}", searchString);
         List<News> matchedNews = newsRepository.search(searchString);
+        log.info("Fetched {} news articles for search string '{}'", matchedNews.size(), searchString);
         return matchedNews.stream()
                 .map(this::mapEntityToDto)
                 .collect(Collectors.toList());
@@ -80,7 +103,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<NewsDTO> getNewsByIds(List<Integer> ids) {
+        log.info("Fetching news by ids: {}", ids);
         List<News> newsList = newsRepository.findByIdIn(ids);
+        log.info("Fetched {} news articles for ids {}", newsList.size(), ids);
         return newsList.stream()
                 .map(this::mapEntityToDto)
                 .collect(Collectors.toList());
@@ -88,6 +113,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public void addMultipleNews(List<NewsDTO> newsList) {
+        log.info("Adding multiple news articles: {}", newsList != null ? newsList.size() : 0);
         List<News> newsEntities = newsList.stream().map(dto -> {
             News news = new News();
             news.setTitle(dto.getTitle());
@@ -98,8 +124,8 @@ public class NewsServiceImpl implements NewsService {
             news.setKeyword(dto.getKeyword());
             return news;
         }).collect(Collectors.toList());
-
         newsRepository.saveAll(newsEntities);
+        log.info("Saved {} news articles", newsEntities.size());
     }
 
     private NewsDTO mapEntityToDto(News news) {
@@ -119,10 +145,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     private void mapDtoToEntity(NewsDTO dto, News news) {
-        System.out.println("Mapping DTO to Entity:");
-        System.out.println("DTO like count: " + dto.getLikeCount());
-        System.out.println("DTO dislike count: " + dto.getDisLikeCount());
-        
+        log.debug("Mapping DTO to Entity: {}", dto);
         news.setTitle(dto.getTitle());
         news.setDescription(dto.getDescription());
         news.setSource(dto.getSource());
@@ -133,9 +156,7 @@ public class NewsServiceImpl implements NewsService {
         news.setDisLikeCount(dto.getDisLikeCount());
         news.setReportCount(dto.getReportCount());
         news.setIsHide(dto.getIsHide());
-        
-        System.out.println("Entity like count after mapping: " + news.getLikeCount());
-        System.out.println("Entity dislike count after mapping: " + news.getDisLikeCount());
+        log.debug("Entity after mapping: {}", news);
     }
 
     @Override

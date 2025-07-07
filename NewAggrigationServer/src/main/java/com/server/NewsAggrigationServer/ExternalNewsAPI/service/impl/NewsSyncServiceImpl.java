@@ -10,10 +10,14 @@ import com.server.NewsAggrigationServer.model.News;
 import com.server.NewsAggrigationServer.repository.NewsRepository;
 import com.server.NewsAggrigationServer.service.CategoryAssignmentService;
 import com.server.NewsAggrigationServer.service.NewsNotificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NewsSyncServiceImpl implements NewsSyncService {
+    private static final Logger log = LoggerFactory.getLogger(NewsSyncServiceImpl.class);
+
     private final NewsAPIClient newsClients;
     private final NewsRepository articleRepository;
     private final TheNewsAPIClient theNewsAPIClient;
@@ -32,8 +36,15 @@ public class NewsSyncServiceImpl implements NewsSyncService {
     
     @Override
     public void syncAllFeeds() {
-        fetchNewsApi();
-        fetchTheNews();
+        log.info("Starting news synchronization");
+        try {
+            fetchNewsApi();
+            fetchTheNews();
+            log.info("News synchronization completed successfully");
+        } catch (Exception ex) {
+            log.error("News synchronization failed. Error: {}", ex.getMessage(), ex);
+            throw ex;
+        }
     }
 
     private void fetchNewsApi(){

@@ -10,6 +10,8 @@ import com.server.NewsAggrigationServer.model.User;
 import com.server.NewsAggrigationServer.repository.UserRepository;
 import com.server.NewsAggrigationServer.service.UserService;
 import com.server.NewsAggrigationServer.util.EncryptionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepository;
     private final EncryptionUtil encryptionUtil;
@@ -29,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
+        log.info("Creating user with username: {}", userDTO.getUsername());
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
@@ -37,9 +42,12 @@ public class UserServiceImpl implements UserService {
 
         try {
             user = userRepository.save(user);
+            log.info("User created successfully with ID: {}", user.getId());
         } catch (DataIntegrityViolationException ex) {
+            log.warn("User creation failed: username '{}' already exists", userDTO.getUsername());
             throw new FoundDuplicateUserNameException(ExceptionConstants.USER_ALREADY_EXISTS);
         } catch (Exception ex) {
+            log.error("Error creating user: {}", ex.getMessage(), ex);
             throw new DatabaseException(
                 ExceptionConstants.DB_QUERY_ERROR,
                 "CREATE_USER",
@@ -54,7 +62,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream().map(user -> {
+        log.info("Fetching all users");
+        List<User> users = userRepository.findAll();
+        log.info("Fetched {} users", users.size());
+        return users.stream().map(user -> {
             UserDTO dto = new UserDTO();
             dto.setId(user.getId());
             dto.setUsername(user.getUsername());
@@ -67,8 +78,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserByEmail(String email) {
+        log.info("Fetching user by email: {}", email);
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException(ExceptionConstants.USER_NOT_FOUND + " with email: " + email));
+                .orElseThrow(() -> {
+                    log.warn("User not found with email: {}", email);
+                    return new ResourceNotFoundException(ExceptionConstants.USER_NOT_FOUND + " with email: " + email);
+                });
 
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
@@ -76,7 +91,7 @@ public class UserServiceImpl implements UserService {
         dto.setEmail(user.getEmail());
         dto.setPassword(user.getPassword());
         dto.setRole(user.getRole());
-
+        log.info("User found with ID: {}", user.getId());
         return dto;
     }
 }
