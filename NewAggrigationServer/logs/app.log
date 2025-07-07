@@ -68,3 +68,356 @@
 2025-07-07 23:05:24 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 10 visible categories
 2025-07-07 23:05:27 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: [2, 5, 3]
 2025-07-07 23:05:27 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 3 visible categories for ids [2, 5, 3]
+2025-07-07 23:08:52 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-07-07 23:08:52 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-07-07 23:08:52 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-07-07 23:08:52 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-07-07 23:08:52 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-07-07 23:34:53 INFO  c.s.N.NewsAggrigationApplication - Starting NewsAggrigationApplication using Java 22.0.1 with PID 24632 (D:\gitMajorProject\L-C-FinalProject\NewAggrigationServer\target\classes started by prashant.s in D:\gitMajorProject\L-C-FinalProject\NewAggrigationServer)
+2025-07-07 23:34:53 INFO  c.s.N.NewsAggrigationApplication - No active profile set, falling back to 1 default profile: "default"
+2025-07-07 23:34:55 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-07-07 23:34:55 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.CategoryKeywordRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.CategoryRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.ExternalNewsSourceRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.KeywordRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.NewsCategoryRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.NewsLikeDislikeUserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.NewsRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.NotificationConfigurationRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.NotificationRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.SavedNewsRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.UserNewsReportRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.UserReadingHistoryRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.server.NewsAggrigationServer.repository.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 257 ms. Found 0 JDBC repository interfaces.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-07 23:34:56 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 262 ms. Found 13 JPA repository interfaces.
+2025-07-07 23:34:58 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-07-07 23:34:58 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-07-07 23:34:58 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-07-07 23:34:58 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.41]
+2025-07-07 23:34:58 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-07-07 23:34:58 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 5169 ms
+2025-07-07 23:34:59 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-07 23:34:59 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.15.Final
+2025-07-07 23:34:59 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-07-07 23:35:00 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-07 23:35:00 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-07-07 23:35:01 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@36665c11
+2025-07-07 23:35:01 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-07-07 23:35:01 WARN  org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-07-07 23:35:01 WARN  org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-07-07 23:35:01 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-07-07 23:35:03 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-07-07 23:35:03 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-07 23:35:04 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-07-07 23:35:08 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-07 23:35:09 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-07-07 23:35:09 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-07-07 23:35:09 INFO  c.s.N.NewsAggrigationApplication - Started NewsAggrigationApplication in 17.576 seconds (process running for 19.465)
+2025-07-07 23:35:09 INFO  c.s.N.E.s.impl.NewsSyncServiceImpl - Starting news synchronization
+2025-07-07 23:35:09 INFO  c.s.N.s.i.ExternalNewsSourceServiceImpl - Fetching news sources by sourceName: News API
+2025-07-07 23:35:09 INFO  c.s.N.s.i.ExternalNewsSourceServiceImpl - Fetched 1 news sources for sourceName News API
+2025-07-07 23:35:11 INFO  c.s.N.s.i.ExternalNewsSourceServiceImpl - Saving external news source: ExternalNewsSourceDTO{id=2, sourceName='News API', apiKey='20d9c0aa6c4f4fb182e11eea7bb44f49', baseUrl='https://newsapi.org/v2/top-headlines?country=us', status=1, lastAccessed=2025-07-07T23:35:11.915756600}
+2025-07-07 23:35:12 INFO  c.s.N.s.i.ExternalNewsSourceServiceImpl - External news source saved successfully: News API
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Starting category assignment for 20 news articles...
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: The current GC standings at the Tour de France 2025 - Cyclingnews
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'The current GC standings at the Tour de France 2025 - Cyclingnews': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: The current GC standings at the Tour de France 2025 - Cyclingnews
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Box Office: ‘Jurassic World Rebirth’ Stomps to $147 Million Over July Fourth Holiday Weekend - Variety
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Box Office: ‘Jurassic World Rebirth’ Stomps to $147 Million Over July Fourth Holiday Weekend - Variety': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Box Office: ‘Jurassic World Rebirth’ Stomps to $147 Million Over July Fourth Holiday Weekend - Variety
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Guest column | A patient’s eye view of radiation therapy: This is what it feels like - The Washington Post
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Guest column | A patient’s eye view of radiation therapy: This is what it feels like - The Washington Post': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Guest column | A patient’s eye view of radiation therapy: This is what it feels like - The Washington Post
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: How Trump's megabill could slam the job market - Politico
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'How Trump's megabill could slam the job market - Politico': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: How Trump's megabill could slam the job market - Politico
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Bayern Munich: Jamal Musiala out for 'long period' with broken leg and dislocated ankle - BBC
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Bayern Munich: Jamal Musiala out for 'long period' with broken leg and dislocated ankle - BBC': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Bayern Munich: Jamal Musiala out for 'long period' with broken leg and dislocated ankle - BBC
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Tariffs return to April rates on August 1 without deals, Bessent says - Axios
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Tariffs return to April rates on August 1 without deals, Bessent says - Axios': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Tariffs return to April rates on August 1 without deals, Bessent says - Axios
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Cops Eye Speed as Factor in Sophia Hutchins' Deadly ATV Crash - TMZ
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Cops Eye Speed as Factor in Sophia Hutchins' Deadly ATV Crash - TMZ': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Cops Eye Speed as Factor in Sophia Hutchins' Deadly ATV Crash - TMZ
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Knives, bullets and thieves: the quest for food in Gaza - NPR
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Knives, bullets and thieves: the quest for food in Gaza - NPR': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Knives, bullets and thieves: the quest for food in Gaza - NPR
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Before you reconnect with an old friend online, ask yourself these questions - The Washington Post
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Before you reconnect with an old friend online, ask yourself these questions - The Washington Post': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Before you reconnect with an old friend online, ask yourself these questions - The Washington Post
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Don’t wait for Amazon Prime Day, our experts found 67 deals worth shopping early - CNN
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Don’t wait for Amazon Prime Day, our experts found 67 deals worth shopping early - CNN': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Don’t wait for Amazon Prime Day, our experts found 67 deals worth shopping early - CNN
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Sharon Osbourne disinvites greedy band from Ozzy's Black Sabbath farewell concert - pagesix.com
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Sharon Osbourne disinvites greedy band from Ozzy's Black Sabbath farewell concert - pagesix.com': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Sharon Osbourne disinvites greedy band from Ozzy's Black Sabbath farewell concert - pagesix.com
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Iran’s supreme leader appears in public for first time since Israeli attack - Financial Times
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Iran’s supreme leader appears in public for first time since Israeli attack - Financial Times': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Iran’s supreme leader appears in public for first time since Israeli attack - Financial Times
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: A Comet From Another Solar System Is On Its Way - Defector
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'A Comet From Another Solar System Is On Its Way - Defector': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: A Comet From Another Solar System Is On Its Way - Defector
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: 4 things to know about the vaccine ingredient thimerosal - NPR
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news '4 things to know about the vaccine ingredient thimerosal - NPR': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: 4 things to know about the vaccine ingredient thimerosal - NPR
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: After 9,000 Layoffs, Microsoft Boss Has Brutal Advice for Sacked Workers - Futurism
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'After 9,000 Layoffs, Microsoft Boss Has Brutal Advice for Sacked Workers - Futurism': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: After 9,000 Layoffs, Microsoft Boss Has Brutal Advice for Sacked Workers - Futurism
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Israel to send team to Gaza talks despite Hamas demands, PM says - BBC
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Israel to send team to Gaza talks despite Hamas demands, PM says - BBC': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Israel to send team to Gaza talks despite Hamas demands, PM says - BBC
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Citizen scientists pinpoint 10,000 eclipsing star pairs - The Washington Post
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Citizen scientists pinpoint 10,000 eclipsing star pairs - The Washington Post': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Citizen scientists pinpoint 10,000 eclipsing star pairs - The Washington Post
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: Tropical Storm Chantal brings heavy rains as it moves across northeastern South Carolina - AP News
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'Tropical Storm Chantal brings heavy rains as it moves across northeastern South Carolina - AP News': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: Tropical Storm Chantal brings heavy rains as it moves across northeastern South Carolina - AP News
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: US deports eight men to South Sudan after legal battle - BBC
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'US deports eight men to South Sudan after legal battle - BBC': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: US deports eight men to South Sudan after legal battle - BBC
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigning categories to news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Matched category IDs: []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Found 0 matching categories for news 'US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News': []
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Assigned 0 categories to news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News
+2025-07-07 23:35:12 INFO  c.s.N.s.i.CategoryAssignmentServiceImpl - Completed category assignment for all news articles.
+2025-07-07 23:35:12 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: [2, 5, 3]
+2025-07-07 23:35:12 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 3 visible categories for ids [2, 5, 3]
+2025-07-07 23:35:12 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 2
+2025-07-07 23:35:12 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@2444d223
+2025-07-07 23:35:12 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: The current GC standings at the Tour de France 2025 - Cyclingnews, in category: business
+2025-07-07 23:35:20 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:35:20 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 2
+2025-07-07 23:35:20 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@29722da8
+2025-07-07 23:35:20 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: The current GC standings at the Tour de France 2025 - Cyclingnews, in category: business
+2025-07-07 23:35:25 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:35:25 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 3
+2025-07-07 23:35:25 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@619bee6c
+2025-07-07 23:35:25 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: The current GC standings at the Tour de France 2025 - Cyclingnews, in category: sports
+2025-07-07 23:35:31 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:35:31 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 3
+2025-07-07 23:35:31 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@19cc59e4
+2025-07-07 23:35:31 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: The current GC standings at the Tour de France 2025 - Cyclingnews, in category: sports
+2025-07-07 23:35:36 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:35:36 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 5
+2025-07-07 23:35:36 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@235f9492
+2025-07-07 23:35:36 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: The current GC standings at the Tour de France 2025 - Cyclingnews, in category: politics
+2025-07-07 23:35:43 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:35:44 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 5
+2025-07-07 23:35:44 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@33f953ce
+2025-07-07 23:35:44 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: The current GC standings at the Tour de France 2025 - Cyclingnews, in category: politics
+2025-07-07 23:35:49 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:35:49 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:35:49 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:35:49 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: [3, 4, 5]
+2025-07-07 23:35:49 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 3 visible categories for ids [3, 4, 5]
+2025-07-07 23:35:49 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 3
+2025-07-07 23:35:49 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@5215f758
+2025-07-07 23:35:49 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: Guest column | A patient’s eye view of radiation therapy: This is what it feels like - The Washington Post, in category: sports
+2025-07-07 23:35:54 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:35:54 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 3
+2025-07-07 23:35:54 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@f1c0de
+2025-07-07 23:35:54 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: Guest column | A patient’s eye view of radiation therapy: This is what it feels like - The Washington Post, in category: sports
+2025-07-07 23:35:59 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:35:59 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 4
+2025-07-07 23:35:59 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@43167418
+2025-07-07 23:35:59 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: Guest column | A patient’s eye view of radiation therapy: This is what it feels like - The Washington Post, in category: general
+2025-07-07 23:36:05 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:36:05 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 4
+2025-07-07 23:36:05 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@480b7fd7
+2025-07-07 23:36:05 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: Guest column | A patient’s eye view of radiation therapy: This is what it feels like - The Washington Post, in category: general
+2025-07-07 23:36:10 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:36:10 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 5
+2025-07-07 23:36:10 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@3abdd019
+2025-07-07 23:36:10 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: Guest column | A patient’s eye view of radiation therapy: This is what it feels like - The Washington Post, in category: politics
+2025-07-07 23:36:16 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:36:16 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 5
+2025-07-07 23:36:16 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@485ab597
+2025-07-07 23:36:16 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: Guest column | A patient’s eye view of radiation therapy: This is what it feels like - The Washington Post, in category: politics
+2025-07-07 23:36:23 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 0 visible categories for ids []
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: [2, 2]
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 1 visible categories for ids [2, 2]
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 2
+2025-07-07 23:36:23 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@1024f7a6
+2025-07-07 23:36:23 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: Citizen scientists pinpoint 10,000 eclipsing star pairs - The Washington Post, in category: business
+2025-07-07 23:36:28 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:36:28 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 2
+2025-07-07 23:36:28 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@6a330331
+2025-07-07 23:36:28 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: Citizen scientists pinpoint 10,000 eclipsing star pairs - The Washington Post, in category: business
+2025-07-07 23:36:34 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:36:34 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: [2, 4, 3, 4]
+2025-07-07 23:36:34 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 3 visible categories for ids [2, 4, 3, 4]
+2025-07-07 23:36:34 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 2
+2025-07-07 23:36:34 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@6fcc921c
+2025-07-07 23:36:34 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: Tropical Storm Chantal brings heavy rains as it moves across northeastern South Carolina - AP News, in category: business
+2025-07-07 23:36:40 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:36:40 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 2
+2025-07-07 23:36:40 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@2e4246d3
+2025-07-07 23:36:40 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: Tropical Storm Chantal brings heavy rains as it moves across northeastern South Carolina - AP News, in category: business
+2025-07-07 23:36:45 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:36:45 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 3
+2025-07-07 23:36:45 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@3b2bda9a
+2025-07-07 23:36:45 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: Tropical Storm Chantal brings heavy rains as it moves across northeastern South Carolina - AP News, in category: sports
+2025-07-07 23:36:51 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:36:51 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 3
+2025-07-07 23:36:51 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@57ea723f
+2025-07-07 23:36:51 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: Tropical Storm Chantal brings heavy rains as it moves across northeastern South Carolina - AP News, in category: sports
+2025-07-07 23:36:56 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:36:56 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 4
+2025-07-07 23:36:56 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@4aa40809
+2025-07-07 23:36:56 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: Tropical Storm Chantal brings heavy rains as it moves across northeastern South Carolina - AP News, in category: general
+2025-07-07 23:37:02 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:37:02 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 4
+2025-07-07 23:37:02 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@51d19665
+2025-07-07 23:37:02 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: Tropical Storm Chantal brings heavy rains as it moves across northeastern South Carolina - AP News, in category: general
+2025-07-07 23:37:07 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:37:08 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: [2, 7, 3, 4]
+2025-07-07 23:37:08 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 4 visible categories for ids [2, 7, 3, 4]
+2025-07-07 23:37:08 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 2
+2025-07-07 23:37:08 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@42371c46
+2025-07-07 23:37:08 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: US deports eight men to South Sudan after legal battle - BBC, in category: business
+2025-07-07 23:37:14 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:37:14 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 2
+2025-07-07 23:37:14 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@3c46b419
+2025-07-07 23:37:14 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: US deports eight men to South Sudan after legal battle - BBC, in category: business
+2025-07-07 23:37:19 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:37:19 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 3
+2025-07-07 23:37:19 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@2b3b63d5
+2025-07-07 23:37:19 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: US deports eight men to South Sudan after legal battle - BBC, in category: sports
+2025-07-07 23:37:24 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:37:24 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 3
+2025-07-07 23:37:24 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@213fc303
+2025-07-07 23:37:24 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: US deports eight men to South Sudan after legal battle - BBC, in category: sports
+2025-07-07 23:37:30 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:37:30 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 4
+2025-07-07 23:37:30 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@6ab11537
+2025-07-07 23:37:30 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: US deports eight men to South Sudan after legal battle - BBC, in category: general
+2025-07-07 23:37:36 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:37:36 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 4
+2025-07-07 23:37:36 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@43c6cd40
+2025-07-07 23:37:36 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: US deports eight men to South Sudan after legal battle - BBC, in category: general
+2025-07-07 23:37:41 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:37:41 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 7
+2025-07-07 23:37:41 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@228cb103
+2025-07-07 23:37:41 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: US deports eight men to South Sudan after legal battle - BBC, in category: tech
+2025-07-07 23:37:48 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:37:48 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 7
+2025-07-07 23:37:48 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@63b3c663
+2025-07-07 23:37:48 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: US deports eight men to South Sudan after legal battle - BBC, in category: tech
+2025-07-07 23:37:53 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:37:53 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching visible categories by ids: [1, 7, 2, 6, 4, 3, 3]
+2025-07-07 23:37:53 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetched 6 visible categories for ids [1, 7, 2, 6, 4, 3, 3]
+2025-07-07 23:37:53 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 1
+2025-07-07 23:37:53 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@528ef27a
+2025-07-07 23:37:53 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: entertainment
+2025-07-07 23:37:59 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:37:59 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 1
+2025-07-07 23:37:59 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@1299abfc
+2025-07-07 23:37:59 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: entertainment
+2025-07-07 23:38:04 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:38:04 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 2
+2025-07-07 23:38:04 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@769c6b34
+2025-07-07 23:38:04 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: business
+2025-07-07 23:38:09 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:38:09 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 2
+2025-07-07 23:38:09 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@3cd240a9
+2025-07-07 23:38:09 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: business
+2025-07-07 23:38:15 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:38:15 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 3
+2025-07-07 23:38:15 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@e18d648
+2025-07-07 23:38:15 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: sports
+2025-07-07 23:38:20 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:38:20 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 3
+2025-07-07 23:38:20 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@31e3869b
+2025-07-07 23:38:20 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: sports
+2025-07-07 23:38:26 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:38:26 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 4
+2025-07-07 23:38:26 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@14965ebe
+2025-07-07 23:38:26 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: general
+2025-07-07 23:38:31 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:38:31 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 4
+2025-07-07 23:38:31 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@2e78e6aa
+2025-07-07 23:38:31 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: general
+2025-07-07 23:38:38 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:38:38 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 6
+2025-07-07 23:38:38 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@2cfa91ea
+2025-07-07 23:38:38 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: science
+2025-07-07 23:38:43 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:38:43 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 6
+2025-07-07 23:38:43 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@364d66bf
+2025-07-07 23:38:43 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: science
+2025-07-07 23:38:49 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:38:49 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 7
+2025-07-07 23:38:49 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@3945bf5a
+2025-07-07 23:38:49 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: lavish@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: tech
+2025-07-07 23:38:54 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: lavish@gmail.com
+2025-07-07 23:38:54 INFO  c.s.N.s.impl.CategoryServiceImpl - Fetching category by id: 7
+2025-07-07 23:38:54 INFO  c.s.N.s.impl.CategoryServiceImpl - Category found: com.server.NewsAggrigationServer.dto.CategoryDTO@43bdce03
+2025-07-07 23:38:54 INFO  c.s.N.service.impl.EmailServiceImpl - Sending email notification to: singh.prashant.009988@gmail.com, for news: US tariffs on European goods threaten to shake up the world's largest 2-way trade relationship - AP News, in category: tech
+2025-07-07 23:38:59 INFO  c.s.N.service.impl.EmailServiceImpl - Email notification sent successfully to: singh.prashant.009988@gmail.com
+2025-07-07 23:38:59 INFO  c.s.N.s.i.ExternalNewsSourceServiceImpl - Fetching news sources by sourceName: The News API
+2025-07-07 23:38:59 INFO  c.s.N.s.i.ExternalNewsSourceServiceImpl - Fetched 1 news sources for sourceName The News API
+2025-07-07 23:39:04 INFO  c.s.N.s.i.ExternalNewsSourceServiceImpl - Saving external news source: ExternalNewsSourceDTO{id=1, sourceName='The News API', apiKey='xFw2HzwoPJCjwF5CKJCVd86oItVcTOvrW5HjyX5j', baseUrl='https://api.thenewsapi.com/v1/news/all?language=en', status=1, lastAccessed=2025-07-07T23:39:04.143194100}
+2025-07-07 23:39:04 INFO  c.s.N.s.i.ExternalNewsSourceServiceImpl - External news source saved successfully: The News API
+2025-07-07 23:39:04 INFO  c.s.N.E.s.impl.NewsSyncServiceImpl - News synchronization completed successfully
+2025-07-07 23:41:44 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-07-07 23:41:44 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-07-07 23:41:44 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-07-07 23:41:44 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-07-07 23:41:44 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

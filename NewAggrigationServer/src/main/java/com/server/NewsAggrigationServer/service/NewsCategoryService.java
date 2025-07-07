@@ -7,9 +7,14 @@ import java.util.List;
 
 public interface NewsCategoryService {
     NewsCategoryDTO assignCategory(NewsCategoryDTO dto);
+
     List<CategoryDTO> getCategoriesByNewsId(Integer newsId);
+
     void removeCategoryFromNews(Integer newsId, Integer categoryId);
+
     void removeCategoriesByNewsId(Integer newsId);
+
     List<NewsCategoryDTO> getAllNewsCategory();
+
     List<Integer> getNewsIdByCategoryId(Integer categoryId);
 }

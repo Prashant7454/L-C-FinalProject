@@ -7,6 +7,7 @@ import com.server.NewsAggrigationServer.model.NewsCategory;
 import com.server.NewsAggrigationServer.repository.CategoryKeywordRepository;
 import com.server.NewsAggrigationServer.repository.KeywordRepository;
 import com.server.NewsAggrigationServer.repository.NewsCategoryRepository;
+import com.server.NewsAggrigationServer.repository.NewsRepository;
 import com.server.NewsAggrigationServer.service.CategoryAssignmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,9 @@ public class CategoryAssignmentServiceImpl implements CategoryAssignmentService 
 
     @Autowired
     private NewsCategoryRepository newsCategoryRepository;
+
+    @Autowired
+    private NewsRepository newsRepository;
 
     @Override
     public void assignCategoriesToNews(News news) {
@@ -67,14 +71,11 @@ public class CategoryAssignmentServiceImpl implements CategoryAssignmentService 
             return new ArrayList<>();
         }
 
-        // Convert text to lowercase for case-insensitive matching
         String lowerText = text.toLowerCase();
-        
-        // Get all keywords and their associated categories
+
         List<Keyword> allKeywords = keywordRepository.findAll();
         List<CategoryKeyword> allCategoryKeywords = categoryKeywordRepository.findAll();
-        
-        // Create a map of keyword name to category IDs
+
         Map<String, List<Integer>> keywordToCategories = new HashMap<>();
         
         for (CategoryKeyword ck : allCategoryKeywords) {
@@ -88,8 +89,7 @@ public class CategoryAssignmentServiceImpl implements CategoryAssignmentService 
                         .add(ck.getCategoryId());
             }
         }
-        
-        // Find matching keywords in the text
+
         Set<Integer> matchingCategoryIds = new HashSet<>();
         
         for (String keyword : keywordToCategories.keySet()) {
@@ -126,5 +126,33 @@ public class CategoryAssignmentServiceImpl implements CategoryAssignmentService 
         } else {
             log.debug("Category ID {} already assigned to news ID {}", categoryId, newsId);
         }
+    }
+
+    @Override
+    public List<News> findUncategorizedNews() {
+        List<News> allNews = newsRepository.findAll();
+        return allNews.stream()
+                .filter(news -> {
+                    List<Integer> categoryIds = newsCategoryRepository.findByNewsId(news.getId())
+                            .stream()
+                            .map(cat -> cat.getCategoryId())
+                            .toList();
+                    return categoryIds.isEmpty();
+                })
+                .toList();
+    }
+
+    @Override
+    public int countUncategorizedNews() {
+        List<News> allNews = newsRepository.findAll();
+        return (int) allNews.stream()
+                .filter(news -> {
+                    List<Integer> categoryIds = newsCategoryRepository.findByNewsId(news.getId())
+                            .stream()
+                            .map(cat -> cat.getCategoryId())
+                            .toList();
+                    return categoryIds.isEmpty();
+                })
+                .count();
     }
 } 

@@ -77,7 +77,6 @@ public class NotificationConfigServiceImpl implements NotificationConfigService 
             dto.setId(existingConfig.getId());
         } else {
             System.out.println("Called else");
-            // Create new configuration if it doesn't exist
             NotificationConfiguration newConfig = new NotificationConfiguration();
             newConfig.setUserId(dto.getUserId());
             newConfig.setCategoryId(dto.getCategoryId());

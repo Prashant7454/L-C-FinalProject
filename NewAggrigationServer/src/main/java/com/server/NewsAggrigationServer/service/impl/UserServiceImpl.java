@@ -1,6 +1,5 @@
 package com.server.NewsAggrigationServer.service.impl;
 
-
 import com.server.NewsAggrigationServer.dto.UserDTO;
 import com.server.NewsAggrigationServer.exception.DatabaseException;
 import com.server.NewsAggrigationServer.exception.ExceptionConstants;

@@ -41,16 +41,13 @@ public class NewsNotificationServiceImpl implements NewsNotificationService {
     @Override
     public void sendNotificationsForNews(com.server.NewsAggrigationServer.model.News news, List<Integer> categoryIds) {
         for (Integer categoryId : categoryIds) {
-            // Find all users who have enabled notifications for this category
             List<NotificationConfiguration> configs = notificationConfigRepository.findByCategoryIdAndEnabledTrue(categoryId);
             
             for (NotificationConfiguration config : configs) {
                 try {
-                    // Get user details
                     User user = userRepository.findById(config.getUserId()).orElse(null);
                     if (user == null) continue;
 
-                    // Send email notification
                     emailService.sendNewsNotification(
                         user.getEmail(),
                         user.getUsername(),
@@ -59,7 +56,6 @@ public class NewsNotificationServiceImpl implements NewsNotificationService {
                         getCategoryName(categoryId)
                     );
 
-                    // Store notification in database
                     NotificationDTO notificationDTO = new NotificationDTO();
                     notificationDTO.setNewsId(news.getId());
                     notificationDTO.setUserId(user.getId());
@@ -79,7 +75,6 @@ public class NewsNotificationServiceImpl implements NewsNotificationService {
     @Override
     public void sendNotificationsForNewsList(List<com.server.NewsAggrigationServer.model.News> newsList) {
         for (com.server.NewsAggrigationServer.model.News news : newsList) {
-            // Get category IDs for this news
             List<Integer> categoryIds = getCategoryIdsForNews(news.getId());
             if (!categoryIds.isEmpty()) {
                 sendNotificationsForNews(news, categoryIds);
@@ -89,7 +84,6 @@ public class NewsNotificationServiceImpl implements NewsNotificationService {
 
     private List<Integer> getCategoryIdsForNews(Integer newsId) {
         try {
-            // Get categories for this news and extract their IDs
             return newsCategoryService.getCategoriesByNewsId(newsId)
                 .stream()
                 .map(category -> category.getId())

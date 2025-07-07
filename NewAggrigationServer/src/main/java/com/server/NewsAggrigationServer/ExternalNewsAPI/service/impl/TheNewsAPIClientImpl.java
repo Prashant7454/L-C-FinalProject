@@ -59,7 +59,6 @@ public class TheNewsAPIClientImpl implements TheNewsAPIClient {
 
         JsonNode arr = resp.getBody().path("data");
         if (!arr.isArray()) {
-            // Set status to false when no news is fetched
             api.get(0).setStatus(0);
             api.get(0).setLastAccessed(LocalDateTime.now());
             externalNewsSourceService.save(api.get(0));
@@ -104,11 +103,9 @@ public class TheNewsAPIClientImpl implements TheNewsAPIClient {
 
         }
 
-        // If no articles were parsed, set status to false
         if (parsedArticles.isEmpty()) {
             api.get(0).setStatus(0);
         } else {
-            // If articles were successfully fetched, ensure status is true
             api.get(0).setStatus(1);
         }
         

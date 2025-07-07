@@ -50,19 +50,15 @@ public class NewsSyncServiceImpl implements NewsSyncService {
     private void fetchNewsApi(){
         try {
             List<News> newsAPIArticles = newsClients.fetchNews();
-            
-            // Filter out duplicate news articles
+
             List<News> newNewsArticles = filterDuplicateNews(newsAPIArticles);
             
             if (!newNewsArticles.isEmpty()) {
-                // Save only new news articles
                 List<News> savedNews = articleRepository.saveAll(newNewsArticles);
-                
-                // Assign categories to saved news articles
+
                 System.out.println("Assigning categories to " + savedNews.size() + " new news articles from NewsAPI...");
                 categoryAssignmentService.assignCategoriesToNewsList(savedNews);
-                
-                // Send notifications only for newly inserted news articles
+
                 System.out.println("Sending notifications for " + savedNews.size() + " new news articles from NewsAPI...");
                 newsNotificationService.sendNotificationsForNewsList(savedNews);
             } else {
@@ -77,19 +73,15 @@ public class NewsSyncServiceImpl implements NewsSyncService {
     private void fetchTheNews(){
         try {
             List<News> theNewsAPIArticles = theNewsAPIClient.fetchNews();
-            
-            // Filter out duplicate news articles
+
             List<News> newNewsArticles = filterDuplicateNews(theNewsAPIArticles);
             
             if (!newNewsArticles.isEmpty()) {
-                // Save only new news articles
                 List<News> savedNews = articleRepository.saveAll(newNewsArticles);
-                
-                // Assign categories to saved news articles
+
                 System.out.println("Assigning categories to " + savedNews.size() + " new news articles from TheNewsAPI...");
                 categoryAssignmentService.assignCategoriesToNewsList(savedNews);
-                
-                // Send notifications only for newly inserted news articles
+
                 System.out.println("Sending notifications for " + savedNews.size() + " new news articles from TheNewsAPI...");
                 newsNotificationService.sendNotificationsForNewsList(savedNews);
             } else {

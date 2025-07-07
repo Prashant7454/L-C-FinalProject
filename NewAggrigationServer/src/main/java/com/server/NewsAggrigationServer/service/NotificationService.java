@@ -7,8 +7,11 @@ import java.util.List;
 
 public interface NotificationService {
     NotificationDTO createNotification(NotificationDTO dto);
+
     List<NewsDTO> getNotificationsByUserId(Integer userId);
+
     void clearNotifications(Integer userId);
+
     void deleteNotification(Integer newsId, Integer userId);
 }
 

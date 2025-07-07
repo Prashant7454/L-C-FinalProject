@@ -41,7 +41,7 @@ public class UserNewsReportServiceImpl implements UserNewsReportService {
 
         if (existing.isPresent()) {
             UserNewsReport report = existing.get();
-            report.setIsReported(dto.getIsReported()); // update if needed
+            report.setIsReported(dto.getIsReported());
             return mapToDTO(repository.save(report));
         }
 

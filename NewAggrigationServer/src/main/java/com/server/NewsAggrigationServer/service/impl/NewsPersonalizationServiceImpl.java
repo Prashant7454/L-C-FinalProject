@@ -49,18 +49,15 @@ public class NewsPersonalizationServiceImpl implements NewsPersonalizationServic
     @Override
     public List<NewsDTO> getPersonalizedNews(Integer userId, int limit) {
         try {
-            // Get all visible news articles
             List<NewsDTO> allNews = newsService.getAllVisibleNews();
-            
-            // Calculate personalized scores for each news article
+
             Map<Integer, Double> newsScores = new HashMap<>();
             
             for (NewsDTO news : allNews) {
                 double score = calculateUserInterestScore(userId, news.getId());
                 newsScores.put(news.getId(), score);
             }
-            
-            // Sort news by personalized score (highest first) and return top results
+
             return allNews.stream()
                 .sorted((n1, n2) -> Double.compare(newsScores.get(n2.getId()), newsScores.get(n1.getId())))
                 .limit(limit)
@@ -75,23 +72,19 @@ public class NewsPersonalizationServiceImpl implements NewsPersonalizationServic
     @Override
     public List<NewsDTO> getPersonalizedNewsPaginated(Integer userId, int page, int size) {
         try {
-            // Get all visible news articles
             List<NewsDTO> allNews = newsService.getAllVisibleNews();
-            
-            // Calculate personalized scores for each news article
+
             Map<Integer, Double> newsScores = new HashMap<>();
             
             for (NewsDTO news : allNews) {
                 double score = calculateUserInterestScore(userId, news.getId());
                 newsScores.put(news.getId(), score);
             }
-            
-            // Sort news by personalized score (highest first)
+
             List<NewsDTO> sortedNews = allNews.stream()
                 .sorted((n1, n2) -> Double.compare(newsScores.get(n2.getId()), newsScores.get(n1.getId())))
                 .collect(Collectors.toList());
-            
-            // Apply pagination
+
             int startIndex = page * size;
             int endIndex = Math.min(startIndex + size, sortedNews.size());
             
@@ -111,20 +104,16 @@ public class NewsPersonalizationServiceImpl implements NewsPersonalizationServic
     public double calculateUserInterestScore(Integer userId, Integer newsId) {
         try {
             double totalScore = 0.0;
-            
-            // 1. Notification preferences weight (40%)
+
             double notificationScore = calculateNotificationPreferenceScore(userId, newsId);
             totalScore += notificationScore * 0.4;
-            
-            // 2. Reading history weight (25%)
+
             double readingHistoryScore = calculateReadingHistoryScore(userId, newsId);
             totalScore += readingHistoryScore * 0.25;
-            
-            // 3. Like/dislike behavior weight (20%)
+
             double likeDislikeScore = calculateLikeDislikeScore(userId, newsId);
             totalScore += likeDislikeScore * 0.2;
-            
-            // 4. Saved articles weight (15%)
+
             double savedArticlesScore = calculateSavedArticlesScore(userId, newsId);
             totalScore += savedArticlesScore * 0.15;
             
@@ -140,16 +129,14 @@ public class NewsPersonalizationServiceImpl implements NewsPersonalizationServic
     public List<Integer> getUserTopInterestCategories(Integer userId, int limit) {
         try {
             Map<Integer, Double> categoryScores = new HashMap<>();
-            
-            // Get user's notification preferences
+
             List<NotificationConfiguration> notificationConfigs = notificationConfigRepository.findByUserId(userId);
             for (NotificationConfiguration config : notificationConfigs) {
                 if (config.getEnabled()) {
                     categoryScores.put(config.getCategoryId(), categoryScores.getOrDefault(config.getCategoryId(), 0.0) + 0.5);
                 }
             }
-            
-            // Get user's reading history and analyze category preferences
+
             List<UserReadingHistory> readingHistory = readingHistoryRepository.findByUserIdOrderByReadAtDesc(userId);
             for (UserReadingHistory history : readingHistory) {
                 List<CategoryDTO> categories = newsCategoryService.getCategoriesByNewsId(history.getNewsId());
@@ -157,8 +144,7 @@ public class NewsPersonalizationServiceImpl implements NewsPersonalizationServic
                     categoryScores.put(category.getId(), categoryScores.getOrDefault(category.getId(), 0.0) + 0.3);
                 }
             }
-            
-            // Get user's liked articles and analyze category preferences
+
             List<NewsDTO> likedNews = likeDislikeService.getLikedNewsByUserId(userId);
             for (NewsDTO news : likedNews) {
                 List<CategoryDTO> categories = newsCategoryService.getCategoriesByNewsId(news.getId());
@@ -166,8 +152,7 @@ public class NewsPersonalizationServiceImpl implements NewsPersonalizationServic
                     categoryScores.put(category.getId(), categoryScores.getOrDefault(category.getId(), 0.0) + 0.4);
                 }
             }
-            
-            // Get user's saved articles and analyze category preferences
+
             List<NewsDTO> savedNews = savedNewsService.getSavedNewsByUserId(userId);
             for (NewsDTO news : savedNews) {
                 List<CategoryDTO> categories = newsCategoryService.getCategoriesByNewsId(news.getId());
@@ -175,8 +160,7 @@ public class NewsPersonalizationServiceImpl implements NewsPersonalizationServic
                     categoryScores.put(category.getId(), categoryScores.getOrDefault(category.getId(), 0.0) + 0.35);
                 }
             }
-            
-            // Sort categories by score and return top results
+
             return categoryScores.entrySet().stream()
                 .sorted(Map.Entry.<Integer, Double>comparingByValue().reversed())
                 .limit(limit)
@@ -192,7 +176,6 @@ public class NewsPersonalizationServiceImpl implements NewsPersonalizationServic
     @Override
     public void recordArticleRead(Integer userId, Integer newsId) {
         try {
-            // Check if already recorded
             if (!readingHistoryRepository.existsByUserIdAndNewsId(userId, newsId)) {
                 UserReadingHistory readingHistory = new UserReadingHistory(userId, newsId);
                 readingHistoryRepository.save(readingHistory);
@@ -202,8 +185,6 @@ public class NewsPersonalizationServiceImpl implements NewsPersonalizationServic
             System.err.println("Error recording article read for user " + userId + " and news " + newsId + ": " + e.getMessage());
         }
     }
-
-    // Helper methods for calculating different aspects of the interest score
 
     private double calculateNotificationPreferenceScore(Integer userId, Integer newsId) {
         try {
@@ -233,8 +214,7 @@ public class NewsPersonalizationServiceImpl implements NewsPersonalizationServic
             if (readingHistory.isEmpty()) {
                 return 0.0;
             }
-            
-            // Get recent reading history (last 30 days)
+
             LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
             List<UserReadingHistory> recentHistory = readingHistoryRepository.findRecentReadingHistory(userId, thirtyDaysAgo);
             

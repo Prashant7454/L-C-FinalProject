@@ -9,9 +9,10 @@ import java.util.Optional;
 
 public interface NewsLikeDislikeUserService {
     NewsLikeDislikeUser saveOrUpdate(NewsLikeDislikeUserDTO dto);
+
     NewsLikeDislikeUser getByNewsIdAndUserId(Integer newsId, Integer userId);
-    
-    // New methods for personalization
+
     List<NewsDTO> getLikedNewsByUserId(Integer userId);
+
     List<NewsDTO> getDislikedNewsByUserId(Integer userId);
 }

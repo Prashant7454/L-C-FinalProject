@@ -43,7 +43,6 @@ public class CategoryController {
         return categoryService.getCategoryById(id);
     }
 
-    // New endpoints for visible categories only
     @GetMapping("/visible")
     public List<CategoryDTO> getAllVisibleCategories() {
         return categoryService.getAllVisibleCategories();
@@ -54,7 +53,6 @@ public class CategoryController {
         return categoryService.getVisibleCategoriesByIds(ids);
     }
 
-    // Admin endpoints for hiding/unhiding categories
     @PutMapping("/{id}/hide")
     public CategoryDTO hideCategory(@PathVariable Integer id) {
         return categoryService.hideCategory(id);

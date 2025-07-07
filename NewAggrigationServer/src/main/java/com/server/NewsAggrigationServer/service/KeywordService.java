@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface KeywordService {
     KeywordDTO addKeyword(KeywordDTO dto);
+
     List<KeywordDTO> getAllKeywords();
 }

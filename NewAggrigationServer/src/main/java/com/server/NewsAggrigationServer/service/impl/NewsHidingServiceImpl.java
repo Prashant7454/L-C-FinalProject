@@ -100,10 +100,8 @@ public class NewsHidingServiceImpl implements NewsHidingService {
             return List.of();
         }
 
-        // Get all news articles
         List<News> allNews = newsRepository.findAll();
-        
-        // Filter news that contain any of the keywords
+
         return allNews.stream()
                 .filter(news -> containsAnyKeyword(news, keywords))
                 .collect(Collectors.toList());
@@ -119,10 +117,8 @@ public class NewsHidingServiceImpl implements NewsHidingService {
             return false;
         }
 
-        // Create search text from title and description
         String searchText = createSearchText(news).toLowerCase();
-        
-        // Check if any keyword is contained in the search text
+
         return keywords.stream()
                 .anyMatch(keyword -> searchText.contains(keyword.toLowerCase()));
     }

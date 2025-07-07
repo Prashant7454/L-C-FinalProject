@@ -177,7 +177,6 @@ public class NewsServiceImpl implements NewsService {
                 .collect(Collectors.toList());
     }
 
-    // New methods for visible news only
     @Override
     public List<NewsDTO> getAllVisibleNews() {
         return newsRepository.findByIsHide(0).stream()

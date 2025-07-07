@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface NewsLikeDislikeUserRepository extends JpaRepository<NewsLikeDislikeUser, Integer> {
     NewsLikeDislikeUser findByNewsIdAndUserId(Integer newsId, Integer userId);
-    
-    // New methods for personalization
+
     List<NewsLikeDislikeUser> findByUserIdAndLiked(Integer userId, Integer liked);
+
     List<NewsLikeDislikeUser> findByUserIdAndDisliked(Integer userId, Integer disliked);
 }
 

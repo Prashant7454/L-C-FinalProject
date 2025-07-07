@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface CategoryKeywordRepository extends JpaRepository<CategoryKeyword, Integer> {
     List<CategoryKeyword> findByCategoryId(Integer categoryId);
+
     List<CategoryKeyword> findByKeywordId(Integer keywordId);
 }
