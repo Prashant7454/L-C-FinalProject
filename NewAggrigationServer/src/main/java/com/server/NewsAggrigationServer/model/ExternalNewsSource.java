@@ -1,0 +1,85 @@
+package com.server.NewsAggrigationServer.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "ExternalNewsSource")
+public class ExternalNewsSource {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "sourceName", nullable = false)
+    private String sourceName;
+
+    @Column(name = "baseUrl", nullable = false)
+    private String baseUrl;
+
+    @Column(name = "apiKey", nullable = false)
+    private String apiKey;
+
+    @Column(name = "status")
+    private Integer status = 1;
+
+    @Column(name = "lastAccessed")
+    private LocalDateTime lastAccessed;
+
+    public ExternalNewsSource() {}
+
+    public ExternalNewsSource(String sourceName, String apiKey, Integer status) {
+        this.sourceName = sourceName;
+        this.apiKey = apiKey;
+        this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getLastAccessed() {
+        return lastAccessed;
+    }
+
+    public void setLastAccessed(LocalDateTime lastAccessed) {
+        this.lastAccessed = lastAccessed;
+    }
+}
